@@ -3,7 +3,7 @@ import { SafeAreaView, Text } from "react-native";
 export default () => {
   return (
     <SafeAreaView>
-      <Text>Home</Text>
+      <Text>Login</Text>
     </SafeAreaView>
   );
 };

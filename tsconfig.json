@@ -6,7 +6,10 @@
       "@/components/*": ["./src/components/*"],
       "@/constants/*": ["./src/constants/*"],
       "@/hooks/*": ["./src/hooks/*"],
+      "@/providers/*": ["./src/providers/*"],
       "@/screens/*": ["./src/screens/*"],
+      "@/store/*": ["./src/store/*"],
+      "@/utils/*": ["./src/utils/*"],
       "@/*": ["./*"],
       "tailwind.config": [
         "./tailwind.config.js"

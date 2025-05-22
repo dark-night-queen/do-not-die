@@ -1,9 +1,9 @@
-import { View, Text } from "react-native";
+import { SafeAreaView, Text } from "react-native";
 
 export default () => {
   return (
-    <View>
+    <SafeAreaView>
       <Text>Analysis</Text>
-    </View>
+    </SafeAreaView>
   );
 };
