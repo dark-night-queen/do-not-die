@@ -4,6 +4,9 @@
     "strict": true,
     "paths": {
       "@/components/*": ["./src/components/*"],
+      "@/constants/*": ["./src/constants/*"],
+      "@/hooks/*": ["./src/hooks/*"],
+      "@/screens/*": ["./src/screens/*"],
       "@/*": ["./*"],
       "tailwind.config": [
         "./tailwind.config.js"
