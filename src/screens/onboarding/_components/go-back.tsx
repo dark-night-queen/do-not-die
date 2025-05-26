@@ -10,7 +10,7 @@ export const GoBack = ({ goBack }: IGoBackProps) => {
   return (
     <Button
       variant="link"
-      className="self-start rounded-lg p-2 absolute top-[70px] left-3"
+      className="self-start rounded-lg p-2 absolute top-5 left-3"
       onPress={goBack}
     >
       <ButtonIcon as={ChevronLeft} className="text-gray-400" />

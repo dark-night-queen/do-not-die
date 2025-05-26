@@ -68,7 +68,7 @@ export const CaptureActivityLevel = () => {
 
             <VStack>
               <Text className="text-lg font-medium">{label}</Text>
-              <Text className="text-sm text-gray-300">{description}</Text>
+              <Text className="text-sm dark:text-gray-300">{description}</Text>
             </VStack>
           </Card>
         ))}
