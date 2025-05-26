@@ -1,5 +1,5 @@
 import React from "react";
-import { CircleIcon } from "lucide-react-native";
+import { ChevronDownIcon, CircleIcon, LucideIcon } from "lucide-react-native";
 import {
   FormControl,
   FormControlError,
@@ -17,6 +17,19 @@ import {
   RadioLabel,
 } from "@/components/ui/radio";
 import { IRadioGroupProps } from "@gluestack-ui/radio/lib/types";
+import {
+  Select,
+  SelectBackdrop,
+  SelectContent,
+  SelectDragIndicator,
+  SelectDragIndicatorWrapper,
+  SelectIcon,
+  SelectInput,
+  SelectItem,
+  SelectPortal,
+  SelectTrigger,
+} from "@/components/ui/select";
+import { Card, Icon } from "@/components/ui";
 
 type IFormProps = IFormControlProps &
   React.PropsWithChildren & {
@@ -29,7 +42,19 @@ type IRadioElementProps = IRadioGroupProps & {
   direction?: "vertical" | "horizontal";
 };
 
-export const FormElement = ({ label, error, children }: IFormProps) => {
+type IRadioElement2Props = IRadioGroupProps & {
+  options: { label: string; icon: LucideIcon }[];
+};
+
+type ISelectElementProps = {
+  options: {
+    label: string;
+    value: string;
+    isDisabled?: boolean;
+  }[];
+};
+
+export const FormElement = ({ label, error, className, children }: IFormProps) => {
   return (
     <FormControl
       isInvalid={!!error}
@@ -37,7 +62,7 @@ export const FormElement = ({ label, error, children }: IFormProps) => {
       isDisabled={false}
       isReadOnly={false}
       isRequired={false}
-      className="w-full gap-1"
+      className={`w-full gap-1 ${className}`}
     >
       {label ? (
         <FormControlLabel>
@@ -89,5 +114,58 @@ export const RadioElement = ({
         </Radio>
       ))}
     </RadioGroup>
+  );
+};
+
+export const RadioElement2 = ({ options, ...props }: IRadioElement2Props) => {
+  return (
+    <RadioGroup {...props}>
+      {options.map(({ label, icon }) => (
+        <Radio
+          key={label}
+          value={label}
+          size="sm"
+          isInvalid={false}
+          isDisabled={false}
+        >
+          <Card
+            variant="outline"
+            className="flex-row items-center w-full gap-2"
+          >
+            <Icon as={icon} className="text-indigo-400" />
+            <RadioLabel>{label}</RadioLabel>
+          </Card>
+        </Radio>
+      ))}
+    </RadioGroup>
+  );
+};
+
+export const SelectElement = ({ options }: ISelectElementProps) => {
+  return (
+    <Select>
+      <SelectTrigger variant="outline" size="md">
+        <SelectInput placeholder="Select option" className="flex-1" />
+        <SelectIcon className="mr-3" as={ChevronDownIcon} />
+      </SelectTrigger>
+
+      <SelectPortal>
+        <SelectBackdrop />
+        <SelectContent>
+          <SelectDragIndicatorWrapper>
+            <SelectDragIndicator />
+          </SelectDragIndicatorWrapper>
+
+          {options.map((option) => (
+            <SelectItem
+              key={option.value}
+              label={option.label}
+              value={option.value}
+              isDisabled={option.isDisabled}
+            />
+          ))}
+        </SelectContent>
+      </SelectPortal>
+    </Select>
   );
 };

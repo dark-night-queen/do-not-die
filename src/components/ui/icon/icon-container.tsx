@@ -18,7 +18,7 @@ export const IconContainer = ({
     <Box
       className={`p-1.5 rounded-lg bg-background-0 ${className}`}
     >
-      <Icon as={as} className={`text-primary-400 ${iconClassName}`} />
+      <Icon as={as} className={`text-indigo-400 ${iconClassName}`} />
     </Box>
   );
 };

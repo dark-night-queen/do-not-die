@@ -6,11 +6,12 @@ const baseStyle = isWeb
   : "";
 
 export const boxStyle = tva({
-  base: baseStyle,
+  base: "",
   variants: {
     variant: {
-      base: "",
+      base: baseStyle,
       screen: "h-screen items-center justify-center dark:bg-background-dark",
+      scroll: "dark:bg-background-dark",
     },
   },
 });
