@@ -1,9 +1,13 @@
-import { SafeAreaView, Text } from "react-native";
+import { SafeAreaView } from "react-native";
+import { Box } from "@/components/ui";
+import { ComingSoon } from "./_components/coming-soon";
 
 export default () => {
   return (
     <SafeAreaView>
-      <Text>Analysis</Text>
+      <Box variant="screen">
+        <ComingSoon />
+      </Box>
     </SafeAreaView>
   );
 };
