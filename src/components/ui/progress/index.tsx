@@ -9,6 +9,7 @@ import {
 } from '@gluestack-ui/nativewind-utils/withStyleContext';
 import { cssInterop } from 'nativewind';
 import type { VariantProps } from '@gluestack-ui/nativewind-utils';
+import { LinearGradient } from '../linear-gradient';
 
 const SCOPE = 'PROGRESS';
 export const UIProgress = createProgress({
@@ -166,4 +167,34 @@ const ProgressFilledTrack = React.forwardRef<
   );
 });
 
-export { Progress, ProgressFilledTrack };
+const ProgressGradientTrack = React.forwardRef<
+  React.ComponentRef<typeof UIProgress.FilledTrack>,
+  React.ComponentProps<typeof LinearGradient>
+>(function ProgressGradientTrack({ className, ...props }, ref) {
+  const { size: parentSize, orientation: parentOrientation, value } = useStyleContext(SCOPE);
+
+  const progressStyle =
+    parentOrientation === 'vertical'
+      ? { height: `${value}%`, width: '100%' }
+      : { width: `${value}%`, height: '100%' };
+
+  return (
+    <LinearGradient
+      ref={ref}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 0 }}
+      className={progressFilledTrackStyle({
+        parentVariants: {
+          size: parentSize,
+          orientation: parentOrientation,
+        },
+        class: className,
+      })}
+      style={progressStyle}
+      {...props}
+    />
+  );
+});
+
+
+export { Progress, ProgressFilledTrack, ProgressGradientTrack };
