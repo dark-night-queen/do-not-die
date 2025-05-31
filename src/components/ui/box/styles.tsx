@@ -6,7 +6,7 @@ const baseStyle = isWeb
   : "";
 
 export const boxStyle = tva({
-  base: "",
+  base: "flex",
   variants: {
     variant: {
       base: baseStyle,
