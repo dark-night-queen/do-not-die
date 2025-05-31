@@ -1,9 +1,12 @@
-import { useFonts } from "expo-font";
 import "@/global.css";
-import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
+import "react-native-reanimated";
+
+import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import "react-native-reanimated";
+import { Toaster } from "sonner-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 import { AuthProvider } from "@/providers/auth-provider";
 
 export default function RootLayout() {
@@ -18,14 +21,17 @@ export default function RootLayout() {
 
   return (
     <GluestackUIProvider mode="system">
-      <AuthProvider>
-        <Stack initialRouteName="(auth)">
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-          <Stack.Screen name="+not-found" />
-        </Stack>
-        <StatusBar style="auto" />
-      </AuthProvider>
+      <GestureHandlerRootView>
+        <AuthProvider>
+          <Stack initialRouteName="(auth)">
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+            <Stack.Screen name="+not-found" />
+          </Stack>
+          <StatusBar style="auto" />
+        </AuthProvider>
+        <Toaster position="bottom-center" duration={3000} visibleToasts={2} />
+      </GestureHandlerRootView>
     </GluestackUIProvider>
   );
 }
