@@ -41,7 +41,7 @@ const buttonStyle = tva({
   variants: {
     action: {
       primary:
-        "bg-indigo-500 data-[hover=true]:bg-primary-600 data-[active=true]:bg-indigo-700 border-indigo-300 data-[hover=true]:border-indigo-400 data-[active=true]:border-indigo-500 data-[focus-visible=true]:web:ring-indicator-info",
+        "bg-indigo-500 data-[hover=true]:bg-indigo-600 data-[active=true]:bg-indigo-700 border-indigo-300 data-[hover=true]:border-indigo-400 data-[active=true]:border-indigo-500 data-[focus-visible=true]:web:ring-indicator-info",
       secondary:
         "bg-secondary-500 border-secondary-300 data-[hover=true]:bg-secondary-600 data-[hover=true]:border-secondary-400 data-[active=true]:bg-secondary-700 data-[active=true]:border-secondary-700 data-[focus-visible=true]:web:ring-indicator-info",
       positive:
@@ -154,7 +154,7 @@ const buttonTextStyle = tva({
       variant: "solid",
       action: "primary",
       class:
-        "text-white data-[hover=true]:text-typography-0 data-[active=true]:text-typography-0",
+        "text-white data-[hover=true]:text-white data-[active=true]:text-white",
     },
     {
       variant: "solid",
