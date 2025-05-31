@@ -1,5 +1,8 @@
 import React from "react";
+import colors from "tailwindcss/colors";
 import { ChevronLeft } from "lucide-react-native";
+import { useAuthStore } from "@/store/useAuthStore";
+import { validateEmail as validateEmailUtil } from "@/utils/validate-auth";
 import {
   Button,
   ButtonIcon,
@@ -8,6 +11,7 @@ import {
   HStack,
   VStack,
   Text,
+  Spinner,
 } from "@/components/ui";
 import { FormElement, InputElement } from "@/components/ui/form-control/form";
 import { ForgetPasswordSuccess } from "./forget-password-success";
@@ -18,7 +22,7 @@ enum Screen {
 }
 
 type IForgetPasswordProps = {
-  handleSubmit: () => void;
+  handleSubmit: (email: string) => void;
   goBackToLogin: () => void;
 };
 
@@ -26,14 +30,29 @@ export const ForgetPassword = ({
   handleSubmit,
   goBackToLogin,
 }: IForgetPasswordProps) => {
-  const [errors, setErrors] = React.useState("");
+  const { showLoader } = useAuthStore();
+  const [email, setEmail] = React.useState("");
+  const [error, setError] = React.useState("");
   const [currentScreen, setCurrentScreen] = React.useState(
     Screen.FORGET_PASSWORD
   );
 
+  const handleChange = (value: string) => {
+    setEmail(value);
+    setError("");
+  };
+
+  const validateEmail = () => {
+    const error_message = validateEmailUtil(email);
+    setError(error_message);
+    return !error_message;
+  };
+
   const onSendEmail = () => {
-    handleSubmit();
-    setCurrentScreen(Screen.SUCCESS);
+    if (validateEmail()) {
+      handleSubmit(email);
+      setCurrentScreen(Screen.SUCCESS);
+    }
   };
 
   return (
@@ -55,16 +74,20 @@ export const ForgetPassword = ({
               password.
             </Text>
 
-            <FormElement error={errors}>
+            <FormElement error={error}>
               <InputElement
                 placeholder="Email"
-                // value={formData.age}
-                // onChangeText={handleChange("age")}
+                value={email}
+                onChangeText={handleChange}
+                keyboardType="email-address"
               />
             </FormElement>
 
             <Button onPress={onSendEmail}>
               <ButtonText>Send Email</ButtonText>
+              {showLoader["forget-password"] ? (
+                <Spinner size="small" color={colors.white} />
+              ) : null}
             </Button>
           </>
         )}

@@ -17,6 +17,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   showLoader: {
     login: false,
     signup: false,
+    "forget-password": false,
   },
   setShowLoader: (type, value) => {
     set((state) => ({
