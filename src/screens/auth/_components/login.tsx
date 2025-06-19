@@ -1,8 +1,11 @@
 import React from "react";
 import colors from "tailwindcss/colors";
 import { useAuthStore } from "@/store/useAuthStore";
-import { validateEmail as validateEmailUtil, validatePassword as validatePasswordUtil } from "@/utils/validate-auth";
-import { Button, ButtonText, Card, VStack, Spinner } from "@/components/ui";
+import {
+  validateEmail as validateEmailUtil,
+  validatePassword as validatePasswordUtil,
+} from "@/utils/validate-auth";
+import { Button, ButtonText, Spinner } from "@/components/ui";
 import { FormElement, InputElement } from "@/components/ui/form-control/form";
 
 type ILoginProps = {
@@ -41,7 +44,7 @@ export const Login = ({
   };
 
   const validatePassword = () => {
-    const error_message = validatePasswordUtil(password)
+    const error_message = validatePasswordUtil(password);
     setError((prev) => ({ ...prev, password: error_message }));
     return !error_message;
   };
@@ -63,44 +66,42 @@ export const Login = ({
   };
 
   return (
-    <Card variant="outline" className="w-full max-w-sm p-4">
-      <VStack className="gap-4">
-        <FormElement error={error.email}>
-          <InputElement
-            placeholder="Email"
-            value={email}
-            onChangeText={handleChange("email")}
-            keyboardType="email-address"
-          />
-        </FormElement>
+    <>
+      <FormElement error={error.email}>
+        <InputElement
+          placeholder="Email"
+          value={email}
+          onChangeText={handleChange("email")}
+          keyboardType="email-address"
+        />
+      </FormElement>
 
-        <FormElement error={error.password}>
-          <InputElement
-            placeholder="Password"
-            value={password}
-            onChangeText={handleChange("password")}
-            type="password"
-          />
-        </FormElement>
+      <FormElement error={error.password}>
+        <InputElement
+          placeholder="Password"
+          value={password}
+          onChangeText={handleChange("password")}
+          type="password"
+        />
+      </FormElement>
 
-        <Button onPress={onLoginPress}>
-          <ButtonText>Login</ButtonText>
-          {showLoader.login ? (
-            <Spinner size="small" color={colors.white} />
-          ) : null}
-        </Button>
+      <Button onPress={onLoginPress}>
+        <ButtonText>Login</ButtonText>
+        {showLoader.login ? (
+          <Spinner size="small" color={colors.white} />
+        ) : null}
+      </Button>
 
-        <Button variant="outline" onPress={onSignUpPress}>
-          <ButtonText>Sign Up</ButtonText>
-          {showLoader.signup ? (
-            <Spinner size="small" color={colors.white} />
-          ) : null}
-        </Button>
+      <Button variant="outline" onPress={onSignUpPress}>
+        <ButtonText>Sign Up</ButtonText>
+        {showLoader.signup ? (
+          <Spinner size="small" color={colors.white} />
+        ) : null}
+      </Button>
 
-        <Button variant="link" onPress={onForgotPasswordPress}>
-          <ButtonText>Forgot Password</ButtonText>
-        </Button>
-      </VStack>
-    </Card>
+      <Button variant="link" onPress={onForgotPasswordPress}>
+        <ButtonText>Forgot Password</ButtonText>
+      </Button>
+    </>
   );
 };

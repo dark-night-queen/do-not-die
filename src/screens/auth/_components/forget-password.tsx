@@ -7,9 +7,7 @@ import {
   Button,
   ButtonIcon,
   ButtonText,
-  Card,
   HStack,
-  VStack,
   Text,
   Spinner,
 } from "@/components/ui";
@@ -56,42 +54,40 @@ export const ForgetPassword = ({
   };
 
   return (
-    <Card variant="outline" className="w-full max-w-sm p-4">
-      <VStack className="gap-4">
-        <HStack className="items-center gap-2">
-          <Button variant="link" onPress={goBackToLogin}>
-            <ButtonIcon as={ChevronLeft} />
+    <>
+      <HStack className="items-center gap-2">
+        <Button variant="link" onPress={goBackToLogin}>
+          <ButtonIcon as={ChevronLeft} />
+        </Button>
+        <Text className="text-xl font-semibold">Reset Password</Text>
+      </HStack>
+
+      {currentScreen == Screen.SUCCESS ? (
+        <ForgetPasswordSuccess goBackToLogin={goBackToLogin} />
+      ) : (
+        <>
+          <Text className="text-sm text-gray-400">
+            Enter your email address and we'll send you a link to reset your
+            password.
+          </Text>
+
+          <FormElement error={error}>
+            <InputElement
+              placeholder="Email"
+              value={email}
+              onChangeText={handleChange}
+              keyboardType="email-address"
+            />
+          </FormElement>
+
+          <Button onPress={onSendEmail}>
+            <ButtonText>Send Email</ButtonText>
+            {showLoader["forget-password"] ? (
+              <Spinner size="small" color={colors.white} />
+            ) : null}
           </Button>
-          <Text className="text-xl font-semibold">Reset Password</Text>
-        </HStack>
-
-        {currentScreen == Screen.SUCCESS ? (
-          <ForgetPasswordSuccess goBackToLogin={goBackToLogin} />
-        ) : (
-          <>
-            <Text className="text-sm text-gray-400">
-              Enter your email address and we'll send you a link to reset your
-              password.
-            </Text>
-
-            <FormElement error={error}>
-              <InputElement
-                placeholder="Email"
-                value={email}
-                onChangeText={handleChange}
-                keyboardType="email-address"
-              />
-            </FormElement>
-
-            <Button onPress={onSendEmail}>
-              <ButtonText>Send Email</ButtonText>
-              {showLoader["forget-password"] ? (
-                <Spinner size="small" color={colors.white} />
-              ) : null}
-            </Button>
-          </>
-        )}
-      </VStack>
-    </Card>
+        </>
+      )}
+    </>
   );
 };

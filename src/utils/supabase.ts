@@ -28,9 +28,4 @@ AppState.addEventListener("change", (state) => {
   }
 });
 
-const getSession = async () => {
-  const session = await supabase.auth.getSession();
-  return session;
-};
-
-export { supabase, getSession };
+export { supabase };

@@ -4,6 +4,7 @@ import { Box, Button, ButtonIcon, ButtonText, VStack } from "@/components/ui";
 import { User } from "./_components/user";
 import { Stats } from "./_components/stats";
 import { Menu } from "./_components/menu";
+import { useAuthStore } from "@/store/useAuthStore";
 
 export default () => {
   const name = "Jane Doe";
@@ -12,6 +13,12 @@ export default () => {
   const currentWeight = 61.8;
   const targetWeight = 55;
   const dailyCalorieTarget = 1458;
+
+  const { logout } = useAuthStore();
+
+  const onLogout = () => {
+    logout();
+  };
 
   return (
     <SafeAreaView>
@@ -31,7 +38,7 @@ export default () => {
                 <ButtonText>Reset Onboarding</ButtonText>
               </Button>
 
-              <Button variant="link">
+              <Button variant="link" onPress={onLogout}>
                 <ButtonIcon as={LogOut} />
                 <ButtonText>Sign Out</ButtonText>
               </Button>

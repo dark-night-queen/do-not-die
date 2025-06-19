@@ -1,32 +1,22 @@
 import React from "react";
 import { useRouter } from "expo-router";
-import { ScrollView } from "react-native";
 import { toast } from "sonner-native";
 import { useAuth, useAuthStore } from "@/providers/auth-provider";
-import { supabase } from "@/utils/supabase";
-import { Box } from "@/components/ui";
 import { Login } from "./_components/login";
+import Layout from "./_layout";
 
 export default () => {
   const router = useRouter();
   const { user, setUser } = useAuth();
-  const { setShowLoader } = useAuthStore();
+  const { login, signup, setShowLoader } = useAuthStore();
 
   const handleLogin = async (email: string, password: string) => {
     setShowLoader("login", true);
     const {
       data: { session, user },
       error,
-    } = await supabase.auth.signInWithPassword({
-      email: email,
-      password: password,
-    });
-
+    } = await login(email, password);
     if (error) toast.warning(error.message);
-    else if (session) {
-      router.push("/(auth)/onboarding");
-    }
-
     setShowLoader("login", false);
   };
 
@@ -35,10 +25,7 @@ export default () => {
     const {
       data: { session },
       error,
-    } = await supabase.auth.signUp({
-      email: email,
-      password: password,
-    });
+    } = await signup(email, password);
 
     if (error) toast.warning(error.message.replaceAll(",", "\n"));
     else if (!session) toast("Please check your inbox for email verification!");
@@ -51,14 +38,12 @@ export default () => {
   };
 
   return (
-    <ScrollView>
-      <Box variant="screen">
-        <Login
-          handleLogin={handleLogin}
-          handleSignup={handleSignup}
-          handleForgetPassword={handleForgetPassword}
-        />
-      </Box>
-    </ScrollView>
+    <Layout>
+      <Login
+        handleLogin={handleLogin}
+        handleSignup={handleSignup}
+        handleForgetPassword={handleForgetPassword}
+      />
+    </Layout>
   );
 };
