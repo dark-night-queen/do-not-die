@@ -1,13 +1,12 @@
 import React from "react";
 import { useRouter } from "expo-router";
 import { toast } from "sonner-native";
-import { useAuth, useAuthStore } from "@/providers/auth-provider";
+import { useAuthStore } from "@/store/useAuthStore";
 import { Login } from "./_components/login";
 import Layout from "./_layout";
 
 export default () => {
   const router = useRouter();
-  const { user, setUser } = useAuth();
   const { login, signup, setShowLoader } = useAuthStore();
 
   const handleLogin = async (email: string, password: string) => {
