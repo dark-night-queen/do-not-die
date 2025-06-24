@@ -1,13 +1,16 @@
 import React from "react";
 import { useRouter } from "expo-router";
 import { toast } from "sonner-native";
+import { useAuth } from "@/providers/auth-provider";
 import { useAuthStore } from "@/store/useAuthStore";
 import { Login } from "./_components/login";
 import Layout from "./_layout";
 
 export default () => {
   const router = useRouter();
-  const { login, signup } = useAuthStore();
+  // TODO: move both login and signup to auth-provider
+  const { login } = useAuthStore();
+  const { signup } = useAuth();
 
   const handleLogin = async (email: string, password: string) => {
     const {
@@ -18,13 +21,11 @@ export default () => {
   };
 
   const handleSignup = async (email: string, password: string) => {
-    const {
-      data: { session },
-      error,
-    } = await signup(email, password);
-
-    if (error) toast.warning(error.message.replaceAll(",", "\n"));
-    else if (!session) toast("Please check your inbox for email verification!");
+    try {
+      await signup(email, password);
+    } catch (error: any) {
+      toast.warning(error.replaceAll(",", "\n"));
+    }
   };
 
   const handleForgetPassword = () => {
