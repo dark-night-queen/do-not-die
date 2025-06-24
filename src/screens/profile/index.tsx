@@ -1,4 +1,5 @@
 import { SafeAreaView, ScrollView } from "react-native";
+import { useRouter } from "expo-router";
 import { LogOut } from "lucide-react-native";
 import { Box, Button, ButtonIcon, ButtonText, VStack } from "@/components/ui";
 import { User } from "./_components/user";
@@ -14,10 +15,12 @@ export default () => {
   const targetWeight = 55;
   const dailyCalorieTarget = 1458;
 
+  const router = useRouter();
   const { logout } = useAuthStore();
 
-  const onLogout = () => {
-    logout();
+  const onLogout = async () => {
+    await logout();
+    router.push("/(auth)");
   };
 
   return (

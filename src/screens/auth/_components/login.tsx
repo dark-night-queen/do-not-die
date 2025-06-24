@@ -1,6 +1,5 @@
 import React from "react";
 import colors from "tailwindcss/colors";
-import { useAuthStore } from "@/store/useAuthStore";
 import {
   validateEmail as validateEmailUtil,
   validatePassword as validatePasswordUtil,
@@ -19,7 +18,10 @@ export const Login = ({
   handleSignup,
   handleForgetPassword,
 }: ILoginProps) => {
-  const { showLoader } = useAuthStore();
+  const [showLoader, setShowLoader] = React.useState({
+    login: false,
+    signup: false,
+  });
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [error, setError] = React.useState({
@@ -49,15 +51,19 @@ export const Login = ({
     return !error_message;
   };
 
-  const onLoginPress = () => {
+  const onLoginPress = async () => {
     if (validateEmail() && validatePassword()) {
-      handleLogin(email, password);
+      setShowLoader((prev) => ({ ...prev, login: true }));
+      await handleLogin(email, password);
+      setShowLoader((prev) => ({ ...prev, login: false }));
     }
   };
 
-  const onSignUpPress = () => {
+  const onSignUpPress = async () => {
     if (validateEmail() && validatePassword()) {
-      handleSignup(email, password);
+      setShowLoader((prev) => ({ ...prev, signup: true }));
+      await handleSignup(email, password);
+      setShowLoader((prev) => ({ ...prev, signup: false }));
     }
   };
 

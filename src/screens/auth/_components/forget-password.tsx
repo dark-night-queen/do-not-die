@@ -1,7 +1,6 @@
 import React from "react";
 import colors from "tailwindcss/colors";
 import { ChevronLeft } from "lucide-react-native";
-import { useAuthStore } from "@/store/useAuthStore";
 import { validateEmail as validateEmailUtil } from "@/utils/validate-auth";
 import {
   Button,
@@ -28,7 +27,7 @@ export const ForgetPassword = ({
   handleSubmit,
   goBackToLogin,
 }: IForgetPasswordProps) => {
-  const { showLoader } = useAuthStore();
+  const [showLoader, setShowLoader] = React.useState(false);
   const [email, setEmail] = React.useState("");
   const [error, setError] = React.useState("");
   const [currentScreen, setCurrentScreen] = React.useState(
@@ -46,9 +45,11 @@ export const ForgetPassword = ({
     return !error_message;
   };
 
-  const onSendEmail = () => {
+  const onSendEmail = async () => {
     if (validateEmail()) {
-      handleSubmit(email);
+      setShowLoader(true);
+      await handleSubmit(email);
+      setShowLoader(false);
       setCurrentScreen(Screen.SUCCESS);
     }
   };
@@ -82,9 +83,7 @@ export const ForgetPassword = ({
 
           <Button onPress={onSendEmail}>
             <ButtonText>Send Email</ButtonText>
-            {showLoader["forget-password"] ? (
-              <Spinner size="small" color={colors.white} />
-            ) : null}
+            {showLoader ? <Spinner size="small" color={colors.white} /> : null}
           </Button>
         </>
       )}

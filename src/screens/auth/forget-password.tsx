@@ -6,12 +6,10 @@ import Layout from "./_layout";
 
 export default () => {
   const router = useRouter();
-  const { setShowLoader, forgetPassword } = useAuthStore();
+  const { forgetPassword } = useAuthStore();
 
   const handleSubmit = async (email: string) => {
-    setShowLoader("forget-password", true);
     await forgetPassword(email);
-    setShowLoader("forget-password", false);
   };
 
   const goBackToLogin = () => {

@@ -1,9 +1,10 @@
 model User {
-  id        String  @id @default(dbgenerated("uuid_generate_v4()"))
-  email     String  @unique
-  firstName String?
-  lastName  String?
-  avatar    String?
+  id              String  @id @default(dbgenerated("uuid_generate_v4()"))
+  email           String  @unique
+  firstName       String?
+  lastName        String?
+  avatar          String?
+  isActive        Boolean @default(true)
 
   profile   Profile?
   createdAt DateTime @default(now())

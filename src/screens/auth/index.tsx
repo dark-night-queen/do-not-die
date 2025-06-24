@@ -7,20 +7,17 @@ import Layout from "./_layout";
 
 export default () => {
   const router = useRouter();
-  const { login, signup, setShowLoader } = useAuthStore();
+  const { login, signup } = useAuthStore();
 
   const handleLogin = async (email: string, password: string) => {
-    setShowLoader("login", true);
     const {
       data: { session, user },
       error,
     } = await login(email, password);
     if (error) toast.warning(error.message);
-    setShowLoader("login", false);
   };
 
   const handleSignup = async (email: string, password: string) => {
-    setShowLoader("signup", true);
     const {
       data: { session },
       error,
@@ -28,8 +25,6 @@ export default () => {
 
     if (error) toast.warning(error.message.replaceAll(",", "\n"));
     else if (!session) toast("Please check your inbox for email verification!");
-
-    setShowLoader("signup", false);
   };
 
   const handleForgetPassword = () => {
