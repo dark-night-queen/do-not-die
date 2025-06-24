@@ -90,8 +90,11 @@
     "eslint": "^9.25.0",
     "eslint-config-expo": "~9.2.0",
     "jscodeshift": "0.15.2",
-    "prisma": "^6.8.2",
+    "prisma": "^6.10.1",
     "typescript": "~5.8.3"
+  },
+  "prisma": {
+    "schema": "prisma"
   },
   "private": true
 }

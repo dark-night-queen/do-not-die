@@ -1,0 +1,46 @@
+model User {
+  id        String  @id @default(dbgenerated("uuid_generate_v4()"))
+  email     String  @unique
+  firstName String?
+  lastName  String?
+  avatar    String?
+
+  profile   Profile?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Profile {
+  id                   Int                @id @default(autoincrement())
+  userId               String             @unique
+  age                  Int?
+  height               Float
+  weight               Float
+  gender               Gender?
+  unitSystem           UnitSystem         @default(IMPERIAL)
+  dietaryPreference    DietaryPreference?
+  isOnboardingComplete Boolean            @default(false)
+
+  user      User      @relation(fields: [userId], references: [id])
+  goal      Goal?
+  activity  Activity?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum UnitSystem {
+  IMPERIAL
+  METRIC
+}
+
+enum DietaryPreference {
+  VEGAN
+  VEGETARIAN
+  NON_VEGETARIAN
+}

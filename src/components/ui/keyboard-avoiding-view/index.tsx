@@ -1,2 +1,2 @@
 'use client';
-export { KeyboardAvoidingView } from 'react-native';
+export { KeyboardAvoidingView, TouchableWithoutFeedback } from 'react-native';
