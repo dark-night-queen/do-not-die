@@ -38,7 +38,7 @@ type IFormProps = IFormControlProps &
   };
 
 type IRadioElementProps = IRadioGroupProps & {
-  options: string[];
+  options: Record<string, string>;
   direction?: "vertical" | "horizontal";
 };
 
@@ -54,7 +54,12 @@ type ISelectElementProps = {
   }[];
 };
 
-export const FormElement = ({ label, error, className, children }: IFormProps) => {
+export const FormElement = ({
+  label,
+  error,
+  className,
+  children,
+}: IFormProps) => {
   return (
     <FormControl
       isInvalid={!!error}
@@ -98,10 +103,10 @@ export const RadioElement = ({
       className={`gap-3 ${direction == "horizontal" ? "flex-row" : ""}`}
       {...props}
     >
-      {options.map((option) => (
+      {Object.keys(options).map((key) => (
         <Radio
-          key={option}
-          value={option}
+          key={key}
+          value={options[key]}
           size="sm"
           isInvalid={false}
           isDisabled={false}
@@ -110,7 +115,7 @@ export const RadioElement = ({
             <RadioIcon as={CircleIcon} />
           </RadioIndicator>
 
-          <RadioLabel>{option}</RadioLabel>
+          <RadioLabel>{key}</RadioLabel>
         </Radio>
       ))}
     </RadioGroup>
