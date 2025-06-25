@@ -19,7 +19,7 @@ interface UserState {
 }
 interface UserActions {
   getUser: (id: string) => Promise<User | null>;
-  setUser: (user: User) => void;
+  setUser: (user: User | null) => void;
   createUser: (user: User) => Promise<{ data: any; error: any }>;
   updateUser: (user: Partial<User>) => void;
 }
@@ -27,7 +27,7 @@ interface UserActions {
 export const useUserStore = create<UserState & UserActions>((set, get) => ({
   user: null,
 
-  getUser: async (id: string) => {
+  getUser: async (id) => {
     const { user, setUser } = get();
     if (user?.id === id) return user;
 
@@ -39,10 +39,10 @@ export const useUserStore = create<UserState & UserActions>((set, get) => ({
     if (newUser) setUser(newUser);
     return newUser || null;
   },
-  setUser: (user: User) => {
+  setUser: (user) => {
     set({ user });
   },
-  createUser: async (user: User) => {
+  createUser: async (user) => {
     const { data, error } = await supabase
       .from("User")
       .insert({
@@ -56,7 +56,7 @@ export const useUserStore = create<UserState & UserActions>((set, get) => ({
 
     return { data, error };
   },
-  updateUser: (user: Partial<User>) => {
+  updateUser: (user) => {
     //   set((state) => ({
     //     user: { ...state.user, ...user },
     //   }));

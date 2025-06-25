@@ -13,7 +13,7 @@ export default () => {
   };
 
   const goBackToLogin = () => {
-    router.push("/(auth)");
+    router.push("/auth");
   };
 
   return (

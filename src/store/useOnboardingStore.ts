@@ -1,55 +1,47 @@
 import { create } from "zustand";
 import { supabase } from "@/utils/supabase";
+import { cmToFeet, feetToCm, kgToLbs, lbsToKg } from "@/utils/units";
+import {
+  Gender,
+  UnitSystem,
+  UnitSystemOptions,
+  DietaryPreference,
+} from "@/constants/user.bodyMetric.type";
 
-export enum Gender {
-  MALE = "Male",
-  FEMALE = "Female",
-  OTHER = "Other",
-}
-
-export enum UnitSystem {
-  IMPERIAL = "Imperial",
-  METRIC = "Metric",
-}
-
-export enum DietaryPreference {
-  VEGAN = "Vegan",
-  VEGETARIAN = "Vegetarian",
-  NON_VEGETARIAN = "Non-Vegetarian",
-}
-
+// Profile type
 export type Profile = {
   id?: number;
   userId: string;
   age?: number;
   height?: number;
   weight?: number;
-  gender?: keyof typeof Gender;
-  unitSystem?: keyof typeof UnitSystem;
-  dietaryPreference?: keyof typeof DietaryPreference;
+  gender?: Gender;
+  unitSystem?: UnitSystem;
+  dietaryPreference?: DietaryPreference;
   isOnboardingComplete?: boolean;
-  // goal?: "Weight Loss" | "Weight Gain";
-  // goalDuration?: "1 month" | "3 month" | "6 month";
-  // activityLevel?: "Sedentary" | "Lightly Active" | "Moderately Active" | "Very Active" | "Super Active";
   createdAt?: string;
   updatedAt?: string;
 };
 
+// state and actions for the Profile store
 interface ProfileState {
   profile: Profile | null;
 }
 interface ProfileActions {
   getProfile: (userId: string) => Promise<Profile | null>;
-  setProfile: (profile: Profile) => void;
-  createProfile: (userId: string) => Promise<{ data: any; error: any }>;
-  // updateProfile: (profile: Partial<Profile>) => Promise<void>;
+  setProfile: (profile: Profile | null) => void;
+  createProfile: (profile: Profile) => Promise<{ data: any; error: any }>;
+  updateProfile: (
+    profile: Partial<Profile>
+  ) => Promise<{ data: any; error: any }>;
 }
 
+// Profile store
 export const useProfileStore = create<ProfileState & ProfileActions>(
   (set, get) => ({
     profile: null,
 
-    getProfile: async (userId: string) => {
+    getProfile: async (userId) => {
       const { profile, setProfile } = get();
       if (profile && profile.userId === userId) {
         return profile;
@@ -67,37 +59,84 @@ export const useProfileStore = create<ProfileState & ProfileActions>(
       return newProfile ?? null;
     },
 
-    setProfile: (profile: Profile) => {
+    setProfile: (profile) => {
       set({ profile });
     },
 
-    createProfile: async (userId: string) => {
+    createProfile: async (profile) => {
       const { data, error } = await supabase
         .from("Profile")
-        .insert({
-          userId,
-        })
+        .insert(profile)
         .select();
 
       return { data, error };
     },
 
-    // updateProfile: async (profileUpdates: Partial<Profile>) => {
-    //   set({ isProfileUpdating: true });
-    //   try {
-    //     const updatedProfile = await updateProfileInAPI(profileUpdates);
-    //     set({ profile: updatedProfile, isProfileUpdating: false, isProfileUpdateSuccess: true });
-    //   } catch (error) {
-    //     set({ isProfileUpdateError: true, isProfileUpdating: false });
-    //   }
-    // },
+    updateProfile: async (profile) => {
+      const { data, error } = await supabase
+        .from("Profile")
+        .update(profile)
+        .eq("id", profile.id)
+        .select();
+
+      return { data, error };
+    },
   })
 );
 
-interface OnboardingState {}
+// state and actions for the Body Metrics store
+interface BodyMetricsActions {
+  getDisplayHeight: (heightCm: string, unitSystem: UnitSystem) => string;
+  getDisplayWeight: (weightKg: string, unitSystem: UnitSystem) => string;
+  calculateBMI: (
+    heightCm: string,
+    weightKg: string,
+    unitSystem: UnitSystem
+  ) => number;
+  getWeightClassification: (bmi: number) => string;
+}
 
-interface OnboardingActions {}
+// Body Metrics store
+export const useBodyMetricsStore = create<BodyMetricsActions>((_set, get) => ({
+  getDisplayHeight: (heightCm, unitSystem) => {
+    if (!heightCm) return heightCm;
 
-export const useOnboardingStore = create<OnboardingState & OnboardingActions>(
-  (set, get) => ({})
-);
+    if (unitSystem === UnitSystemOptions.Imperial) {
+      const [feetStr, inchesStr] = heightCm.split(".");
+      const feet = Number(feetStr) || 0;
+      const inches = Number(inchesStr) || 0;
+
+      return feetToCm(feet, inches).toString();
+    } else {
+      const { feet, inches } = cmToFeet(parseInt(heightCm));
+      return `${feet}.${inches}`;
+    }
+  },
+
+  getDisplayWeight: (weightKg, unitSystem) => {
+    if (unitSystem === UnitSystemOptions.Imperial) {
+      return kgToLbs(parseFloat(weightKg)).toFixed(1);
+    } else {
+      return lbsToKg(parseFloat(weightKg)).toFixed(1);
+    }
+  },
+
+  calculateBMI: (heightCm, weightKg, unitSystem) => {
+    if (unitSystem === UnitSystemOptions.Imperial) {
+      const { getDisplayHeight, getDisplayWeight } = get();
+
+      heightCm = getDisplayHeight(heightCm, unitSystem);
+      weightKg = getDisplayWeight(weightKg, unitSystem);
+    }
+    const heightM = parseInt(heightCm) / 100;
+    if (!heightM) return 0;
+    return parseInt(weightKg) / (heightM * heightM);
+  },
+
+  getWeightClassification: (bmi: number) => {
+    if (bmi < 18.5) return "Underweight";
+    if (bmi < 25) return "Normal weight";
+    if (bmi < 30) return "Overweight";
+    return "Obese";
+  },
+}));

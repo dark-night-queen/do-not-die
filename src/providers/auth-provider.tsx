@@ -15,19 +15,25 @@ const AuthProvider = ({ children }: React.PropsWithChildren) => {
   const router = useRouter();
 
   const { createUser, setUser, getUser } = useUserStore();
-  const { createProfile, setProfile, getProfile } = useProfileStore();
+  const { getProfile } = useProfileStore();
   const { signup, getSession, onAuthStateChange } = useAuthStore();
 
   const handleSessionChange = async (session: Session | null) => {
     if (session) {
-      getUser(session.user.id);
+      if (!session.user) {
+        console.error("No user found in session");
+        return;
+      }
+      await getUser(session.user.id);
       const profile = await getProfile(session.user.id);
 
       if (profile?.isOnboardingComplete) {
         router.push("/(tabs)");
       } else {
-        router.push("/(auth)/onboarding");
+        router.push("/auth/onboarding");
       }
+    } else {
+      router.push("/auth");
     }
   };
 
@@ -50,19 +56,6 @@ const AuthProvider = ({ children }: React.PropsWithChildren) => {
     return newUser.id;
   };
 
-  const createNewProfile = async (userId: string) => {
-    const { data, error } = await createProfile(userId);
-
-    if (error) return console.error("Error creating user's profile:", error);
-    setProfile(data[0] as Profile);
-  };
-
-  const handleNewSession = async (session: Session) => {
-    const userId = await createNewUser(session);
-    if (!userId) return;
-    createNewProfile(userId);
-  };
-
   const onSignup = async (email: string, password: string) => {
     const {
       data: { session },
@@ -74,7 +67,7 @@ const AuthProvider = ({ children }: React.PropsWithChildren) => {
       throw error.message;
     }
 
-    handleNewSession(session);
+    await createNewUser(session);
   };
 
   return (

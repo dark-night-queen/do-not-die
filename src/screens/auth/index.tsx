@@ -29,7 +29,7 @@ export default () => {
   };
 
   const handleForgetPassword = () => {
-    router.push("/(auth)/forget-password");
+    router.push("/auth/forget-password");
   };
 
   return (
