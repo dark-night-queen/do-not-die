@@ -1,14 +1,13 @@
 model User {
-  id        String  @id
-  email     String  @unique
+  id        String   @id
+  email     String   @unique
   firstName String?
   lastName  String?
   avatar    String?
-  isActive  Boolean @default(true)
-
-  profile   Profile?
+  isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
+  profile   Profile?
 }
 
 model Profile {
@@ -21,12 +20,12 @@ model Profile {
   unitSystem           UnitSystem         @default(IMPERIAL)
   dietaryPreference    DietaryPreference?
   isOnboardingComplete Boolean            @default(false)
-
-  user      User      @relation(fields: [userId], references: [id])
-  goal      Goal?
-  activity  Activity?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @default(now()) @updatedAt
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @default(now()) @updatedAt
+  dailyCalorieTarget   Int?
+  activity             Activity?
+  goal                 Goal?
+  user                 User               @relation(fields: [userId], references: [id])
 }
 
 enum Gender {
