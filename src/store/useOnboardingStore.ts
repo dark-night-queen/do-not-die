@@ -17,6 +17,7 @@ export type Profile = {
   age: number | null;
   height: number | null;
   weight: number | null;
+  dailyCalorieTarget?: number;
   gender: Gender | null;
   unitSystem: UnitSystem | null;
   dietaryPreference: DietaryPreference | null;
@@ -36,9 +37,7 @@ interface ProfileActions {
   updateProfile: (
     profile: Partial<Profile>
   ) => Promise<{ data: any; error: any }>;
-  updateOnboardingStatus: (
-    isOnboardingComplete: boolean
-  ) => Promise<{ data: any; error: any }>;
+  resetOnboarding: () => Promise<{ data: any; error: any }>;
 }
 
 // Profile store
@@ -87,21 +86,18 @@ export const useProfileStore = create<ProfileState & ProfileActions>(
       setProfile(data?.[0]);
       return { data, error };
     },
-    updateOnboardingStatus: async (isOnboardingComplete) => {
+    resetOnboarding: async () => {
       const { profile, updateProfile } = get();
       if (!profile) return { data: null, error: null };
 
       let updatedProfile = { ...profile };
-      updatedProfile.isOnboardingComplete = isOnboardingComplete;
-
-      if (!isOnboardingComplete) {
-        updatedProfile.age = null;
-        updatedProfile.dietaryPreference = null;
-        updatedProfile.gender = null;
-        updatedProfile.height = null;
-        updatedProfile.weight = null;
-        updatedProfile.unitSystem = UnitSystemOptions.Metrics;
-      }
+      updatedProfile.age = null;
+      updatedProfile.dietaryPreference = null;
+      updatedProfile.gender = null;
+      updatedProfile.height = null;
+      updatedProfile.weight = null;
+      updatedProfile.unitSystem = UnitSystemOptions.Metrics;
+      updatedProfile.isOnboardingComplete = false;
       return await updateProfile(updatedProfile);
     },
   })

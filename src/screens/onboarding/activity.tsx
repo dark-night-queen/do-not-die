@@ -12,7 +12,7 @@ import Layout from "./_layout";
 export default () => {
   const router = useRouter();
   const navigate = useNavigation();
-  const { profile, updateOnboardingStatus } = useProfileStore();
+  const { profile, updateProfile } = useProfileStore();
   const { activity, createActivity, updateActivity } = useActivityStore();
 
   const [isDisabled, setIsDisabled] = React.useState(true);
@@ -62,7 +62,10 @@ export default () => {
       await handleUpdateActivity(updatedActivity);
     }
 
-    await updateOnboardingStatus(true);
+    const updatedProfile = { ...profile };
+    updatedProfile.isOnboardingComplete = true;
+    updatedProfile.dailyCalorieTarget = 1;
+    await updateProfile(updatedProfile);
   };
 
   return (

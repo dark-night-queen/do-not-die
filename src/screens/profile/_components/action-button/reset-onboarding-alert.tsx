@@ -25,7 +25,7 @@ export const ResetOnboardingAlert = ({
   showAlert,
   onClose,
 }: IResetOnboardingAlert) => {
-  const { updateOnboardingStatus } = useProfileStore();
+  const { resetOnboarding } = useProfileStore();
   const { resetGoal } = useGoalStore();
   const { resetActivity } = useActivityStore();
   const [showLoader, setShowLoader] = React.useState(false);
@@ -34,7 +34,7 @@ export const ResetOnboardingAlert = ({
     setShowLoader(true);
     await resetGoal();
     await resetActivity();
-    await updateOnboardingStatus(false);
+    await resetOnboarding();
     setShowLoader(false);
     onClose();
   };
