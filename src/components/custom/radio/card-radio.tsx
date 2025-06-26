@@ -1,17 +1,15 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import type { LucideIcon } from "lucide-react-native";
 import { IRadioGroupProps } from "@gluestack-ui/radio/lib/types";
 import { tva } from "@gluestack-ui/nativewind-utils/tva";
 import type { VariantProps } from "@gluestack-ui/nativewind-utils";
-import { Card, Icon, UIRadio, RadioGroup, RadioLabel } from "@/components/ui";
+import { Icon, UIRadio, RadioGroup, RadioLabel } from "@/components/ui";
 
-type ICardRadioElementProps = IRadioGroupProps & {
-  options: {
-    label: string;
-    value: string;
-    icon: LucideIcon;
-  }[];
-};
+type Option = {
+  label: string;
+  value: string;
+  icon: LucideIcon;
+} & Record<string, any>;
 
 const cardRadioStyle = tva({
   base: "group/radio flex-row justify-start items-center w-full gap-2 web:cursor-pointer data-[disabled=true]:web:cursor-not-allowed",
@@ -19,7 +17,7 @@ const cardRadioStyle = tva({
     size: {
       sm: "p-3 rounded",
       md: "p-4 rounded-md",
-      lg: "p-6 rounded-xl",
+      lg: "p-6 rounded-lg",
     },
     variant: {
       elevated: "bg-background-0 dark:bg-gray-800",
@@ -50,22 +48,43 @@ const CardRadio = React.forwardRef<
   );
 });
 
-const CardRadioElement = ({ options, ...props }: ICardRadioElementProps) => {
+type ICardRadioElementProps = {
+  options: Option[];
+  formatLabel?: (option: Option) => ReactNode;
+  cardRadioProps?: VariantProps<typeof cardRadioStyle>;
+} & IRadioGroupProps;
+
+const CardRadioElement = ({
+  options,
+  formatLabel,
+  cardRadioProps,
+  ...props
+}: ICardRadioElementProps) => {
   return (
     <RadioGroup {...props} className="gap-3">
-      {options.map(({ label, value, icon }) => (
-        <CardRadio
-          key={value}
-          value={value}
-          size="sm"
-          variant="outline"
-          isInvalid={false}
-          isDisabled={false}
-        >
-          <Icon as={icon} className="text-indigo-400" />
-          <RadioLabel>{label}</RadioLabel>
-        </CardRadio>
-      ))}
+      {options.map((opt) => {
+        const { label, value, icon } = opt;
+        return (
+          <CardRadio
+            key={value}
+            value={value}
+            size="md"
+            variant="outline"
+            isInvalid={false}
+            isDisabled={false}
+            {...cardRadioProps}
+          >
+            {formatLabel ? (
+              formatLabel(opt)
+            ) : (
+              <>
+                <Icon as={icon} className="text-indigo-400" />
+                <RadioLabel>{label}</RadioLabel>
+              </>
+            )}
+          </CardRadio>
+        );
+      })}
     </RadioGroup>
   );
 };

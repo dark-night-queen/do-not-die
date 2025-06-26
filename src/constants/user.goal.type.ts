@@ -1,5 +1,5 @@
+import { Dumbbell, Scale } from "lucide-react-native";
 import type { LucideIcon } from "lucide-react-native";
-import { Icon, Dumbbell, Scale } from "lucide-react-native";
 
 // Define types
 export type GoalType = "WEIGHT_LOSS" | "WEIGHT_GAIN";

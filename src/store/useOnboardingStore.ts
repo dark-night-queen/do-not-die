@@ -8,6 +8,7 @@ import {
   DietaryPreference,
 } from "@/constants/user.bodyMetric.type";
 import { GoalDuration, GoalType } from "@/constants/user.goal.type";
+import { ActivityLevel } from "@/constants/user.activity.type";
 
 // Profile type
 export type Profile = {
@@ -35,6 +36,9 @@ interface ProfileActions {
   updateProfile: (
     profile: Partial<Profile>
   ) => Promise<{ data: any; error: any }>;
+  updateOnboardingStatus: (
+    isOnboardingComplete: boolean
+  ) => {} | Promise<{ data: any; error: any }>;
 }
 
 // Profile store
@@ -59,11 +63,9 @@ export const useProfileStore = create<ProfileState & ProfileActions>(
       if (newProfile) setProfile(newProfile);
       return newProfile ?? null;
     },
-
     setProfile: (profile) => {
       set({ profile });
     },
-
     createProfile: async (profile) => {
       const { data, error } = await supabase
         .from("Profile")
@@ -72,14 +74,23 @@ export const useProfileStore = create<ProfileState & ProfileActions>(
 
       return { data, error };
     },
-
     updateProfile: async (profile) => {
       const { data, error } = await supabase
         .from("Profile")
         .update(profile)
-        .eq("id", profile.id)
+        .eq("userId", profile.userId)
         .select();
 
+      return { data, error };
+    },
+    updateOnboardingStatus: async (isOnboardingComplete) => {
+      const { profile, updateProfile, setProfile } = get();
+
+      if (!profile) return {};
+      profile.isOnboardingComplete = isOnboardingComplete;
+      const { data, error } = await updateProfile(profile);
+
+      if (data?.[0]) setProfile(data[0]);
       return { data, error };
     },
   })
@@ -155,6 +166,7 @@ export type Goal = {
   targetWeight: number;
 };
 
+// state and actions for the Goal store
 interface GoalState {
   goal: Goal | null;
 }
@@ -166,6 +178,7 @@ interface GoalActions {
   updateGoal: (goal: Partial<Goal>) => Promise<{ data: any; error: any }>;
 }
 
+// Goal Store
 export const useGoalStore = create<GoalState & GoalActions>((set, get) => ({
   goal: null,
 
@@ -200,9 +213,72 @@ export const useGoalStore = create<GoalState & GoalActions>((set, get) => ({
     const { data, error } = await supabase
       .from("Goal")
       .update(goal)
-      .eq("id", goal.id)
+      .eq("profileId", goal.profileId)
       .select();
 
     return { data, error };
   },
 }));
+
+// Activity type
+export type Activity = {
+  id?: number;
+  profileId: number;
+  activityLevel: ActivityLevel;
+};
+
+// state and actions for the activity store
+interface ActivityState {
+  activity: Activity | null;
+}
+
+interface ActivityActions {
+  getActivity: (profileId: number) => Promise<Activity | null>;
+  setActivity: (activity: Activity | null) => void;
+  createActivity: (activity: Activity) => Promise<{ data: any; error: any }>;
+  updateActivity: (
+    activity: Partial<Activity>
+  ) => Promise<{ data: any; error: any }>;
+}
+
+export const useActivityStore = create<ActivityState & ActivityActions>(
+  (set, get) => ({
+    activity: null,
+
+    getActivity: async (profileId) => {
+      const { activity, setActivity } = get();
+      if (activity && activity.profileId === profileId) {
+        return activity;
+      }
+
+      const { data, error } = await supabase
+        .from("Activity")
+        .select()
+        .eq("profileId", profileId);
+
+      if (error) console.error("Error fetching user's activity:", error);
+
+      const newActivity = data?.[0];
+      if (newActivity) setActivity(newActivity);
+      return newActivity ?? null;
+    },
+    setActivity: (activity) => set({ activity }),
+    createActivity: async (activity) => {
+      const { data, error } = await supabase
+        .from("Activity")
+        .insert(activity)
+        .select();
+
+      return { data, error };
+    },
+    updateActivity: async (activity) => {
+      const { data, error } = await supabase
+        .from("Activity")
+        .update(activity)
+        .eq("profileId", activity.profileId)
+        .select();
+
+      return { data, error };
+    },
+  })
+);
