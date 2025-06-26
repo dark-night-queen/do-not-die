@@ -11,6 +11,8 @@ import {
 } from "@/components/ui";
 import { ResetOnboardingAlert } from "./reset-onboarding-alert";
 
+// TODO: See if I can change the warning btn to have light background
+// TODO: Reset onboarding's multiple method are being called in child comp, can we merge them in one?
 export const ActionButtons = () => {
   const { logout } = useAuthStore();
   const [showAlert, setShowAlert] = React.useState(false);

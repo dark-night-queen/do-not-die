@@ -2,6 +2,7 @@ import React from "react";
 import { Flame, Scale, Target } from "lucide-react-native";
 import { HStack, Text, Card, Icon, VStack } from "@/components/ui";
 import { useGoalStore, useProfileStore } from "@/store/useOnboardingStore";
+import { getWeightUnitSystem } from "@/utils/units";
 
 type ICustomCard = {
   icon: any;
@@ -25,6 +26,7 @@ const CustomCard = ({ icon, className, name, value }: ICustomCard) => {
 export const Stats = () => {
   const { profile } = useProfileStore();
   const { goal } = useGoalStore();
+  const weightUnitSystem = getWeightUnitSystem(profile?.unitSystem ?? "METRIC");
 
   return (
     <VStack className="gap-4">
@@ -32,13 +34,13 @@ export const Stats = () => {
         <CustomCard
           icon={Scale}
           className="text-blue-400"
-          value={`${profile?.weight} kg`}
+          value={`${profile?.weight} ${weightUnitSystem}`}
           name="Current Weight"
         />
         <CustomCard
           icon={Target}
           className="text-green-400"
-          value={`${goal?.targetWeight} kg`}
+          value={`${goal?.targetWeight} ${weightUnitSystem}`}
           name="Target Weight"
         />
       </HStack>
