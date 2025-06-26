@@ -1,3 +1,5 @@
+import { UnitSystemOptions } from "@/constants/user.bodyMetric.type";
+
 export function cmToFeet(cm: number): { feet: number; inches: number } {
   const totalInches = cm / 2.54;
   const feet = Math.floor(totalInches / 12);
@@ -15,4 +17,12 @@ export function kgToLbs(kg: number): number {
 
 export function lbsToKg(lbs: number): number {
   return Math.round(lbs / 2.20462);
+}
+
+export function getHeightUnitSystem(unitSystem: string): string {
+  return unitSystem === UnitSystemOptions.Imperial ? "ft" : "cm";
+}
+
+export function getWeightUnitSystem(unitSystem: string): string {
+  return unitSystem === UnitSystemOptions.Imperial ? "lbs" : "kg";
 }

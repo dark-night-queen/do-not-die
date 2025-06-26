@@ -7,6 +7,7 @@ import {
   UnitSystemOptions,
   DietaryPreference,
 } from "@/constants/user.bodyMetric.type";
+import { GoalDuration, GoalType } from "@/constants/user.goal.type";
 
 // Profile type
 export type Profile = {
@@ -85,6 +86,8 @@ export const useProfileStore = create<ProfileState & ProfileActions>(
 );
 
 // state and actions for the Body Metrics store
+interface BodyMetricsState {}
+
 interface BodyMetricsActions {
   getDisplayHeight: (heightCm: string, unitSystem: UnitSystem) => string;
   getDisplayWeight: (weightKg: string, unitSystem: UnitSystem) => string;
@@ -97,7 +100,9 @@ interface BodyMetricsActions {
 }
 
 // Body Metrics store
-export const useBodyMetricsStore = create<BodyMetricsActions>((_set, get) => ({
+export const useBodyMetricsStore = create<
+  BodyMetricsState & BodyMetricsActions
+>((_set, get) => ({
   getDisplayHeight: (heightCm, unitSystem) => {
     if (!heightCm) return heightCm;
 
@@ -138,5 +143,66 @@ export const useBodyMetricsStore = create<BodyMetricsActions>((_set, get) => ({
     if (bmi < 25) return "Normal weight";
     if (bmi < 30) return "Overweight";
     return "Obese";
+  },
+}));
+
+// Goal type
+export type Goal = {
+  id?: number;
+  profileId: number;
+  type: GoalType;
+  duration: GoalDuration;
+  targetWeight: number;
+};
+
+interface GoalState {
+  goal: Goal | null;
+}
+
+interface GoalActions {
+  getGoal: (profileId: number) => Promise<Goal | null>;
+  setGoal: (goal: Goal | null) => void;
+  createGoal: (goal: Goal) => Promise<{ data: any; error: any }>;
+  updateGoal: (goal: Partial<Goal>) => Promise<{ data: any; error: any }>;
+}
+
+export const useGoalStore = create<GoalState & GoalActions>((set, get) => ({
+  goal: null,
+
+  getGoal: async (profileId) => {
+    const { goal, setGoal } = get();
+    if (goal && goal.profileId === profileId) {
+      return goal;
+    }
+
+    const { data, error } = await supabase
+      .from("Goal")
+      .select()
+      .eq("profileId", profileId);
+
+    if (error) console.error("Error fetching user's goal:", error);
+
+    const newGoal = data?.[0];
+    if (newGoal) setGoal(newGoal);
+    return newGoal ?? null;
+  },
+
+  setGoal: (goal) => {
+    set({ goal });
+  },
+
+  createGoal: async (goal) => {
+    const { data, error } = await supabase.from("Goal").insert(goal).select();
+    return { data, error };
+  },
+
+  updateGoal: async (goal) => {
+    const { data, error } = await supabase
+      .from("Goal")
+      .update(goal)
+      .eq("id", goal.id)
+      .select();
+
+    return { data, error };
   },
 }));

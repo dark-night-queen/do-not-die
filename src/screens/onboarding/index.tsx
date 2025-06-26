@@ -15,6 +15,7 @@ import { useUserStore } from "@/store/useUserStore";
 import { BodyMetrics } from "./_components/body-metrics";
 import Layout from "./_layout";
 
+// TODO: Call API only if update has been made
 export default () => {
   const router = useRouter();
   const { getDisplayHeight, getDisplayWeight } = useBodyMetricsStore();
@@ -66,8 +67,8 @@ export default () => {
     return Object.values(newErrors).every((err) => !err);
   };
 
-  const handleCreateProfile = async (updatedProfile: Profile) => {
-    const { data, error } = await createProfile(updatedProfile);
+  const handleCreateProfile = async (newProfile: Profile) => {
+    const { data, error } = await createProfile(newProfile);
 
     if (error) return console.error("Error creating user's profile:", error);
     setProfile(data[0] as Profile);

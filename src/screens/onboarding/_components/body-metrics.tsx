@@ -1,18 +1,15 @@
-import { useBodyMetricsStore } from "@/store/useOnboardingStore";
+import { FormElement, InputElement, RadioElement } from "@/components/custom";
+import { InputSlot, Text, VStack } from "@/components/ui";
 import {
+  DietaryPreference,
+  DietaryPreferenceOptions,
   Gender,
   GenderOptions,
   UnitSystem,
   UnitSystemOptions,
-  DietaryPreference,
-  DietaryPreferenceOptions,
 } from "@/constants/user.bodyMetric.type";
-import { InputSlot, Text, VStack } from "@/components/ui";
-import {
-  FormElement,
-  InputElement,
-  RadioElement,
-} from "@/components/ui/form-control/form";
+import { getHeightUnitSystem, getWeightUnitSystem } from "@/utils/units";
+import { useBodyMetricsStore } from "@/store/useOnboardingStore";
 import { BMIDisplay } from "./calc-bmi";
 
 interface IBodyMetricsProps {
@@ -41,10 +38,8 @@ export const BodyMetrics = ({
 }: IBodyMetricsProps) => {
   const { calculateBMI } = useBodyMetricsStore();
 
-  const heightUnitSystem =
-    formData.unitSystem == UnitSystemOptions.Imperial ? "ft" : "cm";
-  const weightUnitSystem =
-    formData.unitSystem == UnitSystemOptions.Imperial ? "lbs" : "kg";
+  const heightUnitSystem = getHeightUnitSystem(formData.unitSystem);
+  const weightUnitSystem = getWeightUnitSystem(formData.unitSystem);
 
   const bmi = calculateBMI(
     formData.height,

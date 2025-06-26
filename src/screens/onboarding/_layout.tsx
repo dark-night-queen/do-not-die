@@ -9,6 +9,7 @@ type ILayoutProps = {
   onSubmit?: () => void;
 } & React.PropsWithChildren;
 
+// TODO: Make the button text dynamic
 export default ({ children, goBack, onSubmit }: ILayoutProps) => {
   const [showLoader, setShowLoader] = React.useState(false);
 
@@ -37,7 +38,7 @@ export default ({ children, goBack, onSubmit }: ILayoutProps) => {
               size="sm"
               onPress={handleSubmit}
             >
-              <ButtonText>Next</ButtonText>
+              <ButtonText>Continue</ButtonText>
               {showLoader ? (
                 <Spinner size="small" color={colors.white} />
               ) : null}
