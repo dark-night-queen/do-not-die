@@ -2,7 +2,7 @@ import React from "react";
 import { SafeAreaView } from "react-native";
 import { Heart } from "lucide-react-native";
 import { Box, Text, VStack } from "@/components/ui";
-import { IconContainer } from "@/components/ui/icon/icon-container";
+import { IconContainer } from "@/components/custom";
 
 export default () => {
   return (

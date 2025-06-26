@@ -1,6 +1,6 @@
 import { ChevronRight } from "lucide-react-native";
 import { Text, Button, ButtonIcon, ButtonText, HStack } from "@/components/ui";
-import { IconContainer } from "@/components/ui/icon/icon-container";
+import { IconContainer } from "@/components/custom";
 
 type IGhostButtonProps = {
   icon: any;

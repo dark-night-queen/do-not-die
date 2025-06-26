@@ -9,6 +9,7 @@ type BMIDisplayProps = {
   bmi: number;
 };
 
+// TODO: Fix UI based upon og
 export const BMIDisplay = ({ bmi }: BMIDisplayProps) => {
   const { getWeightClassification } = useBodyMetricsStore();
   const bmiCategory = getWeightClassification(bmi);

@@ -1,6 +1,6 @@
 import { Heart } from "lucide-react-native";
 import { Text, VStack } from "@/components/ui";
-import { IconContainer } from "@/components/ui/icon/icon-container";
+import { IconContainer } from "@/components/custom";
 
 export const ComingSoon = () => {
   return (
