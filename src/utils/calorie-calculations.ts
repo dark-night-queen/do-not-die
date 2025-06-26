@@ -1,13 +1,8 @@
-import {
-  Activity,
-  Goal,
-  Profile,
-  useBodyMetricsStore,
-} from "@/store/useOnboardingStore";
+import { Activity, Goal, Profile } from "@/store/useOnboardingStore";
 import { ActivityLevel } from "@/constants/user.activity.type";
 import { Gender, UnitSystemOptions } from "@/constants/user.bodyMetric.type";
 import { GoalTimeline } from "@/constants/user.goal.type";
-import { lbsToKg } from "./units";
+import { feetToCm, kgToLbs } from "./units";
 
 export class CalorieCalculations {
   age: number;
@@ -36,15 +31,15 @@ export class CalorieCalculations {
     this.gender = profile.gender ?? "MALE";
 
     this.weightKg =
-      unitSystem === UnitSystemOptions.Metrics ? weight : lbsToKg(weight);
+      unitSystem === UnitSystemOptions.Metric ? weight : kgToLbs(weight);
 
-    if (unitSystem === UnitSystemOptions.Metrics) {
+    if (unitSystem === UnitSystemOptions.Metric) {
       this.heightCm = height;
     } else {
-      const { getDisplayHeight } = useBodyMetricsStore();
-      this.heightCm = Number(
-        getDisplayHeight(height.toString(), UnitSystemOptions.Imperial)
-      );
+      const [feetStr, inchesStr] = height.toString().split(".");
+      const feet = Number(feetStr) || 0;
+      const inches = Number(inchesStr) || 0;
+      this.heightCm = feetToCm(feet, inches);
     }
 
     // activity
@@ -54,9 +49,9 @@ export class CalorieCalculations {
     this.timeline = GoalTimeline[goal.duration ?? "LONG_TERM"];
     const targetWeight = goal.targetWeight ?? 0;
     this.targetWeightKg =
-      unitSystem === UnitSystemOptions.Metrics
+      unitSystem === UnitSystemOptions.Metric
         ? targetWeight
-        : lbsToKg(targetWeight);
+        : kgToLbs(targetWeight);
   }
 
   // Calculate BMR using Mifflin-St Jeor Equation
