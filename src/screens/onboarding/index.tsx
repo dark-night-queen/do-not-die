@@ -20,8 +20,7 @@ export default () => {
   const router = useRouter();
   const { getDisplayHeight, getDisplayWeight } = useBodyMetricsStore();
   const { user } = useUserStore();
-  const { profile, createProfile, setProfile, updateProfile } =
-    useProfileStore();
+  const { profile, createProfile, updateProfile } = useProfileStore();
 
   const [formData, setFormData] = React.useState({
     age: profile?.age?.toString() || "",
@@ -68,17 +67,13 @@ export default () => {
   };
 
   const handleCreateProfile = async (newProfile: Profile) => {
-    const { data, error } = await createProfile(newProfile);
-
+    const { error } = await createProfile(newProfile);
     if (error) return console.error("Error creating user's profile:", error);
-    setProfile(data[0] as Profile);
   };
 
   const handleUpdateProfile = async (updatedProfile: Profile) => {
-    const { data, error } = await updateProfile(updatedProfile);
-
+    const { error } = await updateProfile(updatedProfile);
     if (error) return console.error("Error updating profile:", error);
-    setProfile(data[0] as Profile);
   };
 
   const handleSubmit = async () => {

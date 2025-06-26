@@ -13,7 +13,6 @@ type ILayoutProps = {
   };
 } & React.PropsWithChildren;
 
-// TODO: Make the button text dynamic
 export default ({
   children,
   goBack,

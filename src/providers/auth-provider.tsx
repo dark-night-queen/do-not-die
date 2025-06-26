@@ -3,7 +3,11 @@ import { useRouter } from "expo-router";
 import { Session } from "@supabase/supabase-js";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useUserStore, User } from "@/store/useUserStore";
-import { useProfileStore, Profile } from "@/store/useOnboardingStore";
+import {
+  useProfileStore,
+  useActivityStore,
+  useGoalStore,
+} from "@/store/useOnboardingStore";
 
 // TODO: Fix this
 const AuthContext = createContext({
@@ -14,9 +18,11 @@ const useAuth = () => React.useContext(AuthContext);
 const AuthProvider = ({ children }: React.PropsWithChildren) => {
   const router = useRouter();
 
+  const { signup, session, getSession, onAuthStateChange } = useAuthStore();
   const { createUser, setUser, getUser } = useUserStore();
-  const { getProfile } = useProfileStore();
-  const { signup, getSession, onAuthStateChange } = useAuthStore();
+  const { profile, getProfile } = useProfileStore();
+  const { getGoal } = useGoalStore();
+  const { getActivity } = useActivityStore();
 
   const handleSessionChange = async (session: Session | null) => {
     if (session) {
@@ -27,10 +33,9 @@ const AuthProvider = ({ children }: React.PropsWithChildren) => {
       await getUser(session.user.id);
       const profile = await getProfile(session.user.id);
 
-      if (profile?.isOnboardingComplete) {
-        router.push("/(tabs)");
-      } else {
-        router.push("/auth/onboarding");
+      if (profile?.id) {
+        getGoal(profile.id);
+        getActivity(profile.id);
       }
     } else {
       router.push("/auth");
@@ -38,9 +43,19 @@ const AuthProvider = ({ children }: React.PropsWithChildren) => {
   };
 
   React.useEffect(() => {
-    getSession();
+    // getSession();
     onAuthStateChange(handleSessionChange);
   }, []);
+
+  React.useEffect(() => {
+    if (session) {
+      if (profile?.isOnboardingComplete) {
+        router.push("/(tabs)");
+      } else {
+        router.push("/auth/onboarding");
+      }
+    }
+  }, [profile]);
 
   const createNewUser = async (session: Session) => {
     const user: User = {

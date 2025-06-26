@@ -15,37 +15,19 @@ export default () => {
   const router = useRouter();
   const navigate = useNavigation();
   const { profile } = useProfileStore();
-  const { goal, setGoal, createGoal, updateGoal, getGoal } = useGoalStore();
+  const { goal, createGoal, updateGoal } = useGoalStore();
 
   const [isDisabled, setIsDisabled] = React.useState(true);
   const [formData, setFormData] = React.useState({
     type: goal?.type || ("" as GoalType),
     duration: goal?.duration || ("" as GoalDuration),
-    targetWeight: goal?.targetWeight.toString() || "",
+    targetWeight: goal?.targetWeight?.toString() || "",
     unitSystem: profile?.unitSystem ?? UnitSystemOptions.Metric,
   });
 
   const [errors, setErrors] = React.useState({
     targetWeight: "",
   });
-
-  React.useEffect(() => {
-    // Only fetch goal if we don't already have it and profile id exists
-    if (!goal) {
-      (async () => {
-        if (!profile?.id) return;
-        const _goal = await getGoal(profile.id);
-        if (_goal) {
-          setFormData((prev) => ({
-            ...prev,
-            type: _goal.type,
-            duration: _goal.duration,
-            targetWeight: _goal.targetWeight.toString(),
-          }));
-        }
-      })();
-    }
-  }, [profile?.id]);
 
   React.useEffect(() => {
     const hasEmptyField = Object.values(formData).some((value) => !value);
@@ -70,17 +52,13 @@ export default () => {
   };
 
   const handleCreateGoal = async (newGoal: Goal) => {
-    const { data, error } = await createGoal(newGoal);
-
+    const { error } = await createGoal(newGoal);
     if (error) return console.error("Error creating user's goal:", error);
-    setGoal(data[0] as Goal);
   };
 
   const handleUpdateGoal = async (updatedGoal: Goal) => {
-    const { data, error } = await updateGoal(updatedGoal);
-
+    const { error } = await updateGoal(updatedGoal);
     if (error) return console.error("Error updating user's goal:", error);
-    setGoal(data[0] as Goal);
   };
 
   const handleSubmit = async () => {

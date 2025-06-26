@@ -14,13 +14,13 @@ import { ActivityLevel } from "@/constants/user.activity.type";
 export type Profile = {
   id?: number;
   userId: string;
-  age?: number;
-  height?: number;
-  weight?: number;
-  gender?: Gender;
-  unitSystem?: UnitSystem;
-  dietaryPreference?: DietaryPreference;
-  isOnboardingComplete?: boolean;
+  age: number | null;
+  height: number | null;
+  weight: number | null;
+  gender: Gender | null;
+  unitSystem: UnitSystem | null;
+  dietaryPreference: DietaryPreference | null;
+  isOnboardingComplete?: boolean | null;
   createdAt?: string;
   updatedAt?: string;
 };
@@ -38,7 +38,7 @@ interface ProfileActions {
   ) => Promise<{ data: any; error: any }>;
   updateOnboardingStatus: (
     isOnboardingComplete: boolean
-  ) => {} | Promise<{ data: any; error: any }>;
+  ) => Promise<{ data: any; error: any }>;
 }
 
 // Profile store
@@ -67,31 +67,42 @@ export const useProfileStore = create<ProfileState & ProfileActions>(
       set({ profile });
     },
     createProfile: async (profile) => {
+      const { setProfile } = get();
       const { data, error } = await supabase
         .from("Profile")
         .insert(profile)
         .select();
 
+      setProfile(data?.[0]);
       return { data, error };
     },
     updateProfile: async (profile) => {
+      const { setProfile } = get();
       const { data, error } = await supabase
         .from("Profile")
         .update(profile)
         .eq("userId", profile.userId)
         .select();
 
+      setProfile(data?.[0]);
       return { data, error };
     },
     updateOnboardingStatus: async (isOnboardingComplete) => {
-      const { profile, updateProfile, setProfile } = get();
+      const { profile, updateProfile } = get();
+      if (!profile) return { data: null, error: null };
 
-      if (!profile) return {};
-      profile.isOnboardingComplete = isOnboardingComplete;
-      const { data, error } = await updateProfile(profile);
+      let updatedProfile = { ...profile };
+      updatedProfile.isOnboardingComplete = isOnboardingComplete;
 
-      if (data?.[0]) setProfile(data[0]);
-      return { data, error };
+      if (!isOnboardingComplete) {
+        updatedProfile.age = null;
+        updatedProfile.dietaryPreference = null;
+        updatedProfile.gender = null;
+        updatedProfile.height = null;
+        updatedProfile.weight = null;
+        updatedProfile.unitSystem = UnitSystemOptions.Metrics;
+      }
+      return await updateProfile(updatedProfile);
     },
   })
 );
@@ -161,9 +172,9 @@ export const useBodyMetricsStore = create<
 export type Goal = {
   id?: number;
   profileId: number;
-  type: GoalType;
-  duration: GoalDuration;
-  targetWeight: number;
+  type: GoalType | null;
+  duration: GoalDuration | null;
+  targetWeight: number | null;
 };
 
 // state and actions for the Goal store
@@ -176,6 +187,7 @@ interface GoalActions {
   setGoal: (goal: Goal | null) => void;
   createGoal: (goal: Goal) => Promise<{ data: any; error: any }>;
   updateGoal: (goal: Partial<Goal>) => Promise<{ data: any; error: any }>;
+  resetGoal: () => Promise<{ data: any; error: any }>;
 }
 
 // Goal Store
@@ -205,18 +217,34 @@ export const useGoalStore = create<GoalState & GoalActions>((set, get) => ({
   },
 
   createGoal: async (goal) => {
+    const { setGoal } = get();
     const { data, error } = await supabase.from("Goal").insert(goal).select();
+
+    setGoal(data?.[0]);
     return { data, error };
   },
 
   updateGoal: async (goal) => {
+    const { setGoal } = get();
     const { data, error } = await supabase
       .from("Goal")
       .update(goal)
       .eq("profileId", goal.profileId)
       .select();
 
+    setGoal(data?.[0]);
     return { data, error };
+  },
+
+  resetGoal: async () => {
+    const { goal, updateGoal } = get();
+    if (!goal) return { data: null, error: null };
+    let updatedGoal = { ...goal };
+    updatedGoal.type = null;
+    updatedGoal.duration = null;
+    updatedGoal.targetWeight = null;
+
+    return await updateGoal(updatedGoal);
   },
 }));
 
@@ -224,7 +252,7 @@ export const useGoalStore = create<GoalState & GoalActions>((set, get) => ({
 export type Activity = {
   id?: number;
   profileId: number;
-  activityLevel: ActivityLevel;
+  activityLevel: ActivityLevel | null;
 };
 
 // state and actions for the activity store
@@ -239,6 +267,7 @@ interface ActivityActions {
   updateActivity: (
     activity: Partial<Activity>
   ) => Promise<{ data: any; error: any }>;
+  resetActivity: () => Promise<{ data: any; error: any }>;
 }
 
 export const useActivityStore = create<ActivityState & ActivityActions>(
@@ -264,21 +293,33 @@ export const useActivityStore = create<ActivityState & ActivityActions>(
     },
     setActivity: (activity) => set({ activity }),
     createActivity: async (activity) => {
+      const { setActivity } = get();
       const { data, error } = await supabase
         .from("Activity")
         .insert(activity)
         .select();
 
+      setActivity(data?.[0]);
       return { data, error };
     },
     updateActivity: async (activity) => {
+      const { setActivity } = get();
       const { data, error } = await supabase
         .from("Activity")
         .update(activity)
         .eq("profileId", activity.profileId)
         .select();
 
+      setActivity(data?.[0]);
       return { data, error };
+    },
+    resetActivity: async () => {
+      const { activity, updateActivity } = get();
+      if (!activity) return { data: null, error: null };
+      const updatedActivity = { ...activity };
+      updatedActivity.activityLevel = null;
+
+      return await updateActivity(updatedActivity);
     },
   })
 );
