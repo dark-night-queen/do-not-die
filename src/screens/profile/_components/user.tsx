@@ -2,13 +2,16 @@ import React from "react";
 import { Camera, Settings } from "lucide-react-native";
 import { Text, VStack, Button, ButtonIcon, HStack } from "@/components/ui";
 import { Avatar, AvatarFallbackText } from "@/components/ui/avatar";
+import { useUserStore } from "@/store/useUserStore";
 
-type IUserProps = {
-  name: string;
-  email: string;
-};
+type IUserProps = {};
 
-export const User = ({ name, email }: IUserProps) => {
+export const User = ({}: IUserProps) => {
+  const { user } = useUserStore();
+  const name = user?.firstName
+    ? `${user?.firstName} ${user?.lastName}`
+    : "Anonymous";
+
   return (
     <HStack className="items-center gap-4">
       <Avatar size="lg" className="rounded-xl">
@@ -21,7 +24,7 @@ export const User = ({ name, email }: IUserProps) => {
 
       <VStack className="flex-1">
         <Text className="text-xl font-bold">{name}</Text>
-        <Text className="text-sm text-gray-400">{email}</Text>
+        <Text className="text-sm text-gray-400">{user?.email}</Text>
       </VStack>
 
       <Button variant="link" className="rounded-lg p-2.5">
