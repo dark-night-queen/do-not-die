@@ -17,7 +17,10 @@ export type Profile = {
   age: number | null;
   height: number | null;
   weight: number | null;
+  bmr?: number;
+  tdee?: number;
   dailyCalorieTarget?: number;
+  weeklyWeightChange?: number;
   gender: Gender | null;
   unitSystem: UnitSystem | null;
   dietaryPreference: DietaryPreference | null;

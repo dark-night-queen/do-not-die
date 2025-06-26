@@ -4,16 +4,21 @@ import {
   Activity,
   useActivityStore,
   useProfileStore,
+  useGoalStore,
+  Goal,
 } from "@/store/useOnboardingStore";
 import { ActivityLevel } from "@/constants/user.activity.type";
 import { UserActivityLevel } from "./_components/activity-level";
 import Layout from "./_layout";
+import { CalorieCalculations } from "@/utils/calorie-calculations";
 
 export default () => {
   const router = useRouter();
   const navigate = useNavigation();
-  const { profile, updateProfile } = useProfileStore();
+
   const { activity, createActivity, updateActivity } = useActivityStore();
+  const { goal } = useGoalStore();
+  const { profile, updateProfile } = useProfileStore();
 
   const [isDisabled, setIsDisabled] = React.useState(true);
   const [formData, setFormData] = React.useState({
@@ -45,6 +50,18 @@ export default () => {
     if (error) return console.error("Error updating user's activity:", error);
   };
 
+  const updateUserOnboarding = async (cc: CalorieCalculations) => {
+    const calorieCalculations = cc.calculateDailyCalories();
+
+    const updatedProfile = { ...profile };
+    updatedProfile.isOnboardingComplete = true;
+    updatedProfile.bmr = calorieCalculations.bmr;
+    updatedProfile.tdee = calorieCalculations.tdee;
+    updatedProfile.dailyCalorieTarget = calorieCalculations.dailyCalorieTarget;
+    updatedProfile.weeklyWeightChange = calorieCalculations.weeklyWeightChange;
+    await updateProfile(updatedProfile);
+  };
+
   const handleSubmit = async () => {
     if (!profile?.id) {
       console.error("Profile does not exists!");
@@ -62,10 +79,12 @@ export default () => {
       await handleUpdateActivity(updatedActivity);
     }
 
-    const updatedProfile = { ...profile };
-    updatedProfile.isOnboardingComplete = true;
-    updatedProfile.dailyCalorieTarget = 1;
-    await updateProfile(updatedProfile);
+    const cc = new CalorieCalculations(
+      profile,
+      updatedActivity,
+      goal ?? ({} as Goal)
+    );
+    await updateUserOnboarding(cc);
   };
 
   return (

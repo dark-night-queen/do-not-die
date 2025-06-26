@@ -37,3 +37,9 @@ export const GoalDurationOptions: { label: string; value: GoalDuration }[] = [
     value: "LONG_TERM",
   },
 ];
+
+export const GoalTimeline: Record<GoalDuration, number> = {
+  SHORT_TERM: 1,
+  MEDIUM_TERM: 3,
+  LONG_TERM: 6,
+};

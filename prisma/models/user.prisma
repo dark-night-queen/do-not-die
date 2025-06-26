@@ -22,7 +22,10 @@ model Profile {
   isOnboardingComplete Boolean            @default(false)
   createdAt            DateTime           @default(now())
   updatedAt            DateTime           @default(now()) @updatedAt
-  dailyCalorieTarget   Int?
+  bmr                  Float?
+  tdee                 Float?
+  dailyCalorieTarget   Float?
+  weeklyWeightChange   Float?
   activity             Activity?
   goal                 Goal?
   user                 User               @relation(fields: [userId], references: [id])
