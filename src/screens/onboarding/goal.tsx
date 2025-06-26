@@ -17,12 +17,6 @@ export default () => {
   const { profile } = useProfileStore();
   const { goal, setGoal, createGoal, updateGoal, getGoal } = useGoalStore();
 
-  React.useEffect(() => {
-    if (goal?.id || !profile?.id) return;
-
-    getGoal(profile.id);
-  }, [profile]);
-
   const [formData, setFormData] = React.useState({
     type: goal?.type || ("" as GoalType),
     duration: goal?.duration || ("" as GoalDuration),
@@ -35,6 +29,24 @@ export default () => {
     duration: "",
     targetWeight: "",
   });
+
+  React.useEffect(() => {
+    const init = async () => {
+      if (goal?.id || !profile?.id) return;
+
+      const _goal = await getGoal(profile.id);
+      if (!_goal) return;
+
+      setFormData((prev) => ({
+        ...prev,
+        type: _goal.type,
+        duration: _goal.duration,
+        targetWeight: _goal.targetWeight.toString(),
+      }));
+    };
+
+    init();
+  }, [profile]);
 
   const handleChange = (name: string) => (value: string) => {
     setFormData((prev) => ({ ...prev, [name]: value }));

@@ -22,6 +22,7 @@ import {
   GoalType,
   GoalTypeOptions,
 } from "@/constants/user.goal.type";
+import { useProfileStore } from "@/store/useOnboardingStore";
 
 interface IUserGoalsProps {
   formData: {
@@ -34,7 +35,6 @@ interface IUserGoalsProps {
   handleChange: (name: string) => (value: string) => void;
 }
 
-// TODO: add logic for progress towards goal
 // TODO: fix initialValue of select from formData
 export const UserGoals = ({
   formData,
@@ -42,6 +42,26 @@ export const UserGoals = ({
   handleChange,
 }: IUserGoalsProps) => {
   const weightUnitSystem = getWeightUnitSystem(formData.unitSystem);
+  const { profile } = useProfileStore();
+
+  const getProgressBarWidth = () => {
+    if (!formData.targetWeight) return 50;
+
+    const targetWeight = Number(formData.targetWeight);
+    const currentWeight = profile?.weight || 0;
+
+    if (formData.type == "WEIGHT_LOSS") {
+      if (targetWeight >= currentWeight) return 0;
+
+      const progress = (currentWeight - targetWeight) / (currentWeight * 0.2);
+      return Math.min(100, progress * 100);
+    } else if (formData.type == "WEIGHT_GAIN") {
+      if (currentWeight >= targetWeight) return 0;
+
+      const progress = (targetWeight - currentWeight) / (currentWeight * 0.2);
+      return Math.min(100, progress * 100);
+    }
+  };
 
   return (
     <>
@@ -90,19 +110,21 @@ export const UserGoals = ({
           Progress Towards Goal
         </Text>
 
-        <Progress value={23}>
+        <Progress value={getProgressBarWidth()}>
           <ProgressFilledTrack className="bg-indigo-600" />
         </Progress>
 
         <HStack>
           <HStack className="flex-1 items-center">
-            <Text className="text-xs text-gray-400">0%</Text>
+            <Text className="text-xs text-gray-400">{profile?.weight} kg</Text>
             <Icon as={ArrowRight} size="sm" className="text-gray-400" />
           </HStack>
 
           <HStack className="items-center">
             <Icon as={ArrowLeft} size="sm" className="text-gray-400" />
-            <Text className="text-xs text-gray-400">100%</Text>
+            <Text className="text-xs text-gray-400">
+              {formData.targetWeight} kg
+            </Text>
           </HStack>
         </HStack>
       </VStack>
