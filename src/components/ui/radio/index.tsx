@@ -13,7 +13,7 @@ import { PrimitiveIcon, UIIcon } from "@gluestack-ui/icon";
 
 const SCOPE = "Radio";
 
-const UIRadio = createRadio({
+export const UIRadio = createRadio({
   Root: (Platform.OS === "web"
     ? withStyleContext(View, SCOPE)
     : withStyleContext(Pressable, SCOPE)) as ReturnType<

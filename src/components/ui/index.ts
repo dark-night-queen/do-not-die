@@ -10,6 +10,7 @@ export * from "./icon";
 export * from "./input";
 export * from "./progress";
 export * from "./radio";
+export * from "./spinner";
 export * from "./text";
 export * from "./vstack";
-export * from "./spinner";
+
