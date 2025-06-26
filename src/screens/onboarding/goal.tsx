@@ -17,6 +17,7 @@ export default () => {
   const { profile } = useProfileStore();
   const { goal, setGoal, createGoal, updateGoal, getGoal } = useGoalStore();
 
+  const [isDisabled, setIsDisabled] = React.useState(true);
   const [formData, setFormData] = React.useState({
     type: goal?.type || ("" as GoalType),
     duration: goal?.duration || ("" as GoalDuration),
@@ -25,28 +26,31 @@ export default () => {
   });
 
   const [errors, setErrors] = React.useState({
-    type: "",
-    duration: "",
     targetWeight: "",
   });
 
   React.useEffect(() => {
-    const init = async () => {
-      if (goal?.id || !profile?.id) return;
+    // Only fetch goal if we don't already have it and profile id exists
+    if (!goal) {
+      (async () => {
+        if (!profile?.id) return;
+        const _goal = await getGoal(profile.id);
+        if (_goal) {
+          setFormData((prev) => ({
+            ...prev,
+            type: _goal.type,
+            duration: _goal.duration,
+            targetWeight: _goal.targetWeight.toString(),
+          }));
+        }
+      })();
+    }
+  }, [profile?.id]);
 
-      const _goal = await getGoal(profile.id);
-      if (!_goal) return;
-
-      setFormData((prev) => ({
-        ...prev,
-        type: _goal.type,
-        duration: _goal.duration,
-        targetWeight: _goal.targetWeight.toString(),
-      }));
-    };
-
-    init();
-  }, [profile]);
+  React.useEffect(() => {
+    const hasEmptyField = Object.values(formData).some((value) => !value);
+    setIsDisabled(hasEmptyField);
+  }, [formData]);
 
   const handleChange = (name: string) => (value: string) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -55,8 +59,6 @@ export default () => {
 
   const validateForm = () => {
     const newErrors = { ...errors };
-    if (!formData.type) newErrors.type = "Goal type is required";
-    if (!formData.duration) newErrors.duration = "Goal duration is required";
     if (!formData.targetWeight)
       newErrors.targetWeight = "Target weight is required";
     setErrors(newErrors);
@@ -68,7 +70,6 @@ export default () => {
   };
 
   const handleCreateGoal = async (newGoal: Goal) => {
-    console.log("handleCreateGoal", goal, newGoal);
     const { data, error } = await createGoal(newGoal);
 
     if (error) return console.error("Error creating user's goal:", error);
@@ -76,7 +77,6 @@ export default () => {
   };
 
   const handleUpdateGoal = async (updatedGoal: Goal) => {
-    console.log("handleUpdateGoal", updatedGoal);
     const { data, error } = await updateGoal(updatedGoal);
 
     if (error) return console.error("Error updating user's goal:", error);
@@ -109,7 +109,11 @@ export default () => {
   };
 
   return (
-    <Layout onSubmit={handleSubmit} goBack={goBack}>
+    <Layout
+      onSubmit={handleSubmit}
+      goBack={goBack}
+      button={{ text: "Continue", isDisabled }}
+    >
       <UserGoals
         formData={formData}
         errors={errors}

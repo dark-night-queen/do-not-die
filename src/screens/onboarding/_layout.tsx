@@ -7,10 +7,19 @@ import { GoBack } from "./_components/go-back";
 type ILayoutProps = {
   goBack?: () => void;
   onSubmit?: () => void;
+  button: {
+    text: string;
+    isDisabled?: boolean;
+  };
 } & React.PropsWithChildren;
 
 // TODO: Make the button text dynamic
-export default ({ children, goBack, onSubmit }: ILayoutProps) => {
+export default ({
+  children,
+  goBack,
+  onSubmit,
+  button,
+}: ILayoutProps) => {
   const [showLoader, setShowLoader] = React.useState(false);
 
   const handleSubmit = async () => {
@@ -35,10 +44,10 @@ export default ({ children, goBack, onSubmit }: ILayoutProps) => {
             {children}
             <Button
               className="w-full rounded-lg"
-              size="sm"
               onPress={handleSubmit}
+              {...button}
             >
-              <ButtonText>Continue</ButtonText>
+              <ButtonText>{button.text}</ButtonText>
               {showLoader ? (
                 <Spinner size="small" color={colors.white} />
               ) : null}

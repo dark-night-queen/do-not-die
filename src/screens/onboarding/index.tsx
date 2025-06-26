@@ -110,7 +110,7 @@ export default () => {
   };
 
   return (
-    <Layout onSubmit={handleSubmit}>
+    <Layout onSubmit={handleSubmit} button={{ text: "Next" }}>
       <BodyMetrics
         formData={formData}
         errors={errors}

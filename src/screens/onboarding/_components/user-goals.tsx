@@ -73,7 +73,7 @@ export const UserGoals = ({
       </VStack>
 
       <VStack className="gap-4">
-        <FormElement error={errors.type}>
+        <FormElement>
           <CardRadioElement
             options={GoalTypeOptions}
             value={formData.type}
@@ -95,7 +95,7 @@ export const UserGoals = ({
           </InputElement>
         </FormElement>
 
-        <FormElement label="Timeline" error={errors.duration}>
+        <FormElement label="Timeline">
           <SelectElement
             options={GoalDurationOptions}
             selectedValue={formData.duration}
