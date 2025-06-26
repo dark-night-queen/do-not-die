@@ -1,9 +1,9 @@
 import React from "react";
 import colors from "tailwindcss/colors";
+import { FormElement, InputElement } from "@/components/custom";
+import { Button, ButtonText, Spinner, Text } from "@/components/ui";
 import { useAuthStore } from "@/store/useAuthStore";
 import { validatePassword as validatePasswordUtil } from "@/utils/validate-auth";
-import { Button, ButtonText, Text, Spinner } from "@/components/ui";
-import { FormElement, InputElement } from "@/components/ui/form-control/form";
 
 type IResetPasswordProps = {
   handleSubmit: (email: string) => void;

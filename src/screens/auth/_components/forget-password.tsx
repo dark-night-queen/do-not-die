@@ -7,10 +7,10 @@ import {
   ButtonIcon,
   ButtonText,
   HStack,
-  Text,
   Spinner,
+  Text,
 } from "@/components/ui";
-import { FormElement, InputElement } from "@/components/ui/form-control/form";
+import { FormElement, InputElement } from "@/components/custom";
 import { ForgetPasswordSuccess } from "./forget-password-success";
 
 enum Screen {

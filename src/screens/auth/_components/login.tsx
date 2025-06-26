@@ -1,11 +1,11 @@
 import React from "react";
 import colors from "tailwindcss/colors";
+import { FormElement, InputElement } from "@/components/custom";
+import { Button, ButtonText, Spinner } from "@/components/ui";
 import {
   validateEmail as validateEmailUtil,
   validatePassword as validatePasswordUtil,
 } from "@/utils/validate-auth";
-import { Button, ButtonText, Spinner } from "@/components/ui";
-import { FormElement, InputElement } from "@/components/ui/form-control/form";
 
 type ILoginProps = {
   handleLogin: (email: string, password: string) => void;
