@@ -1,12 +1,7 @@
-import React from 'react';
-import { Flame, Scale, Target } from 'lucide-react-native';
-import { HStack, Text, Card, Icon, VStack } from '@/components/ui';
-
-type IStatsProps = {
-  currentWeight: number;
-  targetWeight: number;
-  dailyCalorieTarget: number;
-}
+import React from "react";
+import { Flame, Scale, Target } from "lucide-react-native";
+import { HStack, Text, Card, Icon, VStack } from "@/components/ui";
+import { useGoalStore, useProfileStore } from "@/store/useOnboardingStore";
 
 type ICustomCard = {
   icon: any;
@@ -27,19 +22,32 @@ const CustomCard = ({ icon, className, name, value }: ICustomCard) => {
   );
 };
 
-export const Stats = ({currentWeight, targetWeight, dailyCalorieTarget}:IStatsProps) => {
+export const Stats = () => {
+  const { profile } = useProfileStore();
+  const { goal } = useGoalStore();
+
   return (
     <VStack className="gap-4">
       <HStack className="gap-4">
-        <CustomCard icon={Scale} className="text-blue-400" value={`${currentWeight} kg`} name="Current Weight" />
-        <CustomCard icon={Target} className="text-green-400" value={`${targetWeight} kg`} name="Target Weight" />
+        <CustomCard
+          icon={Scale}
+          className="text-blue-400"
+          value={`${profile?.weight} kg`}
+          name="Current Weight"
+        />
+        <CustomCard
+          icon={Target}
+          className="text-green-400"
+          value={`${goal?.targetWeight} kg`}
+          name="Target Weight"
+        />
       </HStack>
 
       <HStack className="gap-4">
         <CustomCard
           icon={Flame}
           className="text-orange-400"
-          value={`${dailyCalorieTarget} kcal`}
+          value={`${profile?.dailyCalorieTarget} kcal`}
           name="Daily Calorie Target"
         />
       </HStack>
