@@ -26,6 +26,7 @@ module.exports = function (api) {
             "@/screens": "./src/screens",
             "@/store": "./src/store",
             "@/utils": "./src/utils",
+            "@/lib": "./src/lib",
             "@": "./",
             "tailwind.config": "./tailwind.config.js",
           },
