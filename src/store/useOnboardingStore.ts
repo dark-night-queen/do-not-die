@@ -11,12 +11,15 @@ import { GoalDuration, GoalType } from "@/constants/user.goal.type";
 import { ActivityLevel } from "@/constants/user.activity.type";
 
 // Profile type
+// TODO: handle the height & weight display + add target weight here only
 export type Profile = {
   id?: number;
   userId: string;
   age: number | null;
   height: number | null;
+  heightCm: number | null;
   weight: number | null;
+  weightKg: number | null;
   bmr?: number;
   tdee?: number;
   dailyCalorieTarget?: number;

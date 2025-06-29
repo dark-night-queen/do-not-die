@@ -1,3 +1,4 @@
+// TODO: remove this store
 import { Apple, Bone, Heart, Leaf, LucideIcon, Zap } from 'lucide-react-native';
 import { create } from 'zustand';
 
@@ -14,30 +15,19 @@ type Micronutrient = {
 
 interface NutrientState {
   caloriesConsumed: number;
-  targetCalories: number;
   proteinConsumed: number;
-  targetProtein: number;
   carbsConsumed: number;
-  targetCarbs: number;
   fatsConsumed: number;
-  targetFats: number;
 
   healthScore: number;
   micronutrients: Micronutrient[];
 }
 
 export const useNutrientStore = create<NutrientState>((set, get) => ({
-  caloriesConsumed: 400,
-  targetCalories: 1458,
-
-  proteinConsumed: 15,
-  targetProtein: 150,
-
-  carbsConsumed: 45,
-  targetCarbs: 300,
-
+  caloriesConsumed: 0,
+  proteinConsumed: 0,
+  carbsConsumed: 0,
   fatsConsumed: 0,
-  targetFats: 65,
 
   healthScore: 80,
 

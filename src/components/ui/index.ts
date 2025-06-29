@@ -13,4 +13,5 @@ export * from "./radio";
 export * from "./spinner";
 export * from "./text";
 export * from "./vstack";
+export * from "./modal";
 
