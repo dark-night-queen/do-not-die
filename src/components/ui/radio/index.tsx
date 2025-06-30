@@ -107,7 +107,7 @@ const Radio = React.forwardRef<React.ComponentRef<typeof UIRadio>, IRadioProps>(
         context={{ size }}
       />
     );
-  }
+  },
 );
 
 type IRadioGroupProps = React.ComponentProps<typeof UIRadio.Group> &

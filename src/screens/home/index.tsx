@@ -1,6 +1,5 @@
 import React from "react";
-import { SafeAreaView, ScrollView } from "react-native";
-import { Box, VStack } from "@/components/ui";
+import Layout from "./_layout";
 import { MacroCard } from "./_components/macro-card";
 import { MetricsCard } from "./_components/metrics-card";
 import { ScannerButton } from "./_components/scanner-button";
@@ -20,20 +19,14 @@ export default () => {
   }, [profile]);
 
   return (
-    <SafeAreaView>
-      <Box variant="scroll">
-        <ScrollView>
-          <VStack className="gap-8 p-4">
-            <WeeklyCalendar />
-            <MacroCard />
-            <MetricsCard />
-            <ScannerButton />
-            <RecentlyLoggedItem />
-            <DailyReport />
-            <PersonalizedRecommendation />
-          </VStack>
-        </ScrollView>
-      </Box>
-    </SafeAreaView>
+    <Layout isScrollable={true}>
+      <WeeklyCalendar />
+      <MacroCard />
+      <MetricsCard />
+      <ScannerButton />
+      <RecentlyLoggedItem />
+      <DailyReport />
+      <PersonalizedRecommendation />
+    </Layout>
   );
 };

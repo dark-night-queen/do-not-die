@@ -44,7 +44,7 @@ export const BodyMetrics = ({
   const bmi = calculateBMI(
     formData.height,
     formData.weight,
-    formData.unitSystem
+    formData.unitSystem,
   );
 
   return (

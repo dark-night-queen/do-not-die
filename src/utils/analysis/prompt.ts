@@ -1,11 +1,11 @@
 const prompt = (
   foodName: string,
-  servingSize: string
+  servingSize: string,
 ) => `You are a nutrition expert analyzing food items based on their names and descriptions.
 
     For the food item "${foodName}"${
-  servingSize ? ` with serving size "${servingSize}"` : ""
-}:
+      servingSize ? ` with serving size "${servingSize}"` : ""
+    }:
 
     1. For common dishes and ingredients:
        - Use standard nutritional databases for accurate values

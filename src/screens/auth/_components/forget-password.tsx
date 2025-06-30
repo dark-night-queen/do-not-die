@@ -31,7 +31,7 @@ export const ForgetPassword = ({
   const [email, setEmail] = React.useState("");
   const [error, setError] = React.useState("");
   const [currentScreen, setCurrentScreen] = React.useState(
-    Screen.FORGET_PASSWORD
+    Screen.FORGET_PASSWORD,
   );
 
   const handleChange = (value: string) => {

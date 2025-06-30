@@ -104,7 +104,7 @@ function calculateMicronutrientScore(micronutrients: Micronutrients): number {
     ([nutrient, amount]) => {
       const dv = dailyValues[nutrient as keyof typeof dailyValues];
       return Math.min(100, (amount / dv) * 100);
-    }
+    },
   );
 
   // Average percentage, max 3 points
@@ -126,7 +126,7 @@ function calculateNutritionScore(nutrients: NutrientContent): number {
   // Good protein content relative to calories
   const proteinScore = Math.min(
     2,
-    ((nutrients.protein * 4) / caloriesPerHundred) * 5
+    ((nutrients.protein * 4) / caloriesPerHundred) * 5,
   );
   score += proteinScore;
   // console.log("After protein score:", score, "(added", proteinScore, ")");
@@ -176,7 +176,7 @@ function validateNumber(n: unknown): number {
 }
 
 function cleanMicronutrients(
-  micro: Partial<Micronutrients> = {}
+  micro: Partial<Micronutrients> = {},
 ): Micronutrients {
   return {
     fiber: validateNumber(micro.fiber),

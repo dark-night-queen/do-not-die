@@ -4,7 +4,7 @@ import { IconContainer } from "@/components/custom";
 
 export const ComingSoon = () => {
   return (
-    <VStack className="w-full max-w-sm p-4 gap-8">
+    <>
       <IconContainer
         as={Heart}
         className="p-4 rounded-2xl self-center dark:bg-gray-800"
@@ -19,6 +19,6 @@ export const ComingSoon = () => {
           insights to improve your overall well-being.
         </Text>
       </VStack>
-    </VStack>
+    </>
   );
 };

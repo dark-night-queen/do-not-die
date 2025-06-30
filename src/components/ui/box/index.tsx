@@ -16,7 +16,7 @@ const Box = React.forwardRef<React.ComponentRef<typeof View>, IBoxProps>(
         className={boxStyle({ variant, class: className })}
       />
     );
-  }
+  },
 );
 
 Box.displayName = "Box";

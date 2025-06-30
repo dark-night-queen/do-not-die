@@ -20,7 +20,7 @@ export const RadioElement = ({
 }: IRadioElementProps) => {
   return (
     <RadioGroup
-      className={`gap-3 ${direction == "horizontal" ? "flex-row" : ""}`}
+      className={`gap-3 ${direction === "horizontal" ? "flex-row" : ""}`}
       {...props}
     >
       {Object.keys(options).map((key) => (

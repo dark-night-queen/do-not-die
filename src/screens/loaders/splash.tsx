@@ -1,4 +1,5 @@
 import React from "react";
+import Layout from "../home/_layout";
 import { SafeAreaView } from "react-native";
 import { Heart } from "lucide-react-native";
 import { Box, Text, VStack } from "@/components/ui";
@@ -6,20 +7,14 @@ import { IconContainer } from "@/components/custom";
 
 export default () => {
   return (
-    <SafeAreaView>
-      <Box variant="screen">
-        <VStack className="w-full max-w-sm p-4 gap-8">
-          <IconContainer
-            as={Heart}
-            className="p-4 rounded-2xl self-center dark:bg-gray-800"
-            iconClassName="h-12 w-12"
-          />
-        </VStack>
+    <Layout>
+      <IconContainer
+        as={Heart}
+        className="p-4 rounded-2xl self-center dark:bg-gray-800"
+        iconClassName="h-12 w-12"
+      />
 
-        <VStack className="items-center gap-3">
-          <Text className="text-2xl font-medium">Do not die</Text>
-        </VStack>
-      </Box>
-    </SafeAreaView>
+      <Text className="text-2xl font-medium">Do not die</Text>
+    </Layout>
   );
 };

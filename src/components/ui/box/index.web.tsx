@@ -8,10 +8,14 @@ type IBoxProps = React.ComponentPropsWithoutRef<"div"> &
 
 const Box = React.forwardRef<HTMLDivElement, IBoxProps>(function Box(
   { className, variant = "base", ...props },
-  ref
+  ref,
 ) {
   return (
-    <div ref={ref} className={boxStyle({ variant, class: className })} {...props} />
+    <div
+      ref={ref}
+      className={boxStyle({ variant, class: className })}
+      {...props}
+    />
   );
 });
 

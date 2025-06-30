@@ -12,7 +12,7 @@ import { UserActivityLevel } from "./_components/activity-level";
 import Layout from "./_layout";
 import { CalorieCalculations } from "@/utils/calorie-calculations";
 
-export default () => {
+const Activity = () => {
   const router = useRouter();
   const navigate = useNavigation();
 
@@ -82,7 +82,7 @@ export default () => {
     const cc = new CalorieCalculations(
       profile,
       updatedActivity,
-      goal ?? ({} as Goal)
+      goal ?? ({} as Goal),
     );
     await updateUserOnboarding(cc);
   };
@@ -97,3 +97,4 @@ export default () => {
     </Layout>
   );
 };
+export default Activity;

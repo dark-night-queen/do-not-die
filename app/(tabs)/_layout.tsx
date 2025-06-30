@@ -1,23 +1,25 @@
 import React from "react";
 import { Tabs } from "expo-router";
-import { Platform } from "react-native";
+import colors from "tailwindcss/colors";
+import { useColorScheme } from "react-native";
 import { BarChart2, Home, User } from "lucide-react-native";
 
 export default function TabLayout() {
+  const colorScheme = useColorScheme(); // 'light' | 'dark'
+  const isDark = colorScheme === "dark";
+
   return (
     <Tabs
       screenOptions={{
-        // tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
-        // tabBarButton: HapticTab,
-        // tabBarBackground: TabBarBackground,
-        // tabBarStyle: Platform.select({
-        //   ios: {
-        //     // Use a transparent background on iOS to show the blur effect
-        //     position: "absolute",
-        //   },
-        //   default: {},
-        // }),
+        tabBarActiveTintColor: colors.indigo["500"],
+        tabBarStyle: {
+          backgroundColor: isDark ? colors.gray["900"] : colors.transparent,
+          borderTopWidth: 2,
+          elevation: 0,
+          paddingTop: 8,
+          borderTopColor: isDark ? colors.gray["800"] : colors.gray["200"],
+        },
       }}
     >
       <Tabs.Screen

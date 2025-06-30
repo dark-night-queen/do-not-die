@@ -293,7 +293,7 @@ const Button = React.forwardRef<
   IButtonProps
 >(function Button(
   { className, variant = "solid", size = "md", action = "primary", ...props },
-  ref
+  ref,
 ) {
   return (
     <UIButton
@@ -409,7 +409,7 @@ const ButtonGroup = React.forwardRef<
     flexDirection = "column",
     ...props
   },
-  ref
+  ref,
 ) {
   return (
     <UIButton.Group

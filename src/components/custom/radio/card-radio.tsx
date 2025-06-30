@@ -36,7 +36,7 @@ const CardRadio = React.forwardRef<
   ICardRadioProps
 >(function Radio(
   { className, size = "md", variant = "elevated", ...props },
-  ref
+  ref,
 ) {
   return (
     <UIRadio

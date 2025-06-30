@@ -12,9 +12,7 @@
       "@/utils/*": ["./src/utils/*"],
       "@/lib/*": ["./src/lib/*"],
       "@/*": ["./*"],
-      "tailwind.config": [
-        "./tailwind.config.js"
-      ]
+      "tailwind.config": ["./tailwind.config.js"]
     }
   },
   "include": [

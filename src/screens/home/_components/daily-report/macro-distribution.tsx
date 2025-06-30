@@ -1,15 +1,17 @@
-import React from 'react';
-import { Utensils } from 'lucide-react-native';
-import { HStack, Card, Icon, Text, VStack } from '@/components/ui';
-import { useNutrientStore } from '@/store/useNutrientsStore';
+import React from "react";
+import { Utensils } from "lucide-react-native";
+import { HStack, Card, Icon, Text, VStack } from "@/components/ui";
+import { useNutrientStore } from "@/store/useNutrientsStore";
+import { useDailyDataStore } from "@/store/useDailyDataStore";
 
 export const MacroDistribution = () => {
-  const { proteinConsumed, targetProtein, carbsConsumed, targetCarbs, fatsConsumed, targetFats } =
-    useNutrientStore();
+  const { proteinTarget, fatTarget, carbsTarget } = useDailyDataStore();
 
-  const percentageProteinConsumed = (proteinConsumed / targetProtein) * 100;
-  const percentageCarbsConsumed = (carbsConsumed / targetCarbs) * 100;
-  const percentageFatsConsumed = (fatsConsumed / targetFats) * 100;
+  const { proteinConsumed, carbsConsumed, fatsConsumed } = useNutrientStore();
+
+  const percentageProteinConsumed = (proteinConsumed / proteinTarget) * 100;
+  const percentageCarbsConsumed = (carbsConsumed / carbsTarget) * 100;
+  const percentageFatsConsumed = (fatsConsumed / fatTarget) * 100;
 
   return (
     <Card className="gap-4">
