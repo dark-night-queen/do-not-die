@@ -13,12 +13,7 @@ type ILayoutProps = {
   };
 } & React.PropsWithChildren;
 
-export default ({
-  children,
-  goBack,
-  onSubmit,
-  button,
-}: ILayoutProps) => {
+const Layout = ({ children, goBack, onSubmit, button }: ILayoutProps) => {
   const [showLoader, setShowLoader] = React.useState(false);
 
   const handleSubmit = async () => {
@@ -57,3 +52,5 @@ export default ({
     </SafeAreaView>
   );
 };
+
+export default Layout;
