@@ -1,11 +1,15 @@
 "use client";
-import React from "react";
-import { createIcon } from "@gluestack-ui/icon";
-import { Path } from "react-native-svg";
+import {
+  createIcon,
+  IPrimitiveIcon,
+  PrimitiveIcon,
+  Svg,
+} from "@gluestack-ui/icon";
+import { VariantProps } from "@gluestack-ui/nativewind-utils";
 import { tva } from "@gluestack-ui/nativewind-utils/tva";
 import { cssInterop } from "nativewind";
-import { VariantProps } from "@gluestack-ui/nativewind-utils";
-import { PrimitiveIcon, IPrimitiveIcon, Svg } from "@gluestack-ui/icon";
+import React from "react";
+import { Path } from "react-native-svg";
 
 export const UIIcon = createIcon({
   Root: PrimitiveIcon,
@@ -75,7 +79,7 @@ const Icon = React.forwardRef<React.ComponentRef<typeof UIIcon>, IIConProps>(
         className={iconStyle({ size, class: className })}
       />
     );
-  }
+  },
 );
 
 export { Icon };
@@ -98,7 +102,7 @@ const createIconUI = ({ ...props }: ParameterTypes) => {
       ...inComingProps
     }: VariantProps<typeof iconStyle> &
       React.ComponentPropsWithoutRef<typeof UIIconCreateIcon>,
-    ref
+    ref,
   ) {
     return (
       <UIIconCreateIcon
@@ -256,7 +260,7 @@ ArrowDownIcon.displayName = "ArrowDownIcon";
 ArrowRightIcon.displayName = "ArrowRightIcon";
 ArrowLeftIcon.displayName = "ArrowLeftIcon";
 
-export { ArrowUpIcon, ArrowDownIcon, ArrowRightIcon, ArrowLeftIcon };
+export { ArrowDownIcon, ArrowLeftIcon, ArrowRightIcon, ArrowUpIcon };
 
 const AtSignIcon = createIcon({
   Root: Svg,
@@ -422,7 +426,7 @@ const CheckCircleIcon = createIcon({
 CheckIcon.displayName = "CheckIcon";
 CheckCircleIcon.displayName = "CheckCircleIcon";
 
-export { CheckIcon, CheckCircleIcon };
+export { CheckCircleIcon, CheckIcon };
 
 const ChevronUpIcon = createIcon({
   Root: Svg,
@@ -561,13 +565,13 @@ ChevronsRightIcon.displayName = "ChevronsRightIcon";
 ChevronsUpDownIcon.displayName = "ChevronsUpDownIcon";
 
 export {
-  ChevronUpIcon,
   ChevronDownIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
   ChevronsLeftIcon,
   ChevronsRightIcon,
   ChevronsUpDownIcon,
+  ChevronUpIcon,
 };
 
 const CircleIcon = createIcon({
@@ -665,7 +669,7 @@ const CloseCircleIcon = createIcon({
 CloseIcon.displayName = "CloseIcon";
 CloseCircleIcon.displayName = "CloseCircleIcon";
 
-export { CloseIcon, CloseCircleIcon };
+export { CloseCircleIcon, CloseIcon };
 
 const CopyIcon = createIcon({
   Root: Svg,
@@ -1012,7 +1016,7 @@ const ExternalLinkIcon = createIcon({
 });
 
 ExternalLinkIcon.displayName = "ExternalLinkIcon";
-export { LinkIcon, ExternalLinkIcon };
+export { ExternalLinkIcon, LinkIcon };
 
 const LoaderIcon = createIcon({
   Root: Svg,
@@ -1300,7 +1304,7 @@ const Repeat1Icon = createIcon({
 });
 
 Repeat1Icon.displayName = "Repeat1Icon";
-export { RepeatIcon, Repeat1Icon };
+export { Repeat1Icon, RepeatIcon };
 
 const SearchIcon = createIcon({
   Root: Svg,

@@ -1,0 +1,15 @@
+# Ignore dependencies
+node_modules/**
+package.json
+yarn.lock
+
+# Ignore platform-specific folders
+ios/**
+android/**
+
+# Ignore assets and configuration
+assets/**
+.vscode
+.expo-shared
+.prettirrc
+.eslintrc.js

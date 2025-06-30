@@ -1,14 +1,14 @@
-import React from 'react';
+import React from "react";
 
 import {
   AnimatedCircularProgress,
   AnimatedCircularProgressProps,
-} from 'react-native-circular-progress';
+} from "react-native-circular-progress";
 
 const CircularProgress = (props: AnimatedCircularProgressProps) => {
   const {
-    tintColor = '#8B5CF6',
-    backgroundColor = 'rgba(156, 163, 175, 0.1)',
+    tintColor = "#8B5CF6",
+    backgroundColor = "rgba(156, 163, 175, 0.1)",
     ...otherProps
   } = props;
 
