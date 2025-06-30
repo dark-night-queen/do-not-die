@@ -10,6 +10,7 @@
     "web": "DARK_MODE=media expo start --web",
     "lint": "expo lint",
     "format": "prettier --write \"**/*.+(js|json|css|md|ts|tsx)\"",
+    "ci": "yarn install --frozen-lockfile",
     "prepare": "husky"
   },
   "dependencies": {
