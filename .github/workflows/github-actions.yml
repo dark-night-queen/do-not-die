@@ -1,20 +1,42 @@
-name: Pull Request into Main
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+name: Pull Request into "main" & "develop"
+run-name: ${{ github.actor }} is running GitHub Actions 🚀
 
-on: [push]
+on:
+  pull_request:
+    branches:
+      - "main"
+      - "develop"
 
 jobs:
-  Explore-GitHub-Actions:
+  build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20.x, 22.x, 24.x]
+
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+
       - name: Check out repository code
         uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "yarn"
+
       - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
+
+      - name: Install Node modules
+        run: yarn ci
+
       - run: echo "🖥️ The workflow is now ready to test your code on the runner."
-      - name: List files in the repository
-        run: |
-          ls ${{ github.workspace }}
+
+      - name: 👀 Linting
+        run: npx expo lint
+
+      # - name: 🧬 Unit & Integration tests
+      #   run: yarn test:ci
+
       - run: echo "🍏 This job's status is ${{ job.status }}."
