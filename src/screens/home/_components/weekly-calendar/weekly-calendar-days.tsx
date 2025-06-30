@@ -12,10 +12,10 @@ const Day = ({ date, isActive }: { date: Moment; isActive: boolean }) => {
   const containerStyle = isFuture
     ? "dark:bg-gray-800"
     : isToday
-    ? "border-2 border-indigo-500"
-    : hasData || hasExceededData
-    ? "border-2 border-emerald-500"
-    : "";
+      ? "border-2 border-indigo-500"
+      : hasData || hasExceededData
+        ? "border-2 border-emerald-500"
+        : "";
 
   const buttonTextStyle =
     isActive || isFuture ? "text-background-light" : "text-typography-700";
@@ -47,8 +47,8 @@ const WeekDay = ({
   const buttonStyle = isFuture
     ? "opacity-40"
     : isActive
-    ? "bg-indigo-800/50"
-    : "";
+      ? "bg-indigo-800/50"
+      : "";
 
   return (
     <Button

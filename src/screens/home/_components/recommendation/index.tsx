@@ -1,12 +1,14 @@
-import { Info, TrendingDown } from 'lucide-react-native';
-import { HStack, Icon, Text, VStack } from '@/components/ui';
-import { RecommendationCard } from './recommendation-card';
+import { Info, TrendingDown } from "lucide-react-native";
+import { HStack, Icon, Text, VStack } from "@/components/ui";
+import { RecommendationCard } from "./recommendation-card";
 
 export const PersonalizedRecommendation = () => {
   return (
     <VStack className="gap-4">
       <HStack className="items-center">
-        <Text className="flex-1 text-xl font-semibold">Personalized Recommendation</Text>
+        <Text className="flex-1 text-xl font-semibold">
+          Personalized Recommendation
+        </Text>
         <Icon as={Info} />
       </HStack>
 

@@ -1,5 +1,5 @@
-import React from 'react';
-import { HStack, Card, Icon, Text } from '@/components/ui';
+import React from "react";
+import { HStack, Card, Icon, Text } from "@/components/ui";
 
 type IRecommendationCardProps = {
   icon: any;
@@ -7,7 +7,11 @@ type IRecommendationCardProps = {
   value: string;
 };
 
-export const RecommendationCard = ({ icon, className, value }: IRecommendationCardProps) => {
+export const RecommendationCard = ({
+  icon,
+  className,
+  value,
+}: IRecommendationCardProps) => {
   return (
     <Card>
       <HStack className="items-start gap-3">

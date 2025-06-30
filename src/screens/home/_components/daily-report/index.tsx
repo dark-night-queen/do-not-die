@@ -1,12 +1,12 @@
-import { HStack, Divider, VStack, Text } from '@/components/ui';
-import { useCalendarStore } from '@/store/useWeeklyCalendar';
-import { MacroDistribution } from './macro-distribution';
-import { CalorieConsumed } from './calorie-consumed';
-import { DailyCutoffInfo } from './daily-cutoff-info';
+import { HStack, Divider, VStack, Text } from "@/components/ui";
+import { useCalendarStore } from "@/store/useWeeklyCalendar";
+import { MacroDistribution } from "./macro-distribution";
+import { CalorieConsumed } from "./calorie-consumed";
+import { DailyCutoffInfo } from "./daily-cutoff-info";
 
 export const DailyReport = () => {
   const { activeDate } = useCalendarStore();
-  const timestamp = activeDate.format('MMM DD, YYYY');
+  const timestamp = activeDate.format("MMM DD, YYYY");
 
   return (
     <VStack className="gap-4">
