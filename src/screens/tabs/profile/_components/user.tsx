@@ -1,13 +1,27 @@
+// core dependencies
 import React from "react";
 import { Camera, Settings } from "lucide-react-native";
-import { Text, VStack, Button, ButtonIcon, HStack } from "@/components/ui";
-import { Avatar, AvatarFallbackText } from "@/components/ui/avatar";
-import { useUserStore } from "@/store/useUserStore";
 
-type IUserProps = {};
+// core components
+import {
+  Avatar,
+  AvatarFallbackText,
+  Text,
+  VStack,
+  Button,
+  ButtonIcon,
+  HStack,
+} from "@/components/ui";
 
-export const User = ({}: IUserProps) => {
-  const { user } = useUserStore();
+// constants
+import { User as UserType } from "@/constants/user";
+
+interface IUserType {
+  user: UserType;
+}
+
+// component logic
+export const User = ({ user }: IUserType) => {
   const name = user?.firstName
     ? `${user?.firstName} ${user?.lastName}`
     : "Anonymous";

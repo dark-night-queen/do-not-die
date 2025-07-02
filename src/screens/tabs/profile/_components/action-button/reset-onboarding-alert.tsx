@@ -1,5 +1,8 @@
-import React from "react";
+// core dependencies
+import React, { useState } from "react";
 import colors from "tailwindcss/colors";
+
+// core components
 import { Button, ButtonText, Spinner, Text } from "@/components/ui";
 import {
   AlertDialog,
@@ -10,31 +13,24 @@ import {
   AlertDialogBackdrop,
 } from "@/components/ui/alert-dialog";
 import { Heading } from "@/components/ui/heading";
-import {
-  useProfileStore,
-  useGoalStore,
-  useActivityStore,
-} from "@/store/useOnboardingStore";
 
 interface IResetOnboardingAlert {
   showAlert: boolean;
   onClose: () => void;
+  onSubmit: () => Promise<void>;
 }
 
+// component logic
 export const ResetOnboardingAlert = ({
   showAlert,
   onClose,
+  onSubmit,
 }: IResetOnboardingAlert) => {
-  const { resetOnboarding } = useProfileStore();
-  const { resetGoal } = useGoalStore();
-  const { resetActivity } = useActivityStore();
-  const [showLoader, setShowLoader] = React.useState(false);
+  const [showLoader, setShowLoader] = useState(false);
 
   const onResetOnboarding = async () => {
     setShowLoader(true);
-    await resetGoal();
-    await resetActivity();
-    await resetOnboarding();
+    await onSubmit();
     setShowLoader(false);
     onClose();
   };
