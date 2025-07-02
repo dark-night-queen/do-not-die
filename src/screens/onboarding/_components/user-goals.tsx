@@ -50,12 +50,12 @@ export const UserGoals = ({
     const targetWeight = Number(formData.targetWeight);
     const currentWeight = profile?.weight || 0;
 
-    if (formData.type == "WEIGHT_LOSS") {
+    if (formData.type === "WEIGHT_LOSS") {
       if (targetWeight >= currentWeight) return 0;
 
       const progress = (currentWeight - targetWeight) / (currentWeight * 0.2);
       return Math.min(100, progress * 100);
-    } else if (formData.type == "WEIGHT_GAIN") {
+    } else if (formData.type === "WEIGHT_GAIN") {
       if (currentWeight >= targetWeight) return 0;
 
       const progress = (targetWeight - currentWeight) / (currentWeight * 0.2);
@@ -66,7 +66,7 @@ export const UserGoals = ({
   return (
     <>
       <VStack className="items-center gap-1">
-        <Text className="text-2xl font-bold">Let's Set Your Goal</Text>
+        <Text className="text-2xl font-bold">Let&apos;s Set Your Goal</Text>
         <Text className="text-sm text-center text-gray-400">
           Choose your primary fitness objective and set your target
         </Text>
