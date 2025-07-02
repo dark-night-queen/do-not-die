@@ -1,2 +1,2 @@
-import Splash from "@/screens/loaders/splash";
+import Splash from "@/screens/loaders";
 export default Splash;
