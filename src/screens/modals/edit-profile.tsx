@@ -5,12 +5,12 @@ import React from "react";
 import DefaultLayout from "@/screens/_layout";
 import { ComingSoon } from "@/screens/_components/coming-soon";
 
-const HeartDataScreen = () => {
+const EditProfileScreen = () => {
   return (
     <DefaultLayout className="justify-center items-center">
-      <ComingSoon heading="Health Data" />
+      <ComingSoon heading="Edit Profile" />
     </DefaultLayout>
   );
 };
 
-export default HeartDataScreen;
+export default EditProfileScreen;
