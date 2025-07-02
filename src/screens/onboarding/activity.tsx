@@ -12,7 +12,7 @@ import { UserActivityLevel } from "./_components/activity-level";
 import Layout from "./_layout";
 import { CalorieCalculations } from "@/utils/calorie-calculations";
 
-const Activity = () => {
+const ActivityScreen = () => {
   const router = useRouter();
   const navigate = useNavigation();
 
@@ -97,4 +97,4 @@ const Activity = () => {
     </Layout>
   );
 };
-export default Activity;
+export default ActivityScreen;
