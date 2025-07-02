@@ -1,2 +1,2 @@
 import Analytics from "@/screens/analytics";
-export default () => <Analytics />;
+export default Analytics;
