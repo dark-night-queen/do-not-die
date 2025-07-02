@@ -3,14 +3,14 @@
   "compilerOptions": {
     "strict": true,
     "paths": {
-      "@/components/*": ["./src/components/*"],
-      "@/constants/*": ["./src/constants/*"],
-      "@/hooks/*": ["./src/hooks/*"],
-      "@/providers/*": ["./src/providers/*"],
+      "@/lib": ["./src/lib/*"],
+      "@/components/*": ["./src/lib/components/*"],
+      "@/constants/*": ["./src/lib/constants/*"],
+      "@/hooks/*": ["./src/lib/hooks/*"],
+      "@/providers/*": ["./src/lib/providers/*"],
       "@/screens/*": ["./src/screens/*"],
-      "@/store/*": ["./src/store/*"],
-      "@/utils/*": ["./src/utils/*"],
-      "@/lib/*": ["./src/lib/*"],
+      "@/store/*": ["./src/lib/store/*"],
+      "@/utils/*": ["./src/lib/utils/*"],
       "@/*": ["./*"],
       "tailwind.config": ["./tailwind.config.js"]
     }
