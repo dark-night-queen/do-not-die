@@ -23,7 +23,7 @@ const DefaultLayout = ({ className = "", children }: IDefaultLayout) => {
         backgroundColor: isDark ? colors.gray["900"] : colors.transparent,
       }}
     >
-      <VStack className={`flex-1 ${className}`}>{children}</VStack>
+      <VStack className={`flex-1 p-6 gap-4 ${className}`}>{children}</VStack>
     </SafeAreaView>
   );
 };

@@ -8,7 +8,7 @@ import { Button, ButtonText, Text } from "@/components/ui";
 import DefaultLayout from "@/screens/_layout";
 
 // constants
-import { HEART_PATH } from "@/lib/constants/loaders";
+import { HEART_PATH } from "@/constants/loaders";
 import { useRouter } from "expo-router";
 
 // component logic
@@ -31,7 +31,7 @@ const LoaderScreen = () => {
   }, []);
 
   const onClick = () => {
-    router.replace("/auth");
+    router.replace("/(tabs)");
   };
 
   return (
