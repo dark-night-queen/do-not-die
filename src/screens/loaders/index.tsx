@@ -4,17 +4,15 @@ import Svg, { Defs, ClipPath, Rect, Path } from "react-native-svg";
 import { MotiView, MotiText } from "moti";
 
 // core components
-import { Button, ButtonText, Text } from "@/components/ui";
+import { Text } from "@/components/ui";
 import DefaultLayout from "@/screens/_layout";
 
 // constants
 import { HEART_PATH } from "@/constants/loaders";
-import { useRouter } from "expo-router";
 
 // component logic
 const LoaderScreen = () => {
   const [progress, setProgress] = useState(0);
-  const router = useRouter();
 
   useEffect(() => {
     setProgress(0);
@@ -29,10 +27,6 @@ const LoaderScreen = () => {
       clearInterval(interval);
     };
   }, []);
-
-  const onClick = () => {
-    router.replace("/(tabs)");
-  };
 
   return (
     <DefaultLayout className="justify-center items-center">
@@ -76,10 +70,6 @@ const LoaderScreen = () => {
         Don&apos;t Die
       </MotiText>
       <Text className="text-sm text-gray-400">Loading your health data...</Text>
-
-      <Button onPress={onClick}>
-        <ButtonText>Click</ButtonText>
-      </Button>
     </DefaultLayout>
   );
 };
