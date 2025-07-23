@@ -1,7 +1,9 @@
+// core dependencies
 import React from "react";
 import colors from "tailwindcss/colors";
 import { ChevronLeft } from "lucide-react-native";
-import { validateEmail as validateEmailUtil } from "@/utils/validate-auth";
+
+// core components
 import {
   Button,
   ButtonIcon,
@@ -11,7 +13,12 @@ import {
   Text,
 } from "@/components/ui";
 import { FormElement, InputElement } from "@/components/custom";
-import { ForgetPasswordSuccess } from "./forget-password-success";
+
+// custom components
+import { ForgetPasswordSuccess } from "./success";
+
+// handler functions
+import { validateEmail as validateEmailUtil } from "@/utils/validate-auth";
 
 enum Screen {
   FORGET_PASSWORD = "forget-password",
@@ -23,6 +30,7 @@ type IForgetPasswordProps = {
   goBackToLogin: () => void;
 };
 
+// component logic
 export const ForgetPassword = ({
   handleSubmit,
   goBackToLogin,

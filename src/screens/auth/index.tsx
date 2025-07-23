@@ -1,23 +1,26 @@
+// core dependencies
 import React from "react";
 import { useRouter } from "expo-router";
 import { toast } from "sonner-native";
-import { useAuth } from "@/providers/auth-provider";
-import { useAuthStore } from "@/store/useAuthStore";
-import { Login } from "./_components/login";
-import Layout from "./_layout";
 
-export default () => {
+// custom components
+import Layout from "./_layout";
+import { Login } from "./_components/login";
+
+// handler functions
+import { useAuth } from "@/providers/auth-provider";
+
+// component logic
+const AuthScreen = () => {
   const router = useRouter();
-  // TODO: move both login and signup to auth-provider
-  const { login } = useAuthStore();
-  const { signup } = useAuth();
+  const { login, signup } = useAuth();
 
   const handleLogin = async (email: string, password: string) => {
-    const {
-      data: { session, user },
-      error,
-    } = await login(email, password);
-    if (error) toast.warning(error.message);
+    try {
+      await login(email, password);
+    } catch (error: any) {
+      toast.warning(error);
+    }
   };
 
   const handleSignup = async (email: string, password: string) => {
@@ -42,3 +45,5 @@ export default () => {
     </Layout>
   );
 };
+
+export default AuthScreen;

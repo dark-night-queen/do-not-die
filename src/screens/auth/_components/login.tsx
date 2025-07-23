@@ -1,7 +1,12 @@
+// core dependencies
 import React from "react";
 import colors from "tailwindcss/colors";
+
+// core components
 import { FormElement, InputElement } from "@/components/custom";
 import { Button, ButtonText, Spinner } from "@/components/ui";
+
+// handler functions
 import {
   validateEmail as validateEmailUtil,
   validatePassword as validatePasswordUtil,
@@ -13,12 +18,13 @@ type ILoginProps = {
   handleForgetPassword: () => void;
 };
 
+// component logic
 export const Login = ({
   handleLogin,
   handleSignup,
   handleForgetPassword,
 }: ILoginProps) => {
-  const [showLoader, setShowLoader] = React.useState({
+  const [isLoading, setIsLoading] = React.useState({
     login: false,
     signup: false,
   });
@@ -53,17 +59,17 @@ export const Login = ({
 
   const onLoginPress = async () => {
     if (validateEmail() && validatePassword()) {
-      setShowLoader((prev) => ({ ...prev, login: true }));
+      setIsLoading((prev) => ({ ...prev, login: true }));
       await handleLogin(email, password);
-      setShowLoader((prev) => ({ ...prev, login: false }));
+      setIsLoading((prev) => ({ ...prev, login: false }));
     }
   };
 
   const onSignUpPress = async () => {
     if (validateEmail() && validatePassword()) {
-      setShowLoader((prev) => ({ ...prev, signup: true }));
+      setIsLoading((prev) => ({ ...prev, signup: true }));
       await handleSignup(email, password);
-      setShowLoader((prev) => ({ ...prev, signup: false }));
+      setIsLoading((prev) => ({ ...prev, signup: false }));
     }
   };
 
@@ -87,20 +93,27 @@ export const Login = ({
           placeholder="Password"
           value={password}
           onChangeText={handleChange("password")}
-          type="password"
+          secureTextEntry
         />
       </FormElement>
 
-      <Button onPress={onLoginPress}>
+      <Button
+        className="rounded-lg"
+        onPress={onLoginPress}
+        disabled={isLoading.login || isLoading.signup}
+      >
         <ButtonText>Login</ButtonText>
-        {showLoader.login ? (
-          <Spinner size="small" color={colors.white} />
-        ) : null}
+        {isLoading.login ? <Spinner size="small" color={colors.white} /> : null}
       </Button>
 
-      <Button variant="outline" onPress={onSignUpPress}>
+      <Button
+        variant="outline"
+        className="rounded-lg"
+        onPress={onSignUpPress}
+        disabled={isLoading.login || isLoading.signup}
+      >
         <ButtonText>Sign Up</ButtonText>
-        {showLoader.signup ? (
+        {isLoading.signup ? (
           <Spinner size="small" color={colors.white} />
         ) : null}
       </Button>
