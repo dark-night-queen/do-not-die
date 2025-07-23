@@ -1,33 +1,39 @@
 model User {
-  id        String   @id
-  email     String   @unique
-  firstName String?
-  lastName  String?
-  avatar    String?
-  isActive  Boolean  @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
-  profile   Profile?
+  id              String   @id
+  email           String   @unique
+  firstName       String?
+  lastName        String?
+  avatar          String?
+  isActive        Boolean  @default(true)
+  isEmailVerified Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @default(now()) @updatedAt
+  profile         Profile?
 }
 
 model Profile {
   id                   Int                @id @default(autoincrement())
   userId               String             @unique
   age                  Int?
-  height               Float?
-  weight               Float?
-  gender               Gender?
-  unitSystem           UnitSystem         @default(IMPERIAL)
-  dietaryPreference    DietaryPreference?
-  isOnboardingComplete Boolean            @default(false)
-  createdAt            DateTime           @default(now())
-  updatedAt            DateTime           @default(now()) @updatedAt
+  heightCm             Float?
+  displayHeight        Float?
+  weightKg             Float?
+  displayWeight        Float?
+  targetWeightKg       Float?
+  displayTargetWeight  Float?
   bmr                  Float?
   tdee                 Float?
   dailyCalorieTarget   Float?
   weeklyWeightChange   Float?
-  activity             Activity?
-  goal                 Goal?
+  gender               Gender?
+  unitSystem           UnitSystem         @default(IMPERIAL)
+  dietaryPreference    DietaryPreference?
+  activityLevel        ActivityLevel?
+  goalType             GoalType?
+  duration             GoalDuration?
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @default(now()) @updatedAt
+  isOnboardingComplete Boolean            @default(false)
   user                 User               @relation(fields: [userId], references: [id])
 }
 
@@ -46,4 +52,22 @@ enum DietaryPreference {
   VEGAN
   VEGETARIAN
   NON_VEGETARIAN
+}
+
+enum ActivityLevel {
+  SEDENTARY
+  LIGHTLY_ACTIVE
+  MODERATELY_ACTIVE
+  VERY_ACTIVE
+}
+
+enum GoalType {
+  WEIGHT_LOSS
+  WEIGHT_GAIN
+}
+
+enum GoalDuration {
+  SHORT_TERM
+  MEDIUM_TERM
+  LONG_TERM
 }
