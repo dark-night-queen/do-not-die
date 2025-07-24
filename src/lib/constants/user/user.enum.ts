@@ -6,30 +6,30 @@ enum ACTIVITY_LEVEL {
 }
 
 enum DIETARY_PREFERENCE {
-  VEGAN = "VEGAN",
-  VEGETARIAN = "VEGETARIAN",
-  NON_VEGETARIAN = "NON_VEGETARIAN",
+  "Vegan" = "VEGAN",
+  "Vegetarian" = "VEGETARIAN",
+  "Non-Vegetarian" = "NON_VEGETARIAN",
 }
 
 enum GENDER {
-  MALE = "MALE",
-  FEMALE = "FEMALE",
-  OTHER = "OTHER",
+  Male = "MALE",
+  Female = "FEMALE",
+  Other = "OTHER",
 }
 
 enum GOAL_DURATION {
-  SHORT_TERM = "SHORT_TERM",
-  MEDIUM_TERM = "MEDIUM_TERM",
-  LONG_TERM = "LONG_TERM",
+  SHORT_TERM = "Short Term",
+  MEDIUM_TERM = "Medium Term",
+  LONG_TERM = "Long Term",
 }
 enum GOAL_TYPE {
-  WEIGHT_LOSS = "WEIGHT_LOSS",
-  WEIGHT_GAIN = "WEIGHT_GAIN",
+  "Weight Loss" = "WEIGHT_LOSS",
+  "Weight Gain" = "WEIGHT_GAIN",
 }
 
 enum UNIT_SYSTEM {
-  IMPERIAL = "IMPERIAL",
-  METRIC = "METRIC",
+  Imperial = "IMPERIAL",
+  Metric = "METRIC",
 }
 
 export {

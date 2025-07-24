@@ -7,12 +7,12 @@ import {
   UNIT_SYSTEM,
 } from "./user.enum";
 
-type ActivityLevel = keyof typeof ACTIVITY_LEVEL | null;
-type DietaryPreference = keyof typeof DIETARY_PREFERENCE | null;
-type GoalType = keyof typeof GOAL_TYPE | null;
-type GoalDuration = keyof typeof GOAL_DURATION | null;
-type Gender = keyof typeof GENDER | null;
-type UnitSystem = keyof typeof UNIT_SYSTEM;
+type ActivityLevel = ACTIVITY_LEVEL | null;
+type DietaryPreference = DIETARY_PREFERENCE | null;
+type GoalType = GOAL_TYPE | null;
+type GoalDuration = GOAL_DURATION | null;
+type Gender = GENDER | null;
+type UnitSystem = UNIT_SYSTEM;
 
 type User = {
   id: string;

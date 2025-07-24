@@ -76,7 +76,7 @@ const initProfileState = {
   dailyCalorieTarget: 0,
   weeklyWeightChange: 0,
   gender: null,
-  unitSystem: UNIT_SYSTEM.IMPERIAL,
+  unitSystem: UNIT_SYSTEM.Imperial,
   dietaryPreference: null,
   activityLevel: null,
   goalType: null,
