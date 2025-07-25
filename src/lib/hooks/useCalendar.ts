@@ -19,7 +19,7 @@ const getEndOfWeek = (date: Moment) => date.clone().endOf("isoWeek");
 
 function generateWeek(newDate: Moment) {
   return Array.from({ length: 7 }, (_, i) =>
-    newDate.clone().startOf("isoWeek").add(i, "days")
+    newDate.clone().startOf("isoWeek").add(i, "days"),
   );
 }
 
@@ -38,7 +38,7 @@ function getCurrentMonthName(currentDate: Moment) {
   return `${previousMonth} - ${currentMonth} ${year}`;
 }
 
-export const useCalendarStore = create<CalendarState & CalendarAction>(
+export const useCalendar = create<CalendarState & CalendarAction>(
   (set, get) => ({
     activeDate: moment(),
     currentDate: moment(),
@@ -61,5 +61,5 @@ export const useCalendarStore = create<CalendarState & CalendarAction>(
     },
 
     setActiveDate: (date: Moment) => set({ activeDate: date }),
-  })
+  }),
 );

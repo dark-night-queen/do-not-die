@@ -1,10 +1,14 @@
-import React from "react";
+// core dependencies
 import { ChevronLeft, ChevronRight } from "lucide-react-native";
+
+// core components
 import { HStack, Text, Button, ButtonIcon } from "@/components/ui";
-import { useCalendarStore } from "@/store/useWeeklyCalendar";
+
+// handler functions
+import { useCalendar } from "@/hooks/useCalendar";
 
 export const Navigation = () => {
-  const { navigateWeek, currentMonthName, isNextDisabled } = useCalendarStore();
+  const { navigateWeek, currentMonthName, isNextDisabled } = useCalendar();
 
   return (
     <HStack className="items-center justify-between">

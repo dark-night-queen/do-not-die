@@ -1,11 +1,17 @@
+// core dependencies
 import React from "react";
 import { Activity, Info } from "lucide-react-native";
+
+// core components
 import { Card, Text, Icon, HStack, VStack } from "@/components/ui";
 import { Progress, ProgressGradientTrack } from "@/components/ui/progress";
-import { useNutrientStore } from "@/store/useNutrientsStore";
+
+// handler functions
+// import { useNutrientStore } from "@/store/useNutrientsStore";
 
 export const HealthScore = () => {
-  const { healthScore } = useNutrientStore();
+  // const { healthScore } = useNutrientStore();
+  const healthScore = 0;
 
   return (
     <Card className="flex-1 gap-4">

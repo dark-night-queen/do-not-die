@@ -1,16 +1,19 @@
-import React from "react";
-import { CircularProgress, HStack, Text, VStack } from "@/components/ui";
+// core dependencies
 import { AlertCircle } from "lucide-react-native";
+
+// core components
+import { CircularProgress, HStack, Text, VStack } from "@/components/ui";
 
 type IMacroCircleProps = {
   name: string;
-  value: number;
-  target: number;
+  value?: number;
+  target?: number;
   tintColor?: string;
 };
 
+// component logic
 export const MacroCircle = (props: IMacroCircleProps) => {
-  const { name, value, target, ...otherProps } = props;
+  const { name, value = 0, target = 0, ...otherProps } = props;
 
   const fill = (value / target) * 100;
   const valueLeft = target - value;
@@ -27,8 +30,9 @@ export const MacroCircle = (props: IMacroCircleProps) => {
   );
 };
 
+// component logic
 export const MacroCircle2 = (props: IMacroCircleProps) => {
-  const { name, value, target } = props;
+  const { name, value = 0, target = 0 } = props;
 
   const remaining = target - value;
   const isOverLimit = value > target;

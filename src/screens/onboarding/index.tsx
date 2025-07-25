@@ -107,7 +107,7 @@ const OnboardingScreen = () => {
         dietaryPreference: formData.dietaryPreference,
       };
 
-      if (!profile) {
+      if (!profile?.id) {
         await createProfile(updatedProfile);
       } else {
         await updateProfile({ ...profile, ...updatedProfile });

@@ -1,7 +1,12 @@
+// core dependencies
 import React from "react";
-import { Box, Button, ButtonText, HStack } from "@/components/ui";
 import moment, { Moment } from "moment";
-import { useCalendarStore } from "@/store/useWeeklyCalendar";
+
+// core components
+import { Box, Button, ButtonText, HStack } from "@/components/ui";
+
+// handler functions
+import { useCalendar } from "@/hooks/useCalendar";
 
 const Day = ({ date, isActive }: { date: Moment; isActive: boolean }) => {
   const isToday = date.isSame(moment(), "day");
@@ -69,7 +74,7 @@ const WeekDay = ({
 };
 
 export const WeeklyCalendarDays = () => {
-  const { activeDate, currentWeek, setActiveDate } = useCalendarStore();
+  const { activeDate, currentWeek, setActiveDate } = useCalendar();
 
   return (
     <HStack className="items-center justify-between">

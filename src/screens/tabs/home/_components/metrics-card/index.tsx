@@ -1,4 +1,7 @@
+// core components
 import { HStack } from "@/components/ui";
+
+// custom components
 import { HealthScore } from "./health-score";
 import { Micronutrient } from "./micronutrient";
 

@@ -1,21 +1,27 @@
+// core components
 import { HStack, Text, Card, Divider, VStack } from "@/components/ui";
-import { useNutrientStore } from "@/store/useNutrientsStore";
+
+// custom components
 import { MacroCircle, MacroCircle2 } from "./macro-circle";
-import { useDailyDataStore } from "@/store/useDailyDataStore";
 
+// handler functions
+import { useProfileStore } from "@/store/useOnboardingStore";
+// import { useNutrientStore } from "@/store/useNutrientsStore";
+
+// component logic
 export const MacroCard = () => {
-  const { proteinTarget, fatTarget, carbsTarget, caloriesTarget } =
-    useDailyDataStore();
+  const { profile } = useProfileStore();
+  const targetMacroNutrient = profile?.targetMacroNutrient;
 
-  const { caloriesConsumed, proteinConsumed, carbsConsumed, fatsConsumed } =
-    useNutrientStore();
+  // const { caloriesConsumed, proteinConsumed, carbsConsumed, fatsConsumed } =
+  //   useNutrientStore();
 
   return (
     <Card className="flex-row items-center gap-3 rounded-xl p-4">
       <MacroCircle2
         name="Calorie"
-        value={caloriesConsumed}
-        target={caloriesTarget}
+        // value={caloriesConsumed}
+        target={profile?.dailyCalorieTarget}
       />
 
       <Divider className="h-16 opacity-60" orientation="vertical" />
@@ -26,20 +32,20 @@ export const MacroCard = () => {
         <HStack className="justify-between">
           <MacroCircle
             name="Protein"
-            value={proteinConsumed}
-            target={proteinTarget}
+            // value={proteinConsumed}
+            target={targetMacroNutrient?.proteinTarget}
             tintColor="#EF4444"
           />
           <MacroCircle
             name="Carbs"
-            value={carbsConsumed}
-            target={carbsTarget}
+            // value={carbsConsumed}
+            target={targetMacroNutrient?.carbsTarget}
             tintColor="#F59E0B"
           />
           <MacroCircle
             name="Fat"
-            value={fatsConsumed}
-            target={fatTarget}
+            // value={fatsConsumed}
+            target={targetMacroNutrient?.fatTarget}
             tintColor="#3B82F6"
           />
         </HStack>

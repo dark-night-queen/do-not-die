@@ -1,10 +1,15 @@
+// core dependencies
 import React from "react";
 import { Apple, Info } from "lucide-react-native";
+
+// core components
 import { Card, Text, Icon, HStack, VStack } from "@/components/ui";
-import { useNutrientStore } from "@/store/useNutrientsStore";
+
+// handler functions
+// import { useNutrientStore } from "@/store/useNutrientsStore";
 
 export const Micronutrient = () => {
-  const { micronutrients } = useNutrientStore();
+  // const { micronutrients } = useNutrientStore();
 
   const getColor = (percent: number) => {
     if (percent >= 60) return "text-emerald-400";
@@ -21,7 +26,7 @@ export const Micronutrient = () => {
       </HStack>
 
       <HStack className="items-center justify-between">
-        {micronutrients.map((nutrient, index) => (
+        {/* {micronutrients.map((nutrient, index) => (
           <VStack key={index} className="items-center gap-1">
             <Text
               className={`text-[11px] font-bold ${getColor(nutrient.value)}`}
@@ -32,7 +37,7 @@ export const Micronutrient = () => {
               {nutrient.shortName}
             </Text>
           </VStack>
-        ))}
+        ))} */}
       </HStack>
     </Card>
   );
