@@ -1,0 +1,28 @@
+model FoodItem {
+    int    Int    @id @default(autoincrement())
+    user   User   @relation(fields: [userId], references: [id])
+    userId String
+
+    name     String
+    quantity String
+
+    // nutrients
+    calories Float
+    protein  Float
+    carbs    Float
+    fat      Float
+
+    // micro-nutrients
+    fiber     Float
+    vitaminC  Float
+    calcium   Float
+    iron      Float
+    potassium Float
+
+    // metadata
+    ingredients    Json?
+    healthScore    Float
+    nutritionScore Float
+    createdAt      DateTime @default(now())
+    updatedAt      DateTime @updatedAt
+}

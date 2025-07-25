@@ -8,12 +8,17 @@ model User {
   isEmailVerified Boolean  @default(true)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @default(now()) @updatedAt
-  profile         Profile?
+
+  profile                Profile?
+  foodItem               FoodItem[]
+  nutrientAnalysisPerDay NutrientAnalysisPerDay[]
 }
 
 model Profile {
-  id                    Int                @id @default(autoincrement())
-  userId                String             @unique
+  id     Int    @id @default(autoincrement())
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @unique
+
   age                   Int?
   heightCm              Float?
   displayHeight         Float?
@@ -32,10 +37,9 @@ model Profile {
   goalType              GoalType?
   goalDuration          GoalDuration?
   targetMacroNutrient   Json?
+  isOnboardingCompleted Boolean            @default(false)
   createdAt             DateTime           @default(now())
   updatedAt             DateTime           @default(now()) @updatedAt
-  isOnboardingCompleted Boolean            @default(false)
-  user                  User               @relation(fields: [userId], references: [id])
 }
 
 enum Gender {
