@@ -32,7 +32,7 @@ const useUserStore = create<UserState & UserActions>((set, get) => ({
 
   getUser: async (id) => {
     const { user } = get();
-    if (user?.id === id) return user;
+    if (user?.email) return user;
 
     const { data: newUser } = await getUser(id);
     if (newUser) set({ user: newUser });
@@ -79,8 +79,8 @@ const initProfileState = {
   unitSystem: UNIT_SYSTEM.Imperial,
   dietaryPreference: null,
   activityLevel: null,
-  goalType: null,
-  goalDuration: null,
+  goalType: undefined,
+  goalDuration: undefined,
   isOnboardingCompleted: false,
 };
 
@@ -100,10 +100,12 @@ export const useProfileStore = create<ProfileState & ProfileActions>(
     },
     createProfile: async (profile) => {
       const { data, error } = await createProfile(profile);
+      set({ profile: data });
       return { data, error };
     },
     updateProfile: async (profile) => {
       const { data, error } = await updateProfile(profile);
+      set({ profile: data });
       return { data, error };
     },
     resetOnboarding: async () => {

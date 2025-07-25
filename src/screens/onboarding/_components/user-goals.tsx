@@ -1,12 +1,8 @@
+// core dependencies
 import React from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react-native";
-import { getWeightUnitSystem } from "@/utils/units";
-import {
-  CardRadioElement,
-  FormElement,
-  InputElement,
-  SelectElement,
-} from "@/components/custom";
+
+// core components
 import {
   HStack,
   Icon,
@@ -16,39 +12,50 @@ import {
   Text,
   VStack,
 } from "@/components/ui";
+
+// custom components
+import {
+  CardRadioElement,
+  FormElement,
+  InputElement,
+  SelectElement,
+} from "@/components/custom";
+
+// handler functions
+import { getWeightUnitSystem } from "@/utils/units";
 import {
   GoalDuration,
   GoalDurationOptions,
   GoalType,
   GoalTypeOptions,
-} from "@/constants/user.goal.type";
-import { useProfileStore } from "@/store/useOnboardingStore";
+  GOAL_DURATION_LABEL,
+} from "@/constants/user";
 
 interface IUserGoalsProps {
   formData: {
-    type: GoalType;
-    duration: GoalDuration;
+    type?: GoalType;
+    duration?: GoalDuration;
+    weight: string;
     targetWeight: string;
+    targetWeightKg?: string;
     unitSystem: string;
   };
   errors: Record<string, string>;
   handleChange: (name: string) => (value: string) => void;
 }
 
-// TODO: fix initialValue of select from formData
 export const UserGoals = ({
   formData,
   errors,
   handleChange,
 }: IUserGoalsProps) => {
   const weightUnitSystem = getWeightUnitSystem(formData.unitSystem);
-  const { profile } = useProfileStore();
 
   const getProgressBarWidth = () => {
     if (!formData.targetWeight) return 50;
 
-    const targetWeight = Number(formData.targetWeight);
-    const currentWeight = profile?.weight || 0;
+    const targetWeight = parseFloat(formData.targetWeight);
+    const currentWeight = parseFloat(formData.weight);
 
     if (formData.type === "WEIGHT_LOSS") {
       if (targetWeight >= currentWeight) return 0;
@@ -65,69 +72,69 @@ export const UserGoals = ({
 
   return (
     <>
-      <VStack className="items-center gap-1">
+      <VStack className="items-center gap-1 mb-4">
         <Text className="text-2xl font-bold">Let&apos;s Set Your Goal</Text>
         <Text className="text-sm text-center text-gray-400">
           Choose your primary fitness objective and set your target
         </Text>
       </VStack>
 
-      <VStack className="gap-4">
-        <FormElement>
-          <CardRadioElement
-            options={GoalTypeOptions}
-            value={formData.type}
-            onChange={handleChange("type")}
-          />
-        </FormElement>
+      <FormElement>
+        <CardRadioElement
+          options={GoalTypeOptions}
+          value={formData.type}
+          onChange={handleChange("type")}
+        />
+      </FormElement>
 
-        <FormElement label="Target Weight" error={errors.targetWeight}>
-          <InputElement
-            placeholder="Enter Target Weight"
-            value={formData.targetWeight}
-            onChangeText={handleChange("targetWeight")}
-            inputMode="decimal"
-            keyboardType="decimal-pad"
-          >
-            <InputSlot className="px-3">
-              <Text>{weightUnitSystem}</Text>
-            </InputSlot>
-          </InputElement>
-        </FormElement>
+      <FormElement label="Target Weight" error={errors.targetWeight}>
+        <InputElement
+          placeholder="Enter Target Weight"
+          value={formData.targetWeight}
+          onChangeText={handleChange("targetWeight")}
+          inputMode="decimal"
+          keyboardType="decimal-pad"
+        >
+          <InputSlot className="px-3">
+            <Text>{weightUnitSystem}</Text>
+          </InputSlot>
+        </InputElement>
+      </FormElement>
 
-        <FormElement label="Timeline">
-          <SelectElement
-            options={GoalDurationOptions}
-            selectedValue={formData.duration}
-            onValueChange={handleChange("duration")}
-          />
-        </FormElement>
-      </VStack>
+      <FormElement label="Timeline">
+        <SelectElement
+          options={GoalDurationOptions}
+          selectedValue={
+            formData.duration
+              ? GOAL_DURATION_LABEL[formData.duration] || formData.duration
+              : ""
+          }
+          onValueChange={handleChange("duration")}
+        />
+      </FormElement>
 
       {/* Progress Towards Goal */}
-      <VStack className="gap-4">
-        <Text className="text-sm font-medium text-typography-900">
-          Progress Towards Goal
-        </Text>
+      <Text className="text-sm font-medium text-typography-900">
+        Progress Towards Goal
+      </Text>
 
-        <Progress value={getProgressBarWidth()}>
-          <ProgressFilledTrack className="bg-indigo-600" />
-        </Progress>
+      <Progress value={getProgressBarWidth()}>
+        <ProgressFilledTrack className="bg-indigo-600" />
+      </Progress>
 
-        <HStack>
-          <HStack className="flex-1 items-center">
-            <Text className="text-xs text-gray-400">{profile?.weight} kg</Text>
-            <Icon as={ArrowRight} size="sm" className="text-gray-400" />
-          </HStack>
-
-          <HStack className="items-center">
-            <Icon as={ArrowLeft} size="sm" className="text-gray-400" />
-            <Text className="text-xs text-gray-400">
-              {formData.targetWeight} kg
-            </Text>
-          </HStack>
+      <HStack>
+        <HStack className="flex-1 items-center">
+          <Text className="text-xs text-gray-400">{formData.weight} kg</Text>
+          <Icon as={ArrowRight} size="sm" className="text-gray-400" />
         </HStack>
-      </VStack>
+
+        <HStack className="items-center">
+          <Icon as={ArrowLeft} size="sm" className="text-gray-400" />
+          <Text className="text-xs text-gray-400">
+            {formData.targetWeight} kg
+          </Text>
+        </HStack>
+      </HStack>
     </>
   );
 };
