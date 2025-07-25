@@ -14,13 +14,12 @@ import { useProfileStore } from "@/store/useOnboardingStore";
 // TODO: update consumed values from the store
 export const MacroDistribution = () => {
   const { profile } = useProfileStore();
-  const targetMacroNutrient = profile?.targetMacroNutrient;
 
   const {
     proteinTarget = 0,
     carbsTarget = 0,
     fatTarget = 0,
-  } = targetMacroNutrient || {};
+  } = profile.targetMacroNutrient || {};
 
   const proteinConsumed = 0;
   const carbsConsumed = 0;

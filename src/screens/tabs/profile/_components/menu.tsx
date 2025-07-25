@@ -10,7 +10,7 @@ import { GhostButton } from "@/screens/_components/ghost-button";
 import { Profile } from "@/constants/user";
 
 interface IMenuType {
-  profile: Profile | null;
+  profile: Profile;
 }
 
 // component logic
@@ -42,7 +42,7 @@ export const Menu = ({ profile }: IMenuType) => {
         icon={Activity}
         name="Activity Level"
         showArrow={true}
-        value={profile?.activityLevel?.toLowerCase().replace("_", " ") ?? ""}
+        value={profile.activityLevel?.toLowerCase().replace("_", " ") ?? ""}
         onPress={onPressActivity}
       />
 

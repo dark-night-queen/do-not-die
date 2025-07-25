@@ -21,15 +21,15 @@ const ActivityScreen = () => {
   const [isDisabled, setIsDisabled] = React.useState(true);
   const [isUpdated, setIsUpdated] = React.useState(false);
   const [formData, setFormData] = React.useState({
-    activityLevel: profile?.activityLevel,
+    activityLevel: profile.activityLevel,
   });
   // stores calorie calculation metadata
   const [meta, setMeta] = React.useState({
-    bmr: profile?.bmr ?? 0,
-    tdee: profile?.tdee ?? 0,
-    dailyCalorieTarget: profile?.dailyCalorieTarget ?? 0,
-    weeklyWeightChange: profile?.weeklyWeightChange ?? 0,
-    targetMacroNutrient: profile?.targetMacroNutrient ?? {},
+    bmr: profile.bmr ?? 0,
+    tdee: profile.tdee ?? 0,
+    dailyCalorieTarget: profile.dailyCalorieTarget ?? 0,
+    weeklyWeightChange: profile.weeklyWeightChange ?? 0,
+    targetMacroNutrient: profile.targetMacroNutrient ?? {},
   });
 
   React.useEffect(() => {
@@ -61,7 +61,7 @@ const ActivityScreen = () => {
   };
 
   const handleSubmit = async () => {
-    if (!profile?.id) {
+    if (!profile.id) {
       console.error("Profile does not exists!");
       router.push("/auth");
       return;

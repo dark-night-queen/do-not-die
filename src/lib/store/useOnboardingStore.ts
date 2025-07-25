@@ -52,10 +52,10 @@ const useUserStore = create<UserState & UserActions>((set, get) => ({
   - This store manages user data and actions related to user management.
  */
 interface ProfileState {
-  profile: Profile | null;
+  profile: Profile;
 }
 interface ProfileActions {
-  getProfile: (userId: string) => Promise<Profile | null>;
+  getProfile: (userId: string) => Promise<Profile>;
   createProfile: (profile: Profile) => Promise<{ data: any; error: any }>;
   updateProfile: (
     profile: Partial<Profile>,
@@ -64,6 +64,7 @@ interface ProfileActions {
 }
 
 const initProfileState = {
+  userId: "",
   age: 0,
   displayHeight: 0,
   heightCm: 0,
@@ -81,16 +82,17 @@ const initProfileState = {
   activityLevel: undefined,
   goalType: undefined,
   goalDuration: undefined,
+  targetMacroNutrient: {},
   isOnboardingCompleted: false,
 };
 
 export const useProfileStore = create<ProfileState & ProfileActions>(
   (set, get) => ({
-    profile: null,
+    profile: initProfileState,
 
     getProfile: async (userId) => {
       const { profile } = get();
-      if (profile?.userId === userId) {
+      if (profile.userId === userId) {
         return profile;
       }
 
@@ -119,7 +121,7 @@ export const useProfileStore = create<ProfileState & ProfileActions>(
       };
 
       await resetOnboarding(updatedProfile);
-      set({ profile: null });
+      set({ profile: initProfileState });
     },
   }),
 );

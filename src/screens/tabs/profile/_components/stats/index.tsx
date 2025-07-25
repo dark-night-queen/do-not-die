@@ -13,12 +13,12 @@ import { getWeightUnitSystem } from "@/utils/units";
 import { Profile } from "@/constants/user";
 
 interface IStatsType {
-  profile: Profile | null;
+  profile: Profile;
 }
 
 // component logic
 export const Stats = ({ profile }: IStatsType) => {
-  const weightUnitSystem = getWeightUnitSystem(profile?.unitSystem ?? "METRIC");
+  const weightUnitSystem = getWeightUnitSystem(profile.unitSystem ?? "METRIC");
 
   return (
     <VStack className="gap-4">
@@ -26,13 +26,13 @@ export const Stats = ({ profile }: IStatsType) => {
         <CustomCard
           icon={Scale}
           className="text-blue-400"
-          value={`${profile?.displayWeight} ${weightUnitSystem}`}
+          value={`${profile.displayWeight} ${weightUnitSystem}`}
           name="Current Weight"
         />
         <CustomCard
           icon={Target}
           className="text-green-400"
-          value={`${profile?.displayTargetWeight} ${weightUnitSystem}`}
+          value={`${profile.displayTargetWeight} ${weightUnitSystem}`}
           name="Target Weight"
         />
       </HStack>
@@ -41,7 +41,7 @@ export const Stats = ({ profile }: IStatsType) => {
         <CustomCard
           icon={Flame}
           className="text-orange-400"
-          value={`${profile?.dailyCalorieTarget} kcal`}
+          value={`${profile.dailyCalorieTarget} kcal`}
           name="Daily Calorie Target"
         />
       </HStack>

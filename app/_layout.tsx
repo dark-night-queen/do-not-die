@@ -59,7 +59,7 @@ export default function RootLayout() {
   useEffect(() => {
     if (!isLoading && !redirected) {
       if (session) {
-        if (profile?.isOnboardingCompleted) {
+        if (profile.isOnboardingCompleted) {
           router.replace("/(tabs)");
         } else {
           router.replace("/onboarding");
@@ -73,7 +73,7 @@ export default function RootLayout() {
     isLoading,
     redirected,
     session,
-    profile?.isOnboardingCompleted,
+    profile.isOnboardingCompleted,
     setRedirected,
     router,
   ]);

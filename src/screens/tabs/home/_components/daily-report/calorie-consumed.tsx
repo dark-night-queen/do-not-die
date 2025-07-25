@@ -23,7 +23,7 @@ export const CalorieConsumed = () => {
   const { profile } = useProfileStore();
   // const { caloriesConsumed } = useNutrientStore();
 
-  const caloriesTarget = profile?.dailyCalorieTarget || 0;
+  const caloriesTarget = profile.dailyCalorieTarget || 0;
   const caloriesConsumed = 0; // Placeholder for actual consumed calories
   const percentageConsumed = (caloriesConsumed / caloriesTarget) * 100;
 

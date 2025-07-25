@@ -11,7 +11,7 @@ import { useProfileStore } from "@/store/useOnboardingStore";
 // component logic
 export const MacroCard = () => {
   const { profile } = useProfileStore();
-  const targetMacroNutrient = profile?.targetMacroNutrient;
+  const targetMacroNutrient = profile.targetMacroNutrient;
 
   // const { caloriesConsumed, proteinConsumed, carbsConsumed, fatsConsumed } =
   //   useNutrientStore();
@@ -21,7 +21,7 @@ export const MacroCard = () => {
       <MacroCircle2
         name="Calorie"
         // value={caloriesConsumed}
-        target={profile?.dailyCalorieTarget}
+        target={profile.dailyCalorieTarget}
       />
 
       <Divider className="h-16 opacity-60" orientation="vertical" />

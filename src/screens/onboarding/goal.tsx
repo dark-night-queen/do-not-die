@@ -19,16 +19,16 @@ const GoalScreen = () => {
   const [isDisabled, setIsDisabled] = React.useState(true);
   const [isUpdated, setIsUpdated] = React.useState(false);
   const [formData, setFormData] = React.useState({
-    type: profile?.goalType,
-    duration: profile?.goalDuration,
-    targetWeight: profile?.displayTargetWeight?.toString() || "",
-    targetWeightKg: profile?.targetWeightKg?.toString() || "",
+    type: profile.goalType,
+    duration: profile.goalDuration,
+    targetWeight: profile.displayTargetWeight?.toString() || "",
+    targetWeightKg: profile.targetWeightKg?.toString() || "",
   });
 
   const meta = React.useMemo(
     () => ({
-      weight: profile?.displayWeight?.toString() || "70",
-      unitSystem: profile?.unitSystem ?? UNIT_SYSTEM.Metric,
+      weight: profile.displayWeight?.toString() || "70",
+      unitSystem: profile.unitSystem ?? UNIT_SYSTEM.Metric,
     }),
     [profile],
   );
@@ -71,7 +71,7 @@ const GoalScreen = () => {
   const handleSubmit = async () => {
     if (!validateForm()) return;
 
-    if (!profile?.id) {
+    if (!profile.id) {
       console.error("Profile does not exists!");
       router.push("/auth");
       return;

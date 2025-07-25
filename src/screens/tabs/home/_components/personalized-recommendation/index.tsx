@@ -24,7 +24,7 @@ export const PersonalizedRecommendation = ({
   const { profile } = useProfileStore();
 
   const recommendations = nutrientAnalysis
-    ? generateRecommendations(nutrientAnalysis, profile?.goalType)
+    ? generateRecommendations(nutrientAnalysis, profile.goalType)
     : [];
 
   if (!recommendations.length) {

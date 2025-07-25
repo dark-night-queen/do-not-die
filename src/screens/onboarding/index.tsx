@@ -25,14 +25,14 @@ const OnboardingScreen = () => {
 
   const [isUpdated, setIsUpdated] = React.useState(false);
   const [formData, setFormData] = React.useState({
-    age: profile?.age?.toString() || "",
-    gender: profile?.gender || null,
-    unitSystem: profile?.unitSystem || UNIT_SYSTEM.Metric,
-    height: profile?.displayHeight?.toString() || "",
-    weight: profile?.displayWeight?.toString() || "",
-    heightCm: profile?.heightCm?.toString() || "",
-    weightKg: profile?.weightKg?.toString() || "",
-    dietaryPreference: profile?.dietaryPreference || null,
+    age: profile.age?.toString() || "",
+    gender: profile.gender || null,
+    unitSystem: profile.unitSystem || UNIT_SYSTEM.Metric,
+    height: profile.displayHeight?.toString() || "",
+    weight: profile.displayWeight?.toString() || "",
+    heightCm: profile.heightCm?.toString() || "",
+    weightKg: profile.weightKg?.toString() || "",
+    dietaryPreference: profile.dietaryPreference || null,
   });
 
   const [errors, setErrors] = React.useState({
@@ -107,7 +107,7 @@ const OnboardingScreen = () => {
         dietaryPreference: formData.dietaryPreference,
       };
 
-      if (!profile?.id) {
+      if (!profile.id) {
         await createProfile(updatedProfile);
       } else {
         await updateProfile({ ...profile, ...updatedProfile });
