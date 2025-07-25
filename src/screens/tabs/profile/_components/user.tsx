@@ -31,7 +31,10 @@ export const User = ({ user }: IUserType) => {
       <Avatar size="lg" className="rounded-xl">
         <AvatarFallbackText>{name}</AvatarFallbackText>
 
-        <Button className="absolute -bottom-1 -right-1 rounded-xl p-2">
+        <Button
+          size="xs"
+          className="absolute -bottom-1 -right-1 rounded-xl p-2"
+        >
           <ButtonIcon as={Camera} size="sm" className="text-white" />
         </Button>
       </Avatar>

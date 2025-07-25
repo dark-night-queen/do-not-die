@@ -91,7 +91,8 @@ export const UserActivityLevel = ({
                 Weekly Weight Change:
               </Text>
               <Text className="text-base font-medium text-white">
-                {meta.weeklyWeightChange} kg loss
+                {Math.abs(meta.weeklyWeightChange)} kg
+                {meta.weeklyWeightChange < 0 ? " loss" : " gain"}
               </Text>
             </HStack>
           </VStack>

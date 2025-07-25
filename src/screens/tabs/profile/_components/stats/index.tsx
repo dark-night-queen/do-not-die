@@ -13,7 +13,7 @@ import { getWeightUnitSystem } from "@/utils/units";
 import { Profile } from "@/constants/user";
 
 interface IStatsType {
-  profile: Profile;
+  profile: Profile | null;
 }
 
 // component logic
