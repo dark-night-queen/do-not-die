@@ -1,34 +1,40 @@
+// core dependencies
 import React from "react";
 import { Flame } from "lucide-react-native";
+
+// core components
 import { Card, HStack, Text, VStack } from "@/components/ui";
+
+// custom components
 import {
   CardRadioElement,
   FormElement,
   IconContainer,
 } from "@/components/custom";
-import {
-  ActivityLevel,
-  ActivityLevelOptions,
-} from "@/constants/user.activity.type";
+
+// handler functions
+import { ActivityLevel, ActivityLevelOptions } from "@/constants/user";
 
 interface IUserActivityLevel {
   formData: {
-    activityLevel: ActivityLevel;
+    activityLevel?: ActivityLevel;
+  };
+  meta: {
+    dailyCalorieTarget: number;
+    weeklyWeightChange: number;
   };
   handleChange: (name: string) => (value: string) => void;
 }
 
-// TODO: complete calorie calculator
+// component logic
 export const UserActivityLevel = ({
   formData,
+  meta,
   handleChange,
 }: IUserActivityLevel) => {
-  const [showCalorieCalculation, setShowCalorieCalculation] =
-    React.useState(false);
-
   return (
     <>
-      <VStack className="items-center gap-1">
+      <VStack className="items-center gap-1 mb-4">
         <Text className="text-2xl font-bold">Your Activity Level</Text>
         <Text className="text-sm text-center text-gray-400">
           Help us understand your lifestyle better
@@ -59,7 +65,7 @@ export const UserActivityLevel = ({
         />
       </FormElement>
 
-      {showCalorieCalculation ? (
+      {formData.activityLevel ? (
         <Card className="gap-6">
           <HStack className="items-center gap-4">
             <IconContainer
@@ -75,7 +81,9 @@ export const UserActivityLevel = ({
               <Text className="text-sm text-gray-400 flex-1">
                 Daily Calorie Target:
               </Text>
-              <Text className="text-base font-medium text-white">100 kCal</Text>
+              <Text className="text-base font-medium text-white">
+                {meta.dailyCalorieTarget} kcal
+              </Text>
             </HStack>
 
             <HStack className="items-center">
@@ -83,7 +91,7 @@ export const UserActivityLevel = ({
                 Weekly Weight Change:
               </Text>
               <Text className="text-base font-medium text-white">
-                100 kg loss
+                {meta.weeklyWeightChange} kg loss
               </Text>
             </HStack>
           </VStack>

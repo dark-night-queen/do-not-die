@@ -30,7 +30,8 @@ model Profile {
   dietaryPreference    DietaryPreference?
   activityLevel        ActivityLevel?
   goalType             GoalType?
-  duration             GoalDuration?
+  goalDuration         GoalDuration?
+  targetMacroNutrient  Json?
   createdAt            DateTime           @default(now())
   updatedAt            DateTime           @default(now()) @updatedAt
   isOnboardingComplete Boolean            @default(false)

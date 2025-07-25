@@ -62,11 +62,11 @@ const CardRadioElement = ({
 }: ICardRadioElementProps) => {
   return (
     <RadioGroup {...props} className="gap-3">
-      {options.map((opt) => {
+      {options.map((opt, index) => {
         const { label, value, icon } = opt;
         return (
           <CardRadio
-            key={value}
+            key={index}
             value={value}
             size="md"
             variant="outline"

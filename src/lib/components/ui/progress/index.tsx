@@ -139,7 +139,7 @@ const Progress = React.forwardRef<
       ref={ref}
       {...props}
       className={progressStyle({ size, orientation, class: className })}
-      context={{ size, orientation }}
+      context={{ size, orientation, value: props.value }}
       orientation={orientation}
     />
   );

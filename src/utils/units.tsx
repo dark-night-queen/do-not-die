@@ -9,8 +9,8 @@ export function cmToFeet(cm: number): string {
 
 export function feetToCm(height: string): string {
   const [feetStr, inchesStr] = height.split(".");
-  const feet = Number(feetStr) || 0;
-  const inches = Number(inchesStr) || 0;
+  const feet = parseInt(feetStr) || 0;
+  const inches = parseInt(inchesStr) || 0;
   return Math.round((feet * 12 + inches) * 2.54).toString();
 }
 

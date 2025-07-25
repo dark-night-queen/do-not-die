@@ -21,11 +21,17 @@ const GoalScreen = () => {
   const [formData, setFormData] = React.useState({
     type: profile?.goalType,
     duration: profile?.goalDuration,
-    weight: profile?.displayWeight?.toString() || "70",
     targetWeight: profile?.displayTargetWeight?.toString() || "",
     targetWeightKg: profile?.targetWeightKg?.toString() || "",
-    unitSystem: profile?.unitSystem ?? UNIT_SYSTEM.Metric,
   });
+
+  const meta = React.useMemo(
+    () => ({
+      weight: profile?.displayWeight?.toString() || "70",
+      unitSystem: profile?.unitSystem ?? UNIT_SYSTEM.Metric,
+    }),
+    [profile],
+  );
 
   const [errors, setErrors] = React.useState({
     targetWeight: "",
@@ -43,7 +49,7 @@ const GoalScreen = () => {
 
     if (name === "targetWeight") {
       // Convert target weight to kg if unit system is imperial
-      if (formData.unitSystem === UNIT_SYSTEM.Imperial) {
+      if (meta.unitSystem === UNIT_SYSTEM.Imperial) {
         setFormData((prev) => ({
           ...prev,
           targetWeightKg: lbsToKg(parseFloat(value)).toString(),
@@ -94,6 +100,7 @@ const GoalScreen = () => {
     >
       <UserGoals
         formData={formData}
+        meta={meta}
         errors={errors}
         handleChange={handleChange}
       />

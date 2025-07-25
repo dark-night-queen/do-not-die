@@ -35,27 +35,30 @@ interface IUserGoalsProps {
   formData: {
     type?: GoalType;
     duration?: GoalDuration;
-    weight: string;
     targetWeight: string;
-    targetWeightKg?: string;
+  };
+  meta: {
+    weight: string;
     unitSystem: string;
   };
   errors: Record<string, string>;
   handleChange: (name: string) => (value: string) => void;
 }
 
+// component logic
 export const UserGoals = ({
   formData,
+  meta,
   errors,
   handleChange,
 }: IUserGoalsProps) => {
-  const weightUnitSystem = getWeightUnitSystem(formData.unitSystem);
+  const weightUnitSystem = getWeightUnitSystem(meta.unitSystem);
 
   const getProgressBarWidth = () => {
     if (!formData.targetWeight) return 50;
 
     const targetWeight = parseFloat(formData.targetWeight);
-    const currentWeight = parseFloat(formData.weight);
+    const currentWeight = parseFloat(meta.weight);
 
     if (formData.type === "WEIGHT_LOSS") {
       if (targetWeight >= currentWeight) return 0;
@@ -124,14 +127,16 @@ export const UserGoals = ({
 
       <HStack>
         <HStack className="flex-1 items-center">
-          <Text className="text-xs text-gray-400">{formData.weight} kg</Text>
+          <Text className="text-xs text-gray-400">
+            {meta.weight} {weightUnitSystem}
+          </Text>
           <Icon as={ArrowRight} size="sm" className="text-gray-400" />
         </HStack>
 
         <HStack className="items-center">
           <Icon as={ArrowLeft} size="sm" className="text-gray-400" />
           <Text className="text-xs text-gray-400">
-            {formData.targetWeight} kg
+            {formData.targetWeight} {weightUnitSystem}
           </Text>
         </HStack>
       </HStack>

@@ -18,13 +18,18 @@ enum GENDER {
 }
 
 enum GOAL_DURATION {
-  SHORT_TERM = "Short Term",
-  MEDIUM_TERM = "Medium Term",
-  LONG_TERM = "Long Term",
+  SHORT_TERM = "SHORT_TERM",
+  MEDIUM_TERM = "MEDIUM_TERM",
+  LONG_TERM = "LONG_TERM",
+}
+enum GOAL_DURATION_LABEL {
+  SHORT_TERM = "1 month",
+  MEDIUM_TERM = "3 months",
+  LONG_TERM = "6 months",
 }
 enum GOAL_TYPE {
-  "Weight Loss" = "WEIGHT_LOSS",
-  "Weight Gain" = "WEIGHT_GAIN",
+  WEIGHT_LOSS = "WEIGHT_LOSS",
+  WEIGHT_GAIN = "WEIGHT_GAIN",
 }
 
 enum UNIT_SYSTEM {
@@ -37,6 +42,7 @@ export {
   DIETARY_PREFERENCE,
   GENDER,
   GOAL_DURATION,
+  GOAL_DURATION_LABEL,
   GOAL_TYPE,
   UNIT_SYSTEM,
 };

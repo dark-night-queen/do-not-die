@@ -7,10 +7,10 @@ import {
   UNIT_SYSTEM,
 } from "./user.enum";
 
-type ActivityLevel = ACTIVITY_LEVEL | null;
+type ActivityLevel = ACTIVITY_LEVEL;
 type DietaryPreference = DIETARY_PREFERENCE | null;
-type GoalType = GOAL_TYPE | null;
-type GoalDuration = GOAL_DURATION | null;
+type GoalType = GOAL_TYPE;
+type GoalDuration = GOAL_DURATION;
 type Gender = GENDER | null;
 type UnitSystem = UNIT_SYSTEM;
 
@@ -37,19 +37,25 @@ type Profile = {
   displayHeight: number;
   weightKg: number;
   displayWeight: number;
-  targetWeightKg: number;
-  displayTargetWeight: number;
+  targetWeightKg?: number;
+  displayTargetWeight?: number;
   bmr?: number;
   tdee?: number;
   dailyCalorieTarget?: number;
   weeklyWeightChange?: number;
 
   gender: Gender;
-  unitSystem: UnitSystem;
-  dietaryPreference: DietaryPreference;
-  activityLevel: ActivityLevel;
-  goalType: GoalType;
-  goalDuration: GoalDuration;
+  unitSystem?: UnitSystem;
+  dietaryPreference?: DietaryPreference;
+  activityLevel?: ActivityLevel;
+  goalType?: GoalType;
+  goalDuration?: GoalDuration;
+
+  targetMacroNutrient?: {
+    proteinTarget?: number;
+    fatTarget?: number;
+    carbsTarget?: number;
+  };
 
   createdAt?: string;
   updatedAt?: string;

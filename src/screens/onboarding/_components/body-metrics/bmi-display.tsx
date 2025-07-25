@@ -1,5 +1,7 @@
 // core components
 import React from "react";
+import { Info } from "lucide-react-native";
+import { MotiView } from "moti";
 
 // core components
 import {
@@ -9,6 +11,8 @@ import {
   ProgressGradientTrack,
   Text,
   VStack,
+  Button,
+  ButtonIcon,
 } from "@/components/ui";
 
 type BMIDisplayProps = {
@@ -17,6 +21,9 @@ type BMIDisplayProps = {
 
 // component logic
 export const BMIDisplay = ({ bmi }: BMIDisplayProps) => {
+  const [showInfo, setShowInfo] = React.useState(false);
+  const toggleInfo = () => setShowInfo((prev) => !prev);
+
   const getWeightClassification = (bmi: number) => {
     if (bmi < 18.5) return "Underweight";
     if (bmi < 25) return "Normal weight";
@@ -53,7 +60,34 @@ export const BMIDisplay = ({ bmi }: BMIDisplayProps) => {
 
   return (
     <Card size="lg" className="gap-6">
-      <Text className="text-lg font-semibold">Body Mass Index (BMI)</Text>
+      <HStack className="justify-between items-center">
+        <Text className="text-lg font-semibold">Body Mass Index (BMI)</Text>
+        <Button variant="link" onPress={toggleInfo}>
+          <ButtonIcon as={Info} />
+        </Button>
+      </HStack>
+
+      <MotiView
+        from={{ height: 0, opacity: 0 }}
+        animate={{ height: showInfo ? 200 : 0, opacity: showInfo ? 1 : 0 }}
+        transition={{ type: "timing", duration: 300 }}
+        style={{ overflow: "hidden" }}
+      >
+        <Card className="dark:bg-gray-700/80 gap-2">
+          <Text className="text-sm">BMI Categories:</Text>
+          <VStack className="gap-1 pl-2">
+            <Text className="text-sm">• Underweight: &lt; 18.5</Text>
+            <Text className="text-sm">• Normal weight: 18.5 - 24.9</Text>
+            <Text className="text-sm">• Overweight: 25 - 29.9</Text>
+            <Text className="text-sm">• Obese: ≥ 30</Text>
+          </VStack>
+
+          <Text className="text-sm text-gray-400">
+            Note: BMI is a general indicator and may not be accurate for
+            athletes, elderly, or pregnant individuals.
+          </Text>
+        </Card>
+      </MotiView>
 
       <HStack className="items-baseline gap-3">
         <Text className="text-4xl font-bold">{bmi.toFixed(1)}</Text>
