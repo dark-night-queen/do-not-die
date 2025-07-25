@@ -56,6 +56,7 @@ export const useAuthStore = create<AuthSession & AuthActions>((set, get) => ({
       password: password,
     });
 
+    console.log("login data:", data, " and error:", error);
     return { data, error };
   },
   signup: async (email, password) => {
@@ -64,6 +65,7 @@ export const useAuthStore = create<AuthSession & AuthActions>((set, get) => ({
       password: password,
     });
 
+    console.log("signup data:", data, " and error:", error);
     return { data, error };
   },
   forgetPassword: async (email) => {
@@ -71,14 +73,19 @@ export const useAuthStore = create<AuthSession & AuthActions>((set, get) => ({
       redirectTo: `${baseUrl}/reset-password`,
     });
 
+    console.log("forget-password data:", data, " and error:", error);
+    return { data, error };
+  },
+  resetPassword: async (password) => {
+    const { data, error } = await supabase.auth.updateUser({ password });
+
+    console.log("reset-password data:", data, " and error:", error);
     return { data, error };
   },
   logout: async () => {
     await supabase.auth.signOut();
     set({ session: null, redirected: false });
-  },
-  resetPassword: async (password) => {
-    const { data, error } = await supabase.auth.updateUser({ password });
-    return { data, error };
+
+    console.log("logged out successfully");
   },
 }));
