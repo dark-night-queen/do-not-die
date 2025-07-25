@@ -8,12 +8,14 @@ import { UserActivityLevel } from "./_components/activity-level";
 
 // handler functions
 import { ActivityLevel, Profile } from "@/constants/user";
+import { useAuthStore } from "@/store/useAuthStore";
 import { useProfileStore } from "@/store/useOnboardingStore";
 import { calculateDailyCalories } from "@/utils/calorie-calculations";
 
 // component logic
 const ActivityScreen = () => {
   const router = useRouter();
+  const { setRedirected } = useAuthStore();
   const { profile, updateProfile } = useProfileStore();
 
   const [isDisabled, setIsDisabled] = React.useState(true);
@@ -74,6 +76,7 @@ const ActivityScreen = () => {
       };
 
       await updateProfile(updatedProfile);
+      setRedirected(false);
     }
   };
 

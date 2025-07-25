@@ -5,10 +5,14 @@ import { supabase } from "@/utils/supabase";
   User APIs 
 */
 const getUser = async (id: string) => {
-  const { data, error } = await supabase.from("User").select().eq("id", id);
+  const { data, error } = await supabase
+    .from("User")
+    .select()
+    .eq("id", id)
+    .single();
 
   if (error) console.error("Error fetching user:", error);
-  return { data: data?.[0] ?? null, error };
+  return { data, error };
 };
 
 const createUser = async (user: User) => {
@@ -21,7 +25,8 @@ const createUser = async (user: User) => {
       lastName: user?.lastName,
       avatar: user?.avatar,
     })
-    .select();
+    .select()
+    .single();
 
   if (error) console.error("Error creating user:", error);
   return { data, error };
@@ -32,7 +37,8 @@ const updateUser = async (user: Partial<User>) => {
     .from("User")
     .update(user)
     .eq("id", user.id)
-    .select();
+    .select()
+    .single();
 
   if (error) console.error("Error updating user:", error);
   return { data, error };
@@ -45,20 +51,22 @@ const getProfile = async (userId: string) => {
   const { data, error } = await supabase
     .from("Profile")
     .select()
-    .eq("userId", userId);
+    .eq("userId", userId)
+    .single();
 
   if (error) console.error("Error fetching profile:", error);
-  return { data: data?.[0] ?? null, error };
+  return { data, error };
 };
 
 const createProfile = async (profile: Profile) => {
   const { data, error } = await supabase
     .from("Profile")
     .insert(profile)
-    .select();
+    .select()
+    .single();
 
   if (error) console.error("Error creating profile:", error);
-  return { data: data?.[0] ?? null, error };
+  return { data: data, error };
 };
 
 const updateProfile = async (profile: Partial<Profile>) => {
@@ -66,10 +74,11 @@ const updateProfile = async (profile: Partial<Profile>) => {
     .from("Profile")
     .update(profile)
     .eq("userId", profile.userId)
-    .select();
+    .select()
+    .single();
 
   if (error) console.error("Error updating profile:", error);
-  return { data: data?.[0] ?? null, error };
+  return { data: data, error };
 };
 
 const resetOnboarding = async (profile: Partial<Profile>) => {

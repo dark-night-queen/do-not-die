@@ -69,7 +69,14 @@ export default function RootLayout() {
       }
       setRedirected(true);
     }
-  }, [isLoading, redirected, session]);
+  }, [
+    isLoading,
+    redirected,
+    session,
+    profile?.isOnboardingCompleted,
+    setRedirected,
+    router,
+  ]);
 
   return (
     <GluestackUIProvider mode="system">

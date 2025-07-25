@@ -23,6 +23,21 @@ function calculateBMR(profile: Profile): number {
   return 10 * weightKg + 6.25 * heightCm - 5 * age - 161;
 }
 
+function calcDailyCalorieAdjustments(profile: Profile) {
+  const { targetWeightKg, weightKg, goalDuration } = profile;
+
+  const timeline = goalDuration ? GoalTimeline[goalDuration] : 1;
+
+  const weightDifferenceKg = (targetWeightKg ?? 0) - weightKg;
+  const timelineInDays = timeline * 30; // Convert months to days
+  const dailyWeightChangeKg = weightDifferenceKg / timelineInDays;
+
+  return {
+    // 7700 calories ≈ 1kg of body weight
+    calorieAdjustment: dailyWeightChangeKg * 7700,
+  };
+}
+
 // Calculate macronutrient targets
 function calcTargetMacroNutrient(dailyCalorieTarget: number, weightKg: number) {
   const proteinTarget = Math.round(weightKg * 2.2); // 2.2g per kg body weight
@@ -41,20 +56,6 @@ function calcTargetMacroNutrient(dailyCalorieTarget: number, weightKg: number) {
     fatCalories,
     carbsCalories,
     carbsTarget,
-  };
-}
-
-function calcDailyCalorieAdjustments(profile: Profile) {
-  const { targetWeightKg, weightKg, goalDuration } = profile;
-  const timeline = goalDuration ? GoalTimeline[goalDuration] : 1;
-
-  const weightDifferenceKg = (targetWeightKg ?? 0) - weightKg;
-  const timelineInDays = timeline * 30; // Convert months to days
-  const dailyWeightChangeKg = weightDifferenceKg / timelineInDays;
-
-  return {
-    // 7700 calories ≈ 1kg of body weight
-    calorieAdjustment: dailyWeightChangeKg * 7700,
   };
 }
 

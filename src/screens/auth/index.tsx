@@ -17,7 +17,8 @@ const AuthScreen = () => {
 
   const handleLogin = async (email: string, password: string) => {
     try {
-      await login(email, password);
+      const { error } = await login(email, password);
+      toast.warning(error.message);
     } catch (error: any) {
       toast.warning(error);
     }

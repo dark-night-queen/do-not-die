@@ -60,7 +60,7 @@ interface ProfileActions {
   updateProfile: (
     profile: Partial<Profile>,
   ) => Promise<{ data: any; error: any }>;
-  resetOnboarding: () => void;
+  resetOnboarding: () => Promise<void>;
 }
 
 const initProfileState = {
@@ -76,9 +76,9 @@ const initProfileState = {
   dailyCalorieTarget: 0,
   weeklyWeightChange: 0,
   gender: null,
-  unitSystem: UNIT_SYSTEM.Imperial,
+  unitSystem: UNIT_SYSTEM.Metric,
   dietaryPreference: null,
-  activityLevel: null,
+  activityLevel: undefined,
   goalType: undefined,
   goalDuration: undefined,
   isOnboardingCompleted: false,
@@ -114,6 +114,7 @@ export const useProfileStore = create<ProfileState & ProfileActions>(
 
       const updatedProfile: Profile = {
         ...initProfileState,
+        id: profile.id,
         userId: profile.userId,
       };
 

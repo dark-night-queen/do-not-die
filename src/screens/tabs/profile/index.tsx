@@ -14,6 +14,7 @@ import { Settings } from "./_components/setting";
 
 // constants
 import { useAuth } from "@/providers/auth-provider";
+import { useAuthStore } from "@/store/useAuthStore";
 import {
   initUserState,
   useProfileStore,
@@ -25,11 +26,10 @@ import {
 // TODO: Reset onboarding's multiple method are being called in child comp, can we merge them in one?
 const ProfileScreen = () => {
   const { user, setUser } = useUserStore();
-  const { profile } = useProfileStore();
+  const { profile, resetOnboarding } = useProfileStore();
 
   const { logout } = useAuth();
-
-  const resetOnboarding = async () => {};
+  const { setRedirected } = useAuthStore();
 
   const handleLogout = async () => {
     await logout();
@@ -46,7 +46,13 @@ const ProfileScreen = () => {
         <Settings />
       </VStack>
 
-      <ActionButtons logout={handleLogout} resetOnboarding={resetOnboarding} />
+      <ActionButtons
+        logout={handleLogout}
+        resetOnboarding={async () => {
+          await resetOnboarding();
+          setRedirected(false);
+        }}
+      />
     </DefaultLayout>
   );
 };
