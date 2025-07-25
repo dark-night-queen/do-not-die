@@ -5,13 +5,13 @@ interface CalendarState {
   activeDate: Moment;
   currentDate: Moment;
   currentWeek: Moment[];
-  currentMonthName: string;
   isNextDisabled: boolean;
 }
 
 interface CalendarAction {
   navigateWeek: (direction: "prev" | "next") => void;
   setActiveDate: (date: Moment) => void;
+  getCurrentMonthName: () => string;
 }
 
 const getStartOfWeek = (date: Moment) => date.clone().startOf("isoWeek");
@@ -23,27 +23,11 @@ function generateWeek(newDate: Moment) {
   );
 }
 
-function getCurrentMonthName(currentDate: Moment) {
-  const startOfWeek = getStartOfWeek(currentDate);
-  const endOfWeek = getEndOfWeek(currentDate);
-
-  const previousMonth = startOfWeek.format("MMM");
-  const currentMonth = endOfWeek.format("MMM");
-  const year = endOfWeek.format("YYYY");
-
-  if (startOfWeek.isSame(endOfWeek, "month")) {
-    return `${currentMonth} ${year}`;
-  }
-
-  return `${previousMonth} - ${currentMonth} ${year}`;
-}
-
 export const useCalendar = create<CalendarState & CalendarAction>(
   (set, get) => ({
     activeDate: moment(),
     currentDate: moment(),
     currentWeek: generateWeek(moment()),
-    currentMonthName: getCurrentMonthName(moment()),
     isNextDisabled: true,
 
     navigateWeek: (direction: "prev" | "next") => {
@@ -58,6 +42,23 @@ export const useCalendar = create<CalendarState & CalendarAction>(
         currentWeek: generateWeek(newDate),
         isNextDisabled: !newDate.isBefore(moment(), "isoWeek"),
       });
+    },
+
+    getCurrentMonthName() {
+      const { currentDate } = get();
+
+      const startOfWeek = getStartOfWeek(currentDate);
+      const endOfWeek = getEndOfWeek(currentDate);
+
+      const previousMonth = startOfWeek.format("MMM");
+      const currentMonth = endOfWeek.format("MMM");
+      const year = endOfWeek.format("YYYY");
+
+      if (startOfWeek.isSame(endOfWeek, "month")) {
+        return `${currentMonth} ${year}`;
+      }
+
+      return `${previousMonth} - ${currentMonth} ${year}`;
     },
 
     setActiveDate: (date: Moment) => set({ activeDate: date }),

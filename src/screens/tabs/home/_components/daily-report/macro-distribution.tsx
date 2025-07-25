@@ -1,13 +1,32 @@
+// core dependencies
 import React from "react";
 import { Utensils } from "lucide-react-native";
+
+// core components
 import { HStack, Card, Icon, Text, VStack } from "@/components/ui";
-import { useNutrientStore } from "@/store/useNutrientsStore";
-import { useDailyDataStore } from "@/store/useDailyDataStore";
 
+// handler functions
+import { useProfileStore } from "@/store/useOnboardingStore";
+// import { useNutrientStore } from "@/store/useNutrientsStore";
+// import { useDailyDataStore } from "@/store/useDailyDataStore";
+
+// component logic
+// TODO: update consumed values from the store
 export const MacroDistribution = () => {
-  const { proteinTarget, fatTarget, carbsTarget } = useDailyDataStore();
+  const { profile } = useProfileStore();
+  const targetMacroNutrient = profile?.targetMacroNutrient;
 
-  const { proteinConsumed, carbsConsumed, fatsConsumed } = useNutrientStore();
+  const {
+    proteinTarget = 0,
+    carbsTarget = 0,
+    fatTarget = 0,
+  } = targetMacroNutrient || {};
+
+  const proteinConsumed = 0;
+  const carbsConsumed = 0;
+  const fatsConsumed = 0;
+
+  // const { proteinConsumed, carbsConsumed, fatsConsumed } = useNutrientStore();
 
   const percentageProteinConsumed = (proteinConsumed / proteinTarget) * 100;
   const percentageCarbsConsumed = (carbsConsumed / carbsTarget) * 100;

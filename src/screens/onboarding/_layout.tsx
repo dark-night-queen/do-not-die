@@ -30,7 +30,7 @@ const Layout = ({ children, goBackRoute, onSubmit, button }: ILayoutProps) => {
   };
 
   return (
-    <DefaultLayout>
+    <DefaultLayout className="p-0">
       {goBackRoute ? (
         <VStack className="p-6">
           <GoBack goBackRoute={goBackRoute} />
@@ -38,7 +38,7 @@ const Layout = ({ children, goBackRoute, onSubmit, button }: ILayoutProps) => {
       ) : null}
 
       <ScrollView>
-        <VStack className={`gap-4`}>
+        <VStack className={`gap-4 p-6`}>
           {children}
 
           <Button

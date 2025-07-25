@@ -8,7 +8,7 @@ import { HStack, Text, Button, ButtonIcon } from "@/components/ui";
 import { useCalendar } from "@/hooks/useCalendar";
 
 export const Navigation = () => {
-  const { navigateWeek, currentMonthName, isNextDisabled } = useCalendar();
+  const { navigateWeek, getCurrentMonthName, isNextDisabled } = useCalendar();
 
   return (
     <HStack className="items-center justify-between">
@@ -22,7 +22,7 @@ export const Navigation = () => {
       </Button>
 
       {/* Title */}
-      <Text className="font-semibold">{currentMonthName}</Text>
+      <Text className="font-semibold">{getCurrentMonthName()}</Text>
 
       {/* Right Nav Button */}
       <Button

@@ -1,12 +1,17 @@
+// core components
 import { HStack, Divider, VStack, Text } from "@/components/ui";
-import { useCalendarStore } from "@/store/useWeeklyCalendar";
+
+// custom components
 import { MacroDistribution } from "./macro-distribution";
 import { CalorieConsumed } from "./calorie-consumed";
 import { DailyCutoffInfo } from "./daily-cutoff-info";
 
+// handler functions
+import { useCalendar } from "@/hooks/useCalendar";
+
+// component logic
 export const DailyReport = () => {
-  const { activeDate } = useCalendarStore();
-  const timestamp = activeDate.format("MMM DD, YYYY");
+  const { activeDate } = useCalendar();
 
   return (
     <VStack className="gap-4">
@@ -18,7 +23,9 @@ export const DailyReport = () => {
 
       <HStack className="items-baseline">
         <Text className="flex-1 text-xl font-semibold">Daily Summary</Text>
-        <Text className="text-sm text-gray-400">{timestamp}</Text>
+        <Text className="text-sm text-gray-400">
+          {activeDate.format("MMM DD, YYYY")}
+        </Text>
       </HStack>
 
       <DailyCutoffInfo />
