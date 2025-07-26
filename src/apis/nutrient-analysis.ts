@@ -5,15 +5,15 @@ import { supabase } from "@/utils/supabase";
   Nutrient Analysis Per Day APIs 
 */
 const getNutrientAnalysis = async (userId: string, createdAt: string) => {
+  /* !* Haven't use single(), b/c in case of no data, it will throw an error */
   const { data, error } = await supabase
     .from("NutrientAnalysisPerDay")
     .select()
     .eq("userId", userId)
-    .eq("createdAt", createdAt)
-    .single();
+    .eq("createdAt", createdAt);
 
   if (error) console.error("Error in fetching nutrient analysis:", error);
-  return { data, error };
+  return { data: data?.[0] ?? null, error };
 };
 
 const createNutrientAnalysis = async (analysis: NutrientAnalysis) => {

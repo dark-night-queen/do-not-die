@@ -7,7 +7,10 @@ import { Box, Button, ButtonText, HStack } from "@/components/ui";
 
 // handler functions
 import { useCalendar } from "@/hooks/useCalendar";
+import { useUserStore } from "@/store/useOnboardingStore";
+import { useNutrientAnalysisStore } from "@/store/useNutrientAnalysisStore";
 
+// custom components
 const Day = ({ date, isActive }: { date: Moment; isActive: boolean }) => {
   const isToday = date.isSame(moment(), "day");
   const isFuture = date.isAfter(moment(), "day");
@@ -39,6 +42,7 @@ const Day = ({ date, isActive }: { date: Moment; isActive: boolean }) => {
   );
 };
 
+// custom components
 const WeekDay = ({
   date,
   isActive,
@@ -73,8 +77,16 @@ const WeekDay = ({
   );
 };
 
+// custom components
 export const WeeklyCalendarDays = () => {
+  const { user } = useUserStore();
   const { activeDate, currentWeek, setActiveDate } = useCalendar();
+  const { getNutrientAnalysis } = useNutrientAnalysisStore();
+
+  React.useEffect(() => {
+    const createdAt = activeDate.format();
+    getNutrientAnalysis(user.id, createdAt);
+  }, [activeDate, getNutrientAnalysis, user.id]);
 
   return (
     <HStack className="items-center justify-between">

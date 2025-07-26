@@ -5,6 +5,7 @@ import { VStack } from "@/components/ui";
 import { Navigation } from "./navigation";
 import { WeeklyCalendarDays } from "./weekly-calendar-days";
 
+// custom components
 export const WeeklyCalendar = () => {
   return (
     <VStack className="gap-5">

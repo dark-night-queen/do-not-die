@@ -59,7 +59,8 @@ export const useNutrientAnalysisStore = create<
     }
 
     const { data } = await getNutrientAnalysis(userId, createdAt);
-    set({ nutrientAnalysis: data });
+    if (data) set({ nutrientAnalysis: data });
+    else set({ nutrientAnalysis: initNutrientAnalysis });
     return data;
   },
   createNutrientAnalysis: async (analysis) => {

@@ -7,6 +7,7 @@ import { HStack, Text, Button, ButtonIcon } from "@/components/ui";
 // handler functions
 import { useCalendar } from "@/hooks/useCalendar";
 
+// custom components
 export const Navigation = () => {
   const { navigateWeek, getCurrentMonthName, isNextDisabled } = useCalendar();
 
