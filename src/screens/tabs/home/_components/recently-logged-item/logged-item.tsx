@@ -1,5 +1,8 @@
+// core dependencies
 import React from "react";
 import { Cookie, Wheat, Ham } from "lucide-react-native";
+
+// core components
 import { Image } from "@/components/ui/image";
 import { HStack, Card, Icon, Text, VStack } from "@/components/ui";
 
@@ -19,6 +22,7 @@ type ILoggedItem = {
   timestamp: string;
 };
 
+// component logic
 const Nutrient = ({ value, icon, iconColor }: INutrient) => {
   return (
     <HStack className="items-center gap-1">

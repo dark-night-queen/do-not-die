@@ -20,5 +20,5 @@ model NutrientAnalysisPerDay {
     healthScore    Float
     nutritionScore Float
     createdAt      DateTime @unique @default(now())
-    updatedAt      DateTime @updatedAt
+    updatedAt      DateTime @default(now()) @updatedAt
 }

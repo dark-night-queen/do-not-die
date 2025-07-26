@@ -1,6 +1,6 @@
 // In your React component or custom hook
 import { useMutation } from "@tanstack/react-query";
-import { analyzeFood } from "@/lib/apis/gemini";
+import { analyzeFood } from "@/src/apis/gemini";
 import { getPrompt, analyzeResponse } from "@/utils/analysis";
 
 const useGemini = () => {

@@ -1,12 +1,12 @@
 // core components
-import { HStack, Text, Card, Divider, VStack } from "@/components/ui";
+import { Card, Divider, HStack, Text, VStack } from "@/components/ui";
 
 // custom components
 import { MacroCircle, MacroCircle2 } from "./macro-circle";
 
 // handler functions
-import { useProfileStore } from "@/store/useOnboardingStore";
 import { useNutrientAnalysisStore } from "@/store/useNutrientAnalysisStore";
+import { useProfileStore } from "@/store/useOnboardingStore";
 
 // component logic
 export const MacroCard = () => {
@@ -14,7 +14,7 @@ export const MacroCard = () => {
   const { nutrientAnalysis } = useNutrientAnalysisStore();
 
   const { targetMacroNutrient } = profile;
-  const { calories, protein, carbs, fats } = nutrientAnalysis;
+  const { calories, protein, carbs, fat } = nutrientAnalysis;
 
   return (
     <Card className="flex-row items-center gap-3 rounded-xl p-4">
@@ -44,7 +44,7 @@ export const MacroCard = () => {
           />
           <MacroCircle
             name="Fat"
-            value={fats}
+            value={fat}
             target={targetMacroNutrient?.fatTarget}
             tintColor="#3B82F6"
           />

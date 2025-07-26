@@ -82,8 +82,6 @@ export default function RootLayout() {
     isInitLoading,
   ]);
 
-  console.log("profile.isOnboardingCompleted", profile.isOnboardingCompleted);
-
   return (
     <GluestackUIProvider mode="system">
       <QueryClientProvider client={queryClient}>

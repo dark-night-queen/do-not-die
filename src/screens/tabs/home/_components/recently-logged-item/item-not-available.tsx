@@ -1,5 +1,7 @@
+// core components
 import { Card, Text } from "@/components/ui";
 
+// component logic
 export const NoItemAvailable = () => {
   return (
     <Card size="lg" className="mt-4">

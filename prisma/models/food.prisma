@@ -24,5 +24,5 @@ model FoodItem {
     healthScore    Float
     nutritionScore Float
     createdAt      DateTime @default(now())
-    updatedAt      DateTime @updatedAt
+    updatedAt      DateTime @default(now()) @updatedAt
 }

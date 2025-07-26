@@ -144,4 +144,4 @@ export const useProfileStore = create<ProfileState & ProfileActions>(
     },
   }),
 );
-export { initUserState, useUserStore };
+export { initUserState, initProfileState, useUserStore };

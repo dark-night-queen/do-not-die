@@ -1,17 +1,17 @@
 // core dependencies
+import type { LucideIcon } from "lucide-react-native";
 import {
   Beef,
-  Fish,
-  TrendingUp,
-  TrendingDown,
-  Wheat,
   Carrot,
+  Fish,
+  TrendingDown,
+  TrendingUp,
+  Wheat,
 } from "lucide-react-native";
-import type { LucideIcon } from "lucide-react-native";
 
 // constants
-import { GOAL_TYPE, Profile } from "@/constants/user";
 import { NutrientAnalysis } from "@/constants/analysis";
+import { GOAL_TYPE, Profile } from "@/constants/user";
 
 const calorieRecommendation = (calorieDeviation: number) => {
   if (calorieDeviation > 0) {
@@ -60,7 +60,7 @@ const carbsRecommendation = (
   }
 };
 
-const fatsRecommendation = (fatConsumed: number, fatTarget: number) => {
+const fatRecommendation = (fatConsumed: number, fatTarget: number) => {
   if (fatConsumed < fatTarget * 0.8) {
     return {
       icon: Fish,
@@ -110,9 +110,9 @@ const generateRecommendations = (
   const calorieDeviation = nutrientAnalysis.calories - totalCalories;
   const weightKg = profile.weightKg;
   const proteinTarget = Math.round(weightKg * 1.6);
-  const fatsTarget = Math.round(weightKg * 0.8);
+  const fatTarget = Math.round(weightKg * 0.8);
   const carbsTarget = Math.round(
-    (totalCalories - (proteinTarget * 4 + fatsTarget * 9)) / 4,
+    (totalCalories - (proteinTarget * 4 + fatTarget * 9)) / 4,
   );
 
   // Calorie recommendation
@@ -130,7 +130,7 @@ const generateRecommendations = (
   if (cr) newRecommendations.push(cr);
 
   // Fat recommendation
-  const fr = fatsRecommendation(nutrientAnalysis.fats, fatsTarget);
+  const fr = fatRecommendation(nutrientAnalysis.fat, fatTarget);
   if (fr) newRecommendations.push(fr);
 
   // Micronutrient recommendation

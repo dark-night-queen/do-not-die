@@ -10,15 +10,34 @@ type Macronutrient = {
   calories: number;
   protein: number;
   carbs: number;
-  fats: number;
+  fat: number;
 };
 
 type NutrientAnalysis = {
   userId: string;
-  createdAt: string;
+  createdAt?: string;
+  updatedAt?: string;
   healthScore: number;
   nutritionScore: number;
 } & Macronutrient &
   Micronutrient;
 
-export { Micronutrient, Macronutrient, NutrientAnalysis };
+type Ingredient = {
+  name: string;
+  quantity: string;
+  micronutrients: Micronutrient;
+} & Macronutrient;
+
+type FoodAnalysis = NutrientAnalysis & {
+  name: string;
+  quantity: string;
+  ingredients: Ingredient[];
+};
+
+export {
+  Micronutrient,
+  Macronutrient,
+  FoodAnalysis,
+  Ingredient,
+  NutrientAnalysis,
+};

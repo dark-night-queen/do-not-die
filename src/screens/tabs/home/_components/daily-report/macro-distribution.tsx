@@ -1,13 +1,13 @@
 // core dependencies
-import React from "react";
 import { Utensils } from "lucide-react-native";
+import React from "react";
 
 // core components
-import { HStack, Card, Icon, Text, VStack } from "@/components/ui";
+import { Card, HStack, Icon, Text, VStack } from "@/components/ui";
 
 // handler functions
-import { useProfileStore } from "@/store/useOnboardingStore";
 import { useNutrientAnalysisStore } from "@/store/useNutrientAnalysisStore";
+import { useProfileStore } from "@/store/useOnboardingStore";
 
 // component logic
 export const MacroDistribution = () => {
@@ -20,11 +20,11 @@ export const MacroDistribution = () => {
 
   const proteinConsumed = nutrientAnalysis.protein;
   const carbsConsumed = nutrientAnalysis.carbs;
-  const fatsConsumed = nutrientAnalysis.fats;
+  const fatConsumed = nutrientAnalysis.fat;
 
   const percentageProteinConsumed = (proteinConsumed / proteinTarget) * 100;
   const percentageCarbsConsumed = (carbsConsumed / carbsTarget) * 100;
-  const percentageFatsConsumed = (fatsConsumed / fatTarget) * 100;
+  const percentageFatConsumed = (fatConsumed / fatTarget) * 100;
 
   return (
     <Card className="gap-4">
@@ -50,7 +50,7 @@ export const MacroDistribution = () => {
 
         <VStack className="items-center">
           <Text className="text-base font-bold tabular-nums text-blue-400">
-            {percentageFatsConsumed.toFixed(2)}%
+            {percentageFatConsumed.toFixed(2)}%
           </Text>
           <Text className="text-xs text-gray-400">Fat</Text>
         </VStack>

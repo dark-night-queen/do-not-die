@@ -1,7 +1,18 @@
+// core dependencies
 import React from "react";
 import colors from "tailwindcss/colors";
-import { Button, ButtonText } from "@/components/ui/button";
-import { ModalBody, ModalFooter, Spinner, VStack } from "@/components/ui";
+
+// core components
+import {
+  Button,
+  ButtonText,
+  ModalBody,
+  ModalFooter,
+  Spinner,
+  VStack,
+} from "@/components/ui";
+
+// custom components
 import {
   Modal,
   ModalHeader,
@@ -10,6 +21,7 @@ import {
 } from "@/components/custom";
 
 interface IAddFoodModal {
+  isDisabled: boolean;
   isAnalyzing: boolean;
   formData: {
     foodName: string;
@@ -22,8 +34,9 @@ interface IAddFoodModal {
   onSubmit: () => void;
 }
 
-// TODO: fix isAnalyzing
+// component logic
 export const AddFoodModal = ({
+  isDisabled,
   isAnalyzing,
   formData,
   errors,
@@ -60,7 +73,11 @@ export const AddFoodModal = ({
       </ModalBody>
 
       <ModalFooter>
-        <Button onPress={onSubmit} className="w-full rounded-lg">
+        <Button
+          onPress={onSubmit}
+          className="w-full rounded-lg"
+          isDisabled={isDisabled}
+        >
           <ButtonText>Add Food</ButtonText>
           {isAnalyzing ? <Spinner size="small" color={colors.white} /> : null}
         </Button>
