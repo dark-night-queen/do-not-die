@@ -22,6 +22,7 @@ export default function RootLayout() {
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(true);
+  const [isInitLoading, setIsInitLoading] = useState(true);
   const { session, redirected, setRedirected } = useAuthStore();
   const { user, getUser } = useUserStore();
   const { profile, getProfile } = useProfileStore();
@@ -37,7 +38,7 @@ export default function RootLayout() {
         InteractionManager.runAfterInteractions(() => resolve(undefined));
       });
 
-      setIsLoading(false);
+      setIsInitLoading(false);
     };
 
     loadApp();
@@ -50,6 +51,8 @@ export default function RootLayout() {
         if (user && user.id) {
           await getProfile(user.id);
         }
+
+        setIsLoading(false);
       }
     };
 
@@ -57,7 +60,7 @@ export default function RootLayout() {
   }, [getProfile, getUser, session, user.id]);
 
   useEffect(() => {
-    if (!isLoading && !redirected) {
+    if (!isLoading && !isInitLoading && !redirected) {
       if (session) {
         if (profile.isOnboardingCompleted) {
           router.replace("/(tabs)");
@@ -76,7 +79,10 @@ export default function RootLayout() {
     profile.isOnboardingCompleted,
     setRedirected,
     router,
+    isInitLoading,
   ]);
+
+  console.log("profile.isOnboardingCompleted", profile.isOnboardingCompleted);
 
   return (
     <GluestackUIProvider mode="system">
