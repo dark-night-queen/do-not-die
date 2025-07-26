@@ -7,25 +7,20 @@ import { HStack, Card, Icon, Text, VStack } from "@/components/ui";
 
 // handler functions
 import { useProfileStore } from "@/store/useOnboardingStore";
-// import { useNutrientStore } from "@/store/useNutrientsStore";
-// import { useDailyDataStore } from "@/store/useDailyDataStore";
+import { useNutrientAnalysisStore } from "@/store/useNutrientAnalysisStore";
 
 // component logic
-// TODO: update consumed values from the store
 export const MacroDistribution = () => {
   const { profile } = useProfileStore();
+  const { nutrientAnalysis } = useNutrientAnalysisStore();
 
-  const {
-    proteinTarget = 0,
-    carbsTarget = 0,
-    fatTarget = 0,
-  } = profile.targetMacroNutrient || {};
+  const proteinTarget = profile.targetMacroNutrient?.proteinTarget || 0;
+  const carbsTarget = profile.targetMacroNutrient?.carbsTarget || 0;
+  const fatTarget = profile.targetMacroNutrient?.fatTarget || 0;
 
-  const proteinConsumed = 0;
-  const carbsConsumed = 0;
-  const fatsConsumed = 0;
-
-  // const { proteinConsumed, carbsConsumed, fatsConsumed } = useNutrientStore();
+  const proteinConsumed = nutrientAnalysis.protein;
+  const carbsConsumed = nutrientAnalysis.carbs;
+  const fatsConsumed = nutrientAnalysis.fats;
 
   const percentageProteinConsumed = (proteinConsumed / proteinTarget) * 100;
   const percentageCarbsConsumed = (carbsConsumed / carbsTarget) * 100;

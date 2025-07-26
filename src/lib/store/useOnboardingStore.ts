@@ -56,6 +56,7 @@ interface ProfileState {
 }
 interface ProfileActions {
   getProfile: (userId: string) => Promise<Profile>;
+  setProfile: (profile: Profile) => void;
   createProfile: (profile: Profile) => Promise<{ data: any; error: any }>;
   updateProfile: (
     profile: Partial<Profile>,
@@ -83,6 +84,13 @@ const initProfileState = {
   goalType: undefined,
   goalDuration: undefined,
   targetMacroNutrient: {},
+  targetMicroNutrient: {
+    fiber: 30,
+    vitaminC: 90,
+    calcium: 1000,
+    iron: 18,
+    potassium: 3500,
+  },
   isOnboardingCompleted: false,
 };
 
@@ -91,27 +99,38 @@ export const useProfileStore = create<ProfileState & ProfileActions>(
     profile: initProfileState,
 
     getProfile: async (userId) => {
-      const { profile } = get();
+      const { profile, setProfile } = get();
       if (profile.userId === userId) {
         return profile;
       }
 
       const { data: newProfile } = await getProfile(userId);
-      if (newProfile) set({ profile: newProfile });
+      if (newProfile) setProfile(newProfile);
       return newProfile;
     },
+    setProfile: (profile) => {
+      set({
+        profile: {
+          ...profile,
+          targetMicroNutrient: initProfileState.targetMicroNutrient,
+        },
+      });
+    },
     createProfile: async (profile) => {
+      const { setProfile } = get();
+
       const { data, error } = await createProfile(profile);
-      set({ profile: data });
+      setProfile(data);
       return { data, error };
     },
     updateProfile: async (profile) => {
+      const { setProfile } = get();
       const { data, error } = await updateProfile(profile);
-      set({ profile: data });
+      setProfile(data);
       return { data, error };
     },
     resetOnboarding: async () => {
-      const { profile } = get();
+      const { profile, setProfile } = get();
       if (!profile) return;
 
       const updatedProfile: Profile = {
@@ -121,7 +140,7 @@ export const useProfileStore = create<ProfileState & ProfileActions>(
       };
 
       await resetOnboarding(updatedProfile);
-      set({ profile: initProfileState });
+      setProfile(initProfileState);
     },
   }),
 );

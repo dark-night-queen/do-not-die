@@ -14,17 +14,15 @@ import {
 
 // handler functions
 import { useProfileStore } from "@/store/useOnboardingStore";
-// import { useNutrientStore } from "@/store/useNutrientsStore";
-// import { useDailyDataStore } from "@/store/useDailyDataStore";
+import { useNutrientAnalysisStore } from "@/store/useNutrientAnalysisStore";
 
 // component logic
-// TODO: add calories consumed from the store
 export const CalorieConsumed = () => {
   const { profile } = useProfileStore();
-  // const { caloriesConsumed } = useNutrientStore();
+  const { nutrientAnalysis } = useNutrientAnalysisStore();
 
   const caloriesTarget = profile.dailyCalorieTarget || 0;
-  const caloriesConsumed = 0; // Placeholder for actual consumed calories
+  const caloriesConsumed = nutrientAnalysis.calories;
   const percentageConsumed = (caloriesConsumed / caloriesTarget) * 100;
 
   const getCalorieStatus = () => {

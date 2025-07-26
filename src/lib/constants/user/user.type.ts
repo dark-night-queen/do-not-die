@@ -57,6 +57,14 @@ type Profile = {
     carbsTarget?: number;
   };
 
+  targetMicroNutrient?: {
+    fiber: number;
+    vitaminC: number;
+    calcium: number;
+    iron: number;
+    potassium: number;
+  };
+
   createdAt?: string;
   updatedAt?: string;
 };

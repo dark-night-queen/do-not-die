@@ -6,26 +6,17 @@ import { RecommendationCard } from "./recommendation-card";
 import { RecommendationPopover } from "./recommendation-popover";
 import { NoRecommendation } from "./no-recommendation";
 
-// constants
-import { NutrientAnalysis } from "@/constants/analysis";
-
 // handler functions
 import { useProfileStore } from "@/store/useOnboardingStore";
+import { useNutrientAnalysisStore } from "@/store/useNutrientAnalysisStore";
 import { generateRecommendations } from "@/utils/daily-report";
 
-interface IPersonalizedRecommendationProps {
-  nutrientAnalysis: NutrientAnalysis | null;
-}
-
 // component logic
-export const PersonalizedRecommendation = ({
-  nutrientAnalysis,
-}: IPersonalizedRecommendationProps) => {
+export const PersonalizedRecommendation = () => {
   const { profile } = useProfileStore();
+  const { nutrientAnalysis } = useNutrientAnalysisStore();
 
-  const recommendations = nutrientAnalysis
-    ? generateRecommendations(nutrientAnalysis, profile.goalType)
-    : [];
+  const recommendations = generateRecommendations(nutrientAnalysis, profile);
 
   if (!recommendations.length) {
     return <NoRecommendation />;

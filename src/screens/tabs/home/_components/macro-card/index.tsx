@@ -6,21 +6,21 @@ import { MacroCircle, MacroCircle2 } from "./macro-circle";
 
 // handler functions
 import { useProfileStore } from "@/store/useOnboardingStore";
-// import { useNutrientStore } from "@/store/useNutrientsStore";
+import { useNutrientAnalysisStore } from "@/store/useNutrientAnalysisStore";
 
 // component logic
 export const MacroCard = () => {
   const { profile } = useProfileStore();
-  const targetMacroNutrient = profile.targetMacroNutrient;
+  const { nutrientAnalysis } = useNutrientAnalysisStore();
 
-  // const { caloriesConsumed, proteinConsumed, carbsConsumed, fatsConsumed } =
-  //   useNutrientStore();
+  const { targetMacroNutrient } = profile;
+  const { calories, protein, carbs, fats } = nutrientAnalysis;
 
   return (
     <Card className="flex-row items-center gap-3 rounded-xl p-4">
       <MacroCircle2
         name="Calorie"
-        // value={caloriesConsumed}
+        value={calories}
         target={profile.dailyCalorieTarget}
       />
 
@@ -32,19 +32,19 @@ export const MacroCard = () => {
         <HStack className="justify-between">
           <MacroCircle
             name="Protein"
-            // value={proteinConsumed}
+            value={protein}
             target={targetMacroNutrient?.proteinTarget}
             tintColor="#EF4444"
           />
           <MacroCircle
             name="Carbs"
-            // value={carbsConsumed}
+            value={carbs}
             target={targetMacroNutrient?.carbsTarget}
             tintColor="#F59E0B"
           />
           <MacroCircle
             name="Fat"
-            // value={fatsConsumed}
+            value={fats}
             target={targetMacroNutrient?.fatTarget}
             tintColor="#3B82F6"
           />

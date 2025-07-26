@@ -11,14 +11,14 @@ import {
  * This store manages nutrient analysis data and actions related to nutrient analysis.
  */
 interface NutrientAnalysisState {
-  nutrientAnalysis: NutrientAnalysis | null;
+  nutrientAnalysis: NutrientAnalysis;
 }
 
 interface NutrientAnalysisActions {
   getNutrientAnalysis: (
     userId: string,
     createdAt: string,
-  ) => Promise<NutrientAnalysis | null>;
+  ) => Promise<NutrientAnalysis>;
   createNutrientAnalysis: (
     analysis: NutrientAnalysis,
   ) => Promise<{ data: any; error: any }>;
@@ -27,10 +27,26 @@ interface NutrientAnalysisActions {
   ) => Promise<{ data: any; error: any }>;
 }
 
+const initNutrientAnalysis: NutrientAnalysis = {
+  userId: "",
+  createdAt: "",
+  healthScore: 0,
+  nutritionScore: 0,
+  calories: 0,
+  protein: 0,
+  carbs: 0,
+  fats: 0,
+  fiber: 0,
+  vitaminC: 0,
+  calcium: 0,
+  iron: 0,
+  potassium: 0,
+};
+
 export const useNutrientAnalysisStore = create<
   NutrientAnalysisState & NutrientAnalysisActions
 >((set, get) => ({
-  nutrientAnalysis: null,
+  nutrientAnalysis: initNutrientAnalysis,
 
   getNutrientAnalysis: async (userId, createdAt) => {
     const { nutrientAnalysis } = get();

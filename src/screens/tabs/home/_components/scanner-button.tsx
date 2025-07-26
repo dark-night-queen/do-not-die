@@ -13,7 +13,7 @@ export const ScannerButton = () => {
   };
 
   return (
-    <Button className="rounded-lg" onPress={openCamera}>
+    <Button className="rounded-lg h-12" onPress={openCamera}>
       <ButtonIcon as={Camera} className="text-white" />
       <ButtonText>Tap to Scan Food</ButtonText>
     </Button>

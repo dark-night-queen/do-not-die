@@ -7,11 +7,11 @@ import { Card, Text, Icon, HStack, VStack } from "@/components/ui";
 import { Progress, ProgressGradientTrack } from "@/components/ui/progress";
 
 // handler functions
-// import { useNutrientStore } from "@/store/useNutrientsStore";
+import { useNutrientAnalysisStore } from "@/store/useNutrientAnalysisStore";
 
 export const HealthScore = () => {
-  // const { healthScore } = useNutrientStore();
-  const healthScore = 0;
+  const { nutrientAnalysis } = useNutrientAnalysisStore();
+  const { healthScore } = nutrientAnalysis;
 
   return (
     <Card className="flex-1 gap-4">

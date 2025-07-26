@@ -13,23 +13,10 @@ import { ScannerButton } from "./_components/scanner-button";
 import { WeeklyCalendar } from "./_components/weekly-calendar";
 import { MacroCard } from "./_components/macro-card";
 import { MetricsCard } from "./_components/metrics-card";
-
-// handler functions
-import { useProfileStore } from "@/store/useOnboardingStore";
 import { RecentlyLoggedItem } from "./_components/recently-logged-item";
 
 // component logic
 const HomeScreen = () => {
-  const { profile } = useProfileStore();
-
-  const nutrientAnalysis = {
-    caloriesConsumed: 0,
-    totalCalories: 1080,
-    micronutrients: {
-      // vitamin: 8,
-    },
-  };
-
   return (
     <DefaultLayout className="p-0">
       <ScrollView>
@@ -40,7 +27,7 @@ const HomeScreen = () => {
           <ScannerButton />
           <RecentlyLoggedItem />
           <DailyReport />
-          <PersonalizedRecommendation nutrientAnalysis={null} />
+          <PersonalizedRecommendation />
         </VStack>
       </ScrollView>
     </DefaultLayout>
