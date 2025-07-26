@@ -1,16 +1,20 @@
+import { Moment } from "moment";
 import { NutrientAnalysis } from "@/constants/analysis";
 import { supabase } from "@/utils/supabase";
 
 /* 
   Nutrient Analysis Per Day APIs 
 */
-const getNutrientAnalysis = async (userId: string, createdAt: string) => {
+const getNutrientAnalysis = async (userId: string, createdAt: Moment) => {
   /* !* Haven't use single(), b/c in case of no data, it will throw an error */
+  const startOfDay = createdAt.clone().startOf("day").toISOString();
+  const endOfDay = createdAt.clone().endOf("day").toISOString();
+
   const { data, error } = await supabase
     .from("NutrientAnalysisPerDay")
     .select()
-    .eq("userId", userId)
-    .eq("createdAt", createdAt);
+    .gte("createdAt", startOfDay)
+    .lte("createdAt", endOfDay);
 
   if (error) console.error("Error in fetching nutrient analysis:", error);
   return { data: data?.[0] ?? null, error };

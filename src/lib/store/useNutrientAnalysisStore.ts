@@ -5,6 +5,7 @@ import {
   getNutrientAnalysis,
   updateNutrientAnalysis,
 } from "@/src/apis/nutrient-analysis";
+import { Moment } from "moment";
 
 /*
  * Nutrient Analysis Store
@@ -17,7 +18,7 @@ interface NutrientAnalysisState {
 interface NutrientAnalysisActions {
   getNutrientAnalysis: (
     userId: string,
-    createdAt: string,
+    createdAt: Moment,
   ) => Promise<NutrientAnalysis>;
   createNutrientAnalysis: (
     analysis: NutrientAnalysis,
@@ -49,15 +50,6 @@ export const useNutrientAnalysisStore = create<
   nutrientAnalysis: initNutrientAnalysis,
 
   getNutrientAnalysis: async (userId, createdAt) => {
-    const { nutrientAnalysis } = get();
-    if (
-      nutrientAnalysis &&
-      nutrientAnalysis.userId === userId &&
-      nutrientAnalysis.createdAt === createdAt
-    ) {
-      return nutrientAnalysis;
-    }
-
     const { data } = await getNutrientAnalysis(userId, createdAt);
     if (data) set({ nutrientAnalysis: data });
     else set({ nutrientAnalysis: initNutrientAnalysis });

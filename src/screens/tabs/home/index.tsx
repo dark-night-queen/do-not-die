@@ -1,5 +1,5 @@
 // core dependencies
-import React from "react";
+import React, { useState } from "react";
 import { ScrollView } from "react-native";
 
 // core components
@@ -14,9 +14,84 @@ import { WeeklyCalendar } from "./_components/weekly-calendar";
 import { MacroCard } from "./_components/macro-card";
 import { MetricsCard } from "./_components/metrics-card";
 import { RecentlyLoggedItem } from "./_components/recently-logged-item";
+import { AddFoodModal } from "./_components/recently-logged-item/add-food-modal";
+
+// handler functions
+import { useGemini } from "@/hooks/use-gemini";
+import { useCalendar } from "@/hooks/useCalendar";
+import { useUserStore } from "@/store/useOnboardingStore";
+import { useFoodAnalysisStore } from "@/store/useFoodAnalysisStore";
 
 // component logic
 const HomeScreen = () => {
+  const { user } = useUserStore();
+  const { activeDate } = useCalendar();
+  const { createFoodAnalysis, getFoodAnalysis } = useFoodAnalysisStore();
+  const { getFoodAnalysisData, foodAnalysis } = useGemini();
+
+  const [isAddFoodBtnDisabled, setIsAddFoodBtnDisabled] = useState(false);
+  const [isAnalyzingText, setIsAnalyzingText] = useState(false);
+  const [formData, setFormData] = useState({
+    foodName: "",
+    servingSize: "",
+  });
+  const [errors, setErrors] = useState({
+    foodName: "",
+    servingSize: "",
+  });
+
+  React.useEffect(() => {
+    const hasEmptyField = !formData.foodName;
+    setIsAddFoodBtnDisabled(hasEmptyField);
+  }, [formData]);
+
+  const refetchFoodAnalysis = React.useCallback(async () => {
+    await getFoodAnalysis(user.id, activeDate);
+  }, [getFoodAnalysis, user.id, activeDate]);
+
+  React.useEffect(() => {
+    const addFood = async () => {
+      if (!foodAnalysis || !isAnalyzingText) return;
+      await createFoodAnalysis(user.id, {
+        ...foodAnalysis,
+        createdAt: activeDate.toISOString(),
+        updatedAt: activeDate.toISOString(),
+      });
+      await refetchFoodAnalysis();
+      setIsAnalyzingText(false);
+    };
+
+    addFood();
+  }, [
+    activeDate,
+    createFoodAnalysis,
+    foodAnalysis,
+    isAnalyzingText,
+    refetchFoodAnalysis,
+    user.id,
+  ]);
+
+  const [showModal, setShowModal] = useState(false);
+  const openModal = () => {
+    setFormData({ foodName: "", servingSize: "" });
+    setShowModal(true);
+  };
+  const closeModal = () => setShowModal(false);
+
+  const handleChange = (name: string) => (value: string) => {
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    setErrors((prev) => ({ ...prev, [name]: "" }));
+  };
+
+  const handleAddFood = async () => {
+    setIsAnalyzingText(true);
+    await getFoodAnalysisData({
+      foodName: formData.foodName,
+      servingSize: formData.servingSize,
+    });
+    closeModal();
+  };
+
   return (
     <DefaultLayout className="p-0">
       <ScrollView>
@@ -25,11 +100,25 @@ const HomeScreen = () => {
           <MacroCard />
           <MetricsCard />
           <ScannerButton />
-          <RecentlyLoggedItem />
+          <RecentlyLoggedItem
+            openModal={openModal}
+            refetch={refetchFoodAnalysis}
+          />
           <DailyReport />
           <PersonalizedRecommendation />
         </VStack>
       </ScrollView>
+
+      <AddFoodModal
+        isDisabled={isAddFoodBtnDisabled}
+        isAnalyzing={isAnalyzingText}
+        formData={formData}
+        errors={errors}
+        handleChange={handleChange}
+        showModal={showModal}
+        onClose={closeModal}
+        onSubmit={handleAddFood}
+      />
     </DefaultLayout>
   );
 };

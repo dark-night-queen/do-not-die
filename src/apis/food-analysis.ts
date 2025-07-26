@@ -1,15 +1,20 @@
+import { Moment } from "moment";
 import { FoodAnalysis } from "@/constants/analysis";
 import { supabase } from "@/utils/supabase";
 
 /* 
   Food Analysis Per Day APIs 
 */
-const getFoodAnalysis = async (userId: string, createdAt: string) => {
+const getFoodAnalysis = async (userId: string, createdAt: Moment) => {
+  const startOfDay = createdAt.clone().startOf("day").toISOString();
+  const endOfDay = createdAt.clone().endOf("day").toISOString();
+
   const { data, error } = await supabase
     .from("FoodItem")
     .select()
     .eq("userId", userId)
-    .eq("createdAt", createdAt);
+    .gte("createdAt", startOfDay)
+    .lte("createdAt", endOfDay);
 
   if (error) console.error("Error in fetching food analysis:", error);
   return { data, error };

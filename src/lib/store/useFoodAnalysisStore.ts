@@ -1,12 +1,10 @@
 import { create } from "zustand";
 import { FoodAnalysis } from "@/constants/analysis";
 import { getFoodAnalysis, createFoodAnalysis } from "@/src/apis/food-analysis";
-import moment, { Moment } from "moment";
+import { Moment } from "moment";
 
 interface FoodAnalysisState {
-  activeDate: Moment;
   foodAnalysis: FoodAnalysis[];
-  activeUserId: string | null;
 }
 
 interface FoodAnalysisActions {
@@ -20,23 +18,11 @@ interface FoodAnalysisActions {
 export const useFoodAnalysisStore = create<
   FoodAnalysisState & FoodAnalysisActions
 >((set, get) => ({
-  activeUserId: null,
-  activeDate: moment(),
   foodAnalysis: [],
 
   getFoodAnalysis: async (userId, createdAt) => {
-    const { activeDate, foodAnalysis, activeUserId } = get();
-    if (
-      activeDate.format("DD MM YYYY") === createdAt.format("DD MM YYYY") &&
-      activeUserId === userId
-    ) {
-      return foodAnalysis;
-    }
-
-    const { data } = await getFoodAnalysis(userId, createdAt.toISOString());
-    if (data) {
-      set({ foodAnalysis: data, activeUserId: userId, activeDate: createdAt });
-    }
+    const { data } = await getFoodAnalysis(userId, createdAt);
+    if (data) set({ foodAnalysis: data });
     return data;
   },
   createFoodAnalysis: async (userId, food) => {
@@ -44,8 +30,6 @@ export const useFoodAnalysisStore = create<
       ...food,
       userId: userId,
     });
-
-    set({ foodAnalysis: data });
     return { data, error };
   },
 }));
