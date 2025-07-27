@@ -9,6 +9,7 @@ export * from "./hstack";
 export * from "./icon";
 export * from "./input";
 export * from "./progress";
+export * from "./popover";
 export * from "./radio";
 export * from "./spinner";
 export * from "./text";

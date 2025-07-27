@@ -8,6 +8,7 @@ import {
   updateProfile,
   resetOnboarding,
 } from "@/src/apis/onboarding";
+import { dMicroTargets } from "@/constants/analysis";
 
 /*
  * User Store
@@ -84,13 +85,7 @@ const initProfileState = {
   goalType: undefined,
   goalDuration: undefined,
   targetMacroNutrient: {},
-  targetMicroNutrient: {
-    fiber: 30,
-    vitaminC: 90,
-    calcium: 1000,
-    iron: 18,
-    potassium: 3500,
-  },
+  targetMicroNutrient: dMicroTargets,
   isOnboardingCompleted: false,
 };
 

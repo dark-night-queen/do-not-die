@@ -2,8 +2,8 @@ import {
   Ingredient,
   Micronutrient,
   FoodAnalysis as BaseFoodAnalysis,
+  dMicroTargets,
 } from "@/constants/analysis";
-import { initProfileState } from "@/store/useOnboardingStore";
 import { prompt } from "./prompt";
 
 type FoodAnalysis = BaseFoodAnalysis & {
@@ -12,8 +12,6 @@ type FoodAnalysis = BaseFoodAnalysis & {
 
 const getPrompt = (foodName: string, servingSize: string) =>
   prompt(foodName, servingSize);
-
-const dailyMicroTargets = initProfileState.targetMicroNutrient;
 
 function calculateFoodItemHealthScore(foodItem: FoodAnalysis): number {
   // Calculate macro balance (40% of score)
@@ -36,7 +34,7 @@ function calculateFoodItemHealthScore(foodItem: FoodAnalysis): number {
     4; // Max 4 points
 
   // Calculate micronutrient score (40% of score)
-  const microScores = Object.entries(dailyMicroTargets).map(
+  const microScores = Object.entries(dMicroTargets).map(
     ([nutrient, target]) => {
       const value =
         foodItem.micronutrients[
@@ -69,7 +67,7 @@ function calculateMicronutrientScore(micronutrients: Micronutrient): number {
   // Calculate percentage of daily value for each micronutrient
   const percentages = Object.entries(micronutrients).map(
     ([nutrient, quantity]) => {
-      const dv = dailyMicroTargets[nutrient as keyof typeof dailyMicroTargets];
+      const dv = dMicroTargets[nutrient as keyof typeof dMicroTargets];
       return Math.min(100, (quantity / dv) * 100);
     },
   );

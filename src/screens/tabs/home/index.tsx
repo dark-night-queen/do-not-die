@@ -21,13 +21,15 @@ import { useGemini } from "@/hooks/use-gemini";
 import { useCalendar } from "@/hooks/useCalendar";
 import { useUserStore } from "@/store/useOnboardingStore";
 import { useFoodAnalysisStore } from "@/store/useFoodAnalysisStore";
+import { useNutrientAnalysisStore } from "@/store/useNutrientAnalysisStore";
 
 // component logic
 const HomeScreen = () => {
   const { user } = useUserStore();
   const { activeDate } = useCalendar();
+  const { performFoodAnalysis, foodAnalysis } = useGemini();
   const { createFoodAnalysis, getFoodAnalysis } = useFoodAnalysisStore();
-  const { getFoodAnalysisData, foodAnalysis } = useGemini();
+  const { addFoodItem } = useNutrientAnalysisStore();
 
   const [isAddFoodBtnDisabled, setIsAddFoodBtnDisabled] = useState(false);
   const [isAnalyzingText, setIsAnalyzingText] = useState(false);
@@ -52,18 +54,24 @@ const HomeScreen = () => {
   React.useEffect(() => {
     const addFood = async () => {
       if (!foodAnalysis || !isAnalyzingText) return;
-      await createFoodAnalysis(user.id, {
+
+      const foodItem = {
         ...foodAnalysis,
         createdAt: activeDate.toISOString(),
         updatedAt: activeDate.toISOString(),
-      });
+      };
+
+      await createFoodAnalysis(user.id, foodItem);
       await refetchFoodAnalysis();
+      await addFoodItem(user.id, foodItem);
       setIsAnalyzingText(false);
+      closeModal();
     };
 
     addFood();
   }, [
     activeDate,
+    addFoodItem,
     createFoodAnalysis,
     foodAnalysis,
     isAnalyzingText,
@@ -85,11 +93,10 @@ const HomeScreen = () => {
 
   const handleAddFood = async () => {
     setIsAnalyzingText(true);
-    await getFoodAnalysisData({
+    await performFoodAnalysis({
       foodName: formData.foodName,
       servingSize: formData.servingSize,
     });
-    closeModal();
   };
 
   return (

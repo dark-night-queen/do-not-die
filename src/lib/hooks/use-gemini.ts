@@ -5,7 +5,7 @@ import { getPrompt, analyzeResponse } from "@/utils/analysis";
 
 const useGemini = () => {
   const {
-    mutate: getFoodAnalysisData,
+    mutate: performFoodAnalysis,
     data: foodAnalysis,
     isPending: isAnalyzingText,
   } = useMutation({
@@ -16,7 +16,7 @@ const useGemini = () => {
     },
   });
 
-  return { getFoodAnalysisData, foodAnalysis, isAnalyzingText };
+  return { performFoodAnalysis, foodAnalysis, isAnalyzingText };
 };
 
 export { useGemini };

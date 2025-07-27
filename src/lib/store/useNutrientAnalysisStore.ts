@@ -1,30 +1,44 @@
 import { create } from "zustand";
-import { NutrientAnalysis } from "@/constants/analysis";
+import { Moment } from "moment";
+import {
+  dCalorieTarget,
+  dMacroTargets,
+  FoodAnalysis,
+  NutrientAnalysis,
+} from "@/constants/analysis";
+import { Profile } from "@/constants/user";
 import {
   createNutrientAnalysis,
   getNutrientAnalysis,
   updateNutrientAnalysis,
 } from "@/src/apis/nutrient-analysis";
-import { Moment } from "moment";
+import { calculateHealthScore } from "@/utils/analysis/health-score";
 
 /*
  * Nutrient Analysis Store
  * This store manages nutrient analysis data and actions related to nutrient analysis.
  */
 interface NutrientAnalysisState {
+  macroTargets: typeof dMacroTargets;
   nutrientAnalysis: NutrientAnalysis;
+  targetCalories: number;
 }
 
 interface NutrientAnalysisActions {
+  init: (profile: Profile) => void;
   getNutrientAnalysis: (
     userId: string,
     createdAt: Moment,
   ) => Promise<NutrientAnalysis>;
+  addFoodItem: (
+    userId: string,
+    analysis: FoodAnalysis,
+  ) => Promise<{ data: any; error: any }>;
   createNutrientAnalysis: (
     analysis: NutrientAnalysis,
   ) => Promise<{ data: any; error: any }>;
   updateNutrientAnalysis: (
-    analysis: Partial<NutrientAnalysis>,
+    analysis: NutrientAnalysis,
   ) => Promise<{ data: any; error: any }>;
 }
 
@@ -47,7 +61,71 @@ const initNutrientAnalysis: NutrientAnalysis = {
 export const useNutrientAnalysisStore = create<
   NutrientAnalysisState & NutrientAnalysisActions
 >((set, get) => ({
+  macroTargets: {
+    protein: dMacroTargets.protein,
+    carbs: dMacroTargets.carbs,
+    fat: dMacroTargets.fat,
+  },
   nutrientAnalysis: initNutrientAnalysis,
+  targetCalories: dCalorieTarget,
+
+  init: (profile) => {
+    const macroTargets = {
+      protein:
+        profile.targetMacroNutrient?.proteinTarget || dMacroTargets.protein,
+      carbs: profile.targetMacroNutrient?.carbsTarget || dMacroTargets.carbs,
+      fat: profile.targetMacroNutrient?.fatTarget || dMacroTargets.fat,
+    };
+
+    const targetCalories = profile.dailyCalorieTarget ?? dCalorieTarget;
+    set({ macroTargets, targetCalories });
+  },
+
+  addFoodItem: async (userId, foodItem) => {
+    const {
+      macroTargets,
+      targetCalories,
+      nutrientAnalysis,
+      createNutrientAnalysis,
+      updateNutrientAnalysis,
+    } = get();
+
+    const nutrientKeys = [
+      "calories",
+      "protein",
+      "carbs",
+      "fat",
+      "fiber",
+      "vitaminC",
+      "calcium",
+      "iron",
+      "potassium",
+    ] as const;
+
+    const updatedData = {
+      ...nutrientAnalysis,
+      ...Object.fromEntries(
+        nutrientKeys.map((key) => [
+          key,
+          nutrientAnalysis[key] + (foodItem[key] ?? 0),
+        ]),
+      ),
+      userId,
+      createdAt: foodItem.createdAt,
+      updatedAt: foodItem.updatedAt,
+    };
+
+    updatedData.healthScore = calculateHealthScore(
+      updatedData,
+      macroTargets,
+      targetCalories,
+    );
+
+    if (!nutrientAnalysis.userId) {
+      return await createNutrientAnalysis(updatedData);
+    }
+    return await updateNutrientAnalysis(updatedData);
+  },
 
   getNutrientAnalysis: async (userId, createdAt) => {
     const { data } = await getNutrientAnalysis(userId, createdAt);

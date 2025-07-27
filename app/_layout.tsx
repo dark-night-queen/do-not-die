@@ -15,6 +15,7 @@ import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useProfileStore, useUserStore } from "@/store/useOnboardingStore";
+import { useNutrientAnalysisStore } from "@/store/useNutrientAnalysisStore";
 
 const queryClient = new QueryClient();
 
@@ -26,6 +27,7 @@ export default function RootLayout() {
   const { session, redirected, setRedirected } = useAuthStore();
   const { user, getUser } = useUserStore();
   const { profile, getProfile } = useProfileStore();
+  const { init } = useNutrientAnalysisStore();
 
   // Wait for animation and auth check
   useEffect(() => {
@@ -49,7 +51,8 @@ export default function RootLayout() {
       if (session && !user.id) {
         const user = await getUser(session.user.id);
         if (user && user.id) {
-          await getProfile(user.id);
+          const profile = await getProfile(user.id);
+          init(profile);
         }
 
         setIsLoading(false);
@@ -57,7 +60,7 @@ export default function RootLayout() {
     };
 
     loadUser();
-  }, [getProfile, getUser, session, user.id]);
+  }, [getProfile, getUser, init, session, user.id]);
 
   useEffect(() => {
     if (!isLoading && !isInitLoading && !redirected) {

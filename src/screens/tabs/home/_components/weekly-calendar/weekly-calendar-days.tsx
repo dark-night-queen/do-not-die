@@ -86,8 +86,12 @@ export const WeeklyCalendarDays = () => {
   const { getFoodAnalysis } = useFoodAnalysisStore();
 
   React.useEffect(() => {
-    getNutrientAnalysis(user.id, activeDate);
-    getFoodAnalysis(user.id, activeDate);
+    const fetch = async () => {
+      await getNutrientAnalysis(user.id, activeDate);
+      await getFoodAnalysis(user.id, activeDate);
+    };
+
+    fetch();
   }, [activeDate, getFoodAnalysis, getNutrientAnalysis, user.id]);
 
   return (
