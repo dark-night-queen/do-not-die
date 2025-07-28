@@ -91,9 +91,9 @@ function calculateDailyCalories(
     calorieAdjustment: Math.round(calorieAdjustment),
     weeklyWeightChange: parseFloat(weeklyWeightChange.toFixed(2)),
     targetMacroNutrient: {
-      proteinTarget: targetMacroNutrient.proteinTarget,
-      fatTarget: targetMacroNutrient.fatTarget,
-      carbsTarget: targetMacroNutrient.carbsTarget,
+      protein: targetMacroNutrient.proteinTarget,
+      fat: targetMacroNutrient.fatTarget,
+      carbs: targetMacroNutrient.carbsTarget,
     },
   };
 }

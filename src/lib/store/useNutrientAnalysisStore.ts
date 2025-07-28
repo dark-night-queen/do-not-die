@@ -71,10 +71,9 @@ export const useNutrientAnalysisStore = create<
 
   init: (profile) => {
     const macroTargets = {
-      protein:
-        profile.targetMacroNutrient?.proteinTarget || dMacroTargets.protein,
-      carbs: profile.targetMacroNutrient?.carbsTarget || dMacroTargets.carbs,
-      fat: profile.targetMacroNutrient?.fatTarget || dMacroTargets.fat,
+      protein: profile.targetMacroNutrient?.protein || dMacroTargets.protein,
+      carbs: profile.targetMacroNutrient?.carbs || dMacroTargets.carbs,
+      fat: profile.targetMacroNutrient?.fat || dMacroTargets.fat,
     };
 
     const targetCalories = profile.dailyCalorieTarget ?? dCalorieTarget;

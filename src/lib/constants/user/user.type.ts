@@ -52,9 +52,9 @@ type Profile = {
   goalDuration?: GoalDuration;
 
   targetMacroNutrient?: {
-    proteinTarget?: number;
-    fatTarget?: number;
-    carbsTarget?: number;
+    protein?: number;
+    fat?: number;
+    carbs?: number;
   };
 
   targetMicroNutrient?: {

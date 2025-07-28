@@ -14,9 +14,9 @@ export const MacroDistribution = () => {
   const { profile } = useProfileStore();
   const { nutrientAnalysis } = useNutrientAnalysisStore();
 
-  const proteinTarget = profile.targetMacroNutrient?.proteinTarget || 0;
-  const carbsTarget = profile.targetMacroNutrient?.carbsTarget || 0;
-  const fatTarget = profile.targetMacroNutrient?.fatTarget || 0;
+  const proteinTarget = profile.targetMacroNutrient?.protein || 0;
+  const carbsTarget = profile.targetMacroNutrient?.carbs || 0;
+  const fatTarget = profile.targetMacroNutrient?.fat || 0;
 
   const proteinConsumed = nutrientAnalysis.protein;
   const carbsConsumed = nutrientAnalysis.carbs;
