@@ -17,6 +17,7 @@ const GoalTimeline: Record<GOAL_DURATION, number> = {
 // Calculate BMR using Mifflin-St Jeor Equation
 function calculateBMR(profile: Profile): number {
   const { age, gender, heightCm, weightKg } = profile;
+  if (!age) return 0;
 
   if (gender === GENDER.Male)
     return 10 * weightKg + 6.25 * heightCm - 5 * age + 5;
