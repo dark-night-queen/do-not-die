@@ -17,8 +17,8 @@ interface IBodyMetricsProps {
     unitSystem: UnitSystem;
     height: string;
     weight: string;
-    heightCm: string;
-    weightKg: string;
+    heightCm: number;
+    weightKg: number;
     dietaryPreference: DietaryPreference;
   };
   errors: {
@@ -41,10 +41,10 @@ export const BodyMetrics = ({
   const unitSystemOptions = Object.freeze(UNIT_SYSTEM);
   const dietaryPreferenceOptions = Object.freeze(DIETARY_PREFERENCE);
 
-  const calculateBMI = (heightCm: string, weightKg: string) => {
-    const heightM = parseInt(heightCm) / 100;
+  const calculateBMI = (heightCm: number, weightKg: number) => {
+    const heightM = heightCm / 100;
     if (!heightM) return 0;
-    return parseInt(weightKg) / (heightM * heightM);
+    return weightKg / (heightM * heightM);
   };
 
   const bmi = calculateBMI(formData.heightCm, formData.weightKg);

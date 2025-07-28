@@ -22,7 +22,7 @@ const GoalScreen = () => {
     type: profile.goalType,
     duration: profile.goalDuration,
     targetWeight: profile.displayTargetWeight?.toString() || "",
-    targetWeightKg: profile.targetWeightKg?.toString() || "",
+    targetWeightKg: profile.targetWeightKg,
   });
 
   const meta = React.useMemo(
@@ -49,13 +49,15 @@ const GoalScreen = () => {
 
     if (name === "targetWeight") {
       // Convert target weight to kg if unit system is imperial
+      const targetWeight = parseFloat(value);
+
       if (meta.unitSystem === UNIT_SYSTEM.Imperial) {
         setFormData((prev) => ({
           ...prev,
-          targetWeightKg: lbsToKg(parseFloat(value)).toString(),
+          targetWeightKg: lbsToKg(targetWeight),
         }));
       } else {
-        setFormData((prev) => ({ ...prev, targetWeightKg: value }));
+        setFormData((prev) => ({ ...prev, targetWeightKg: targetWeight }));
       }
     }
   };
@@ -83,7 +85,7 @@ const GoalScreen = () => {
         goalType: formData.type,
         goalDuration: formData.duration,
         displayTargetWeight: parseFloat(formData.targetWeight),
-        targetWeightKg: parseFloat(formData.targetWeightKg),
+        targetWeightKg: formData.targetWeightKg,
       };
 
       await updateProfile(updatedProfile);

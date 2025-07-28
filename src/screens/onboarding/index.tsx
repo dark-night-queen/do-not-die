@@ -30,8 +30,8 @@ const OnboardingScreen = () => {
     unitSystem: profile.unitSystem || UNIT_SYSTEM.Metric,
     height: profile.displayHeight?.toString() || "",
     weight: profile.displayWeight?.toString() || "",
-    heightCm: profile.heightCm?.toString() || "",
-    weightKg: profile.weightKg?.toString() || "",
+    heightCm: profile.heightCm,
+    weightKg: profile.weightKg,
     dietaryPreference: profile.dietaryPreference || null,
   });
 
@@ -52,22 +52,27 @@ const OnboardingScreen = () => {
       // Reset height and weight when unit system changes
       setFormData((prev) => ({
         ...prev,
-        height: getDisplayHeight(formData.height, value),
-        weight: getDisplayWeight(formData.weight, value),
+        height: getDisplayHeight(parseFloat(formData.height), value).toString(),
+        weight: getDisplayWeight(parseFloat(formData.weight), value).toString(),
       }));
     } else if (name === "height") {
       // Convert height to cm if unit system is imperial
+      const height = parseFloat(value);
+
       if (formData.unitSystem === UNIT_SYSTEM.Imperial) {
-        setFormData((prev) => ({ ...prev, heightCm: feetToCm(value) }));
-      } else setFormData((prev) => ({ ...prev, heightCm: value }));
+        setFormData((prev) => ({ ...prev, heightCm: feetToCm(height) }));
+      } else {
+        setFormData((prev) => ({ ...prev, heightCm: height }));
+      }
     } else if (name === "weight") {
+      const weight = parseFloat(value);
+
       // Convert weight to kg if unit system is imperial
       if (formData.unitSystem === UNIT_SYSTEM.Imperial) {
-        setFormData((prev) => ({
-          ...prev,
-          weightKg: lbsToKg(parseFloat(value)).toString(),
-        }));
-      } else setFormData((prev) => ({ ...prev, weightKg: value }));
+        setFormData((prev) => ({ ...prev, weightKg: lbsToKg(weight) }));
+      } else {
+        setFormData((prev) => ({ ...prev, weightKg: weight }));
+      }
     }
   };
 
@@ -100,9 +105,9 @@ const OnboardingScreen = () => {
         age: parseInt(formData.age),
         gender: formData.gender,
         unitSystem: formData.unitSystem,
-        heightCm: parseFloat(formData.heightCm),
+        heightCm: formData.heightCm,
         displayHeight: parseFloat(formData.height),
-        weightKg: parseFloat(formData.weightKg),
+        weightKg: formData.weightKg,
         displayWeight: parseFloat(formData.weight),
         dietaryPreference: formData.dietaryPreference,
       };

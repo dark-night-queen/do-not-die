@@ -67,12 +67,12 @@ interface ProfileActions {
 
 const initProfileState = {
   userId: "",
-  age: 0,
-  displayHeight: 0,
+  age: null,
+  displayHeight: null,
   heightCm: 0,
-  displayWeight: 0,
+  displayWeight: null,
   weightKg: 0,
-  displayTargetWeight: 0,
+  displayTargetWeight: null,
   targetWeightKg: 0,
   bmr: 0,
   tdee: 0,
@@ -115,13 +115,16 @@ export const useProfileStore = create<ProfileState & ProfileActions>(
     createProfile: async (profile) => {
       const { setProfile } = get();
 
-      const { data, error } = await createProfile(profile);
+      const { targetMicroNutrient, ...newProfile } = profile;
+      const { data, error } = await createProfile(newProfile);
       setProfile(data);
       return { data, error };
     },
     updateProfile: async (profile) => {
       const { setProfile } = get();
-      const { data, error } = await updateProfile(profile);
+
+      const { targetMicroNutrient, ...updatedProfile } = profile;
+      const { data, error } = await updateProfile(updatedProfile);
       setProfile(data);
       return { data, error };
     },

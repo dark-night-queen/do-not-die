@@ -30,15 +30,15 @@ type Profile = {
   id?: number;
   userId: string;
 
-  age: number;
+  age: number | null;
   isOnboardingCompleted?: boolean;
 
   heightCm: number;
-  displayHeight: number;
+  displayHeight: number | null;
   weightKg: number;
-  displayWeight: number;
+  displayWeight: number | null;
   targetWeightKg?: number;
-  displayTargetWeight?: number;
+  displayTargetWeight?: number | null;
   bmr?: number;
   tdee?: number;
   dailyCalorieTarget?: number;

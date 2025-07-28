@@ -85,6 +85,7 @@ export const Login = ({
           value={email}
           onChangeText={handleChange("email")}
           keyboardType="email-address"
+          autoCapitalize="none"
         />
       </FormElement>
 
