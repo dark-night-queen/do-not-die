@@ -33,8 +33,8 @@ import {
 
 interface IUserGoalsProps {
   formData: {
-    type?: GoalType;
-    duration?: GoalDuration;
+    type?: GoalType | null;
+    duration?: GoalDuration | null;
     targetWeight: string;
   };
   meta: {
@@ -85,7 +85,7 @@ export const UserGoals = ({
       <FormElement>
         <CardRadioElement
           options={GoalTypeOptions}
-          value={formData.type}
+          value={formData.type ?? ""}
           onChange={handleChange("type")}
         />
       </FormElement>

@@ -47,9 +47,9 @@ type Profile = {
   gender: Gender;
   unitSystem?: UnitSystem;
   dietaryPreference?: DietaryPreference;
-  activityLevel?: ActivityLevel;
-  goalType?: GoalType;
-  goalDuration?: GoalDuration;
+  activityLevel?: ActivityLevel | null;
+  goalType?: GoalType | null;
+  goalDuration?: GoalDuration | null;
 
   targetMacroNutrient?: {
     protein?: number;

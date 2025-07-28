@@ -82,12 +82,12 @@ export const useNutrientAnalysisStore = create<
 
   init: (profile) => {
     const macroTargets = {
-      protein: profile.targetMacroNutrient?.protein || dMacroTargets.protein,
-      carbs: profile.targetMacroNutrient?.carbs || dMacroTargets.carbs,
-      fat: profile.targetMacroNutrient?.fat || dMacroTargets.fat,
+      protein: profile?.targetMacroNutrient?.protein || dMacroTargets.protein,
+      carbs: profile?.targetMacroNutrient?.carbs || dMacroTargets.carbs,
+      fat: profile?.targetMacroNutrient?.fat || dMacroTargets.fat,
     };
 
-    const targetCalories = profile.dailyCalorieTarget ?? dCalorieTarget;
+    const targetCalories = profile?.dailyCalorieTarget ?? dCalorieTarget;
     set({ macroTargets, targetCalories });
   },
 

@@ -81,9 +81,9 @@ const initProfileState = {
   gender: null,
   unitSystem: UNIT_SYSTEM.Metric,
   dietaryPreference: null,
-  activityLevel: undefined,
-  goalType: undefined,
-  goalDuration: undefined,
+  activityLevel: null,
+  goalType: null,
+  goalDuration: null,
   targetMacroNutrient: {},
   targetMicroNutrient: dMicroTargets,
   isOnboardingCompleted: false,
@@ -132,14 +132,16 @@ export const useProfileStore = create<ProfileState & ProfileActions>(
       const { profile, setProfile } = get();
       if (!profile) return;
 
+      const { targetMicroNutrient, ...rest } = initProfileState;
+
       const updatedProfile: Profile = {
-        ...initProfileState,
+        ...rest,
         id: profile.id,
         userId: profile.userId,
       };
 
       await resetOnboarding(updatedProfile);
-      setProfile(initProfileState);
+      setProfile(updatedProfile);
     },
   }),
 );

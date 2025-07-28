@@ -17,7 +17,7 @@ import { ActivityLevel, ActivityLevelOptions } from "@/constants/user";
 
 interface IUserActivityLevel {
   formData: {
-    activityLevel?: ActivityLevel;
+    activityLevel?: ActivityLevel | null;
   };
   meta: {
     dailyCalorieTarget: number;
@@ -44,7 +44,7 @@ export const UserActivityLevel = ({
       <FormElement>
         <CardRadioElement
           options={ActivityLevelOptions}
-          value={formData.activityLevel}
+          value={formData.activityLevel ?? ""}
           cardRadioProps={{ size: "lg" }}
           onChange={handleChange("activityLevel")}
           formatLabel={(opt) => (
