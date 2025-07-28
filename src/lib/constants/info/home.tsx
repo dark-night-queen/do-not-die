@@ -6,6 +6,18 @@ export type InfoText = {
   footer?: string;
 };
 
+export const HealthScoreCalculation: InfoText = {
+  header: "Health Score",
+  description: (
+    <VStack className="gap-1">
+      <Text size="sm">Your health score is calculated from:</Text>
+      <Text size="sm">• Macronutrient Balance (30%)</Text>
+      <Text size="sm">• Micronutrient Content (40%)</Text>
+      <Text size="sm">• Calorie Target Progress (30%)</Text>
+    </VStack>
+  ),
+};
+
 export const FoodDetailHealthScore: InfoText = {
   header: "Health Score",
   description: (

@@ -1,34 +1,67 @@
 // core dependencies
 import React from "react";
-import { Activity, Info } from "lucide-react-native";
+import { Activity } from "lucide-react-native";
 
 // core components
 import { Card, Text, Icon, HStack, VStack } from "@/components/ui";
 import { Progress, ProgressGradientTrack } from "@/components/ui/progress";
 
-// handler functions
-import { useNutrientAnalysisStore } from "@/store/useNutrientAnalysisStore";
+// custom components
+import { InfoPopover } from "@/screens/_components";
 
-export const HealthScore = () => {
-  const { nutrientAnalysis } = useNutrientAnalysisStore();
-  const { healthScore } = nutrientAnalysis;
+// constants
+import { InfoText } from "@/constants/info/home";
+
+// handler functions
+import { getNutritionScoreDescription } from "@/utils/analysis/nutrition-score";
+
+interface IHealthScoreProps {
+  showIcon?: boolean;
+  showHealthScore?: boolean;
+  healthScore: number;
+  info: InfoText;
+}
+
+export const HealthScore = ({
+  showIcon = true,
+  showHealthScore = false,
+  healthScore,
+  info,
+}: IHealthScoreProps) => {
+  const healthScoreInfo = getNutritionScoreDescription(healthScore);
 
   return (
     <Card className="flex-1 gap-4">
-      <HStack className="items-center gap-3">
-        <Icon as={Activity} className="text-indigo-400" />
-        <Text className="flex-1 text-sm">Health Score</Text>
-        <Icon as={Info} size="sm" />
-      </HStack>
+      <VStack>
+        <HStack className="items-center gap-1">
+          {showIcon ? <Icon as={Activity} className="text-indigo-400" /> : null}
+          <Text size="sm" className="flex-1 text-gray-400">
+            Health Score
+          </Text>
+          <InfoPopover size="sm" {...info} />
+        </HStack>
 
+        {showHealthScore ? (
+          <Text className={`font-bold ${healthScoreInfo.color}`}>
+            {healthScore} / 10
+          </Text>
+        ) : null}
+      </VStack>
       <VStack className="gap-2">
-        <Progress value={healthScore}>
+        <Progress size="sm" value={healthScore * 10}>
           <ProgressGradientTrack colors={["#ef4444", "#eab308", "#22c55e"]} />
         </Progress>
 
         <HStack className="justify-between">
-          <Text className="text-xs text-background-400">Poor</Text>
-          <Text className="text-xs text-background-400">Excellent</Text>
+          <Text size="xs" className="text-background-400">
+            Poor
+          </Text>
+          <Text size="xs" className={healthScoreInfo.color}>
+            {healthScoreInfo.label}
+          </Text>
+          <Text size="xs" className="text-background-400">
+            Excellent
+          </Text>
         </HStack>
       </VStack>
     </Card>

@@ -16,8 +16,10 @@ import {
   VStack,
   Progress,
   ProgressFilledTrack,
-  ProgressGradientTrack,
 } from "@/components/ui";
+
+// custom components
+import { InfoPopover } from "@/screens/_components";
 
 // constants
 import {
@@ -32,8 +34,7 @@ import {
 } from "@/constants/info/home";
 
 // handler functions
-import { getNutritionScoreDescription } from "@/utils/analysis/nutrition-score";
-import { InfoPopover } from "../../../../../_components/info-popover";
+import { HealthScore } from "../../metrics-card/health-score";
 
 type IFoodDetailProps = {
   itemInfo: FoodAnalysis | null;
@@ -69,7 +70,6 @@ export const FoodDetail = ({
   };
 
   if (!itemInfo) return;
-  const healthScoreInfo = getNutritionScoreDescription(itemInfo.healthScore);
   return (
     <Drawer isOpen={showDrawer} onClose={closeDrawer} size="lg" anchor="bottom">
       <DrawerBackdrop />
@@ -87,41 +87,12 @@ export const FoodDetail = ({
           <VStack className="gap-4">
             <HStack className="gap-4">
               {/* Health Score Card */}
-              <Card className="flex-1">
-                <HStack className="items-center justify-between">
-                  <Text size="sm" className="text-gray-400">
-                    Health Score
-                  </Text>
-
-                  <InfoPopover
-                    size="sm"
-                    className="text-gray-500"
-                    {...FoodDetailHealthScore}
-                  />
-                </HStack>
-                <Text className="font-bold">{itemInfo.healthScore} / 10</Text>
-
-                <Progress
-                  size="sm"
-                  value={itemInfo.healthScore * 10}
-                  className="mt-2"
-                >
-                  <ProgressGradientTrack
-                    colors={["#ef4444", "#eab308", "#22c55e"]}
-                  />
-                </Progress>
-                <HStack className="justify-between">
-                  <Text size="xs" className="text-gray-400">
-                    Poor
-                  </Text>
-                  <Text size="xs" className={healthScoreInfo.color}>
-                    {healthScoreInfo.label}
-                  </Text>
-                  <Text size="xs" className="text-gray-400">
-                    Excellent
-                  </Text>
-                </HStack>
-              </Card>
+              <HealthScore
+                showIcon={false}
+                showHealthScore={true}
+                healthScore={itemInfo.healthScore}
+                info={FoodDetailHealthScore}
+              />
 
               {/* Macros Card */}
               <Card className="flex-1 gap-2">
@@ -129,11 +100,7 @@ export const FoodDetail = ({
                   <Text size="sm" className="text-gray-400">
                     Macros
                   </Text>
-                  <InfoPopover
-                    size="sm"
-                    className="text-gray-500"
-                    {...FoodDetailMacros}
-                  />
+                  <InfoPopover size="sm" {...FoodDetailMacros} />
                 </HStack>
 
                 <VStack className="gap-1">
@@ -190,11 +157,7 @@ export const FoodDetail = ({
                 <Text size="sm" className="text-gray-400">
                   Micros
                 </Text>
-                <InfoPopover
-                  size="sm"
-                  className="text-gray-500"
-                  {...FoodDetailMicros}
-                />
+                <InfoPopover size="sm" {...FoodDetailMicros} />
               </HStack>
 
               <HStack className="justify-between">

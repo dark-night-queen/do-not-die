@@ -33,19 +33,19 @@ export const MacroCard = () => {
           <MacroCircle
             name="Protein"
             value={protein}
-            target={targetMacroNutrient?.proteinTarget}
+            target={targetMacroNutrient?.protein}
             tintColor="#EF4444"
           />
           <MacroCircle
             name="Carbs"
             value={carbs}
-            target={targetMacroNutrient?.carbsTarget}
+            target={targetMacroNutrient?.carbs}
             tintColor="#F59E0B"
           />
           <MacroCircle
             name="Fat"
             value={fat}
-            target={targetMacroNutrient?.fatTarget}
+            target={targetMacroNutrient?.fat}
             tintColor="#3B82F6"
           />
         </HStack>
