@@ -19,7 +19,6 @@ import { useNutrientAnalysisStore } from "@/store/useNutrientAnalysisStore";
 
 const queryClient = new QueryClient();
 
-// TODO: Fix onboarding / tabs flow when user logs back in
 export default function RootLayout() {
   const router = useRouter();
 
@@ -45,23 +44,28 @@ export default function RootLayout() {
     };
 
     loadApp();
-  }, []);
+  }, [redirected, router]);
 
   useEffect(() => {
+    setIsLoading(true);
     const loadUser = async () => {
-      if (session && !user.id) {
-        const _user = await getUser(session.user.id);
-        if (_user && _user.id) {
-          const _profile = await getProfile(_user.id);
-          init(_profile);
-        }
-      }
-
-      setIsLoading(false);
+      if (session && !user?.id) await getUser(session.user.id);
     };
 
     loadUser();
-  }, [getProfile, getUser, init, session, user.id]);
+  }, [getUser, session, user?.id]);
+
+  useEffect(() => {
+    const loadProfile = async () => {
+      if (user?.id && !profile?.id) {
+        const _profile = await getProfile(user.id);
+        init(_profile);
+        setIsLoading(false);
+      }
+    };
+
+    loadProfile();
+  }, [getProfile, init, profile?.id, user]);
 
   useEffect(() => {
     if (!isLoading && !isInitLoading && !redirected) {
