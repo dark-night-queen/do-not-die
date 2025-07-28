@@ -13,6 +13,7 @@ const getNutrientAnalysis = async (userId: string, createdAt: Moment) => {
   const { data, error } = await supabase
     .from("NutrientAnalysisPerDay")
     .select()
+    .eq("userId", userId)
     .gte("createdAt", startOfDay)
     .lte("createdAt", endOfDay);
 
