@@ -34,8 +34,6 @@ const createNutrientAnalysis = async (analysis: NutrientAnalysis) => {
 };
 
 const updateNutrientAnalysis = async (analysis: Partial<NutrientAnalysis>) => {
-  console.log("updateNutrientAnalysis", analysis.createdAt);
-
   const { data, error } = await supabase
     .from("NutrientAnalysisPerDay")
     .update(analysis)
