@@ -7,16 +7,26 @@ import { Box, Button, ButtonText, HStack } from "@/components/ui";
 
 // handler functions
 import { useCalendar } from "@/hooks/useCalendar";
-import { useUserStore } from "@/store/useOnboardingStore";
+import { useProfileStore, useUserStore } from "@/store/useOnboardingStore";
 import { useNutrientAnalysisStore } from "@/store/useNutrientAnalysisStore";
 import { useFoodAnalysisStore } from "@/store/useFoodAnalysisStore";
 
 // custom components
 const Day = ({ date, isActive }: { date: Moment; isActive: boolean }) => {
+  const { profile } = useProfileStore();
+  const { weeklyNutrientAnalysis } = useNutrientAnalysisStore();
+
   const isToday = date.isSame(moment(), "day");
   const isFuture = date.isAfter(moment(), "day");
-  const hasData = date.isSame(moment().subtract(1, "days"), "days");
-  const hasExceededData = date.isSame(moment().subtract(3, "days"), "days");
+
+  // weeklyNutrientAnalysis is assumed to be a map/object with date keys
+  const dateKey = date.toISOString().split("T")[0];
+  const hasData = !!weeklyNutrientAnalysis?.[dateKey];
+
+  const hasExceededData =
+    hasData &&
+    weeklyNutrientAnalysis[dateKey].calories >
+      (profile?.dailyCalorieTarget || 720);
 
   const containerStyle = isFuture
     ? "dark:bg-gray-800"
@@ -81,18 +91,35 @@ const WeekDay = ({
 // custom components
 export const WeeklyCalendarDays = () => {
   const { user } = useUserStore();
-  const { activeDate, currentWeek, setActiveDate } = useCalendar();
-  const { getNutrientAnalysis } = useNutrientAnalysisStore();
+  const { activeDate, currentDate, currentWeek, setActiveDate } = useCalendar();
+  const { getNutrientAnalysis, getWeeklyNutrientAnalysis } =
+    useNutrientAnalysisStore();
   const { getFoodAnalysis } = useFoodAnalysisStore();
 
   React.useEffect(() => {
     const fetch = async () => {
       await getNutrientAnalysis(user.id, activeDate);
       await getFoodAnalysis(user.id, activeDate);
+      await getWeeklyNutrientAnalysis(user.id, currentDate);
     };
 
     fetch();
-  }, [activeDate, getFoodAnalysis, getNutrientAnalysis, user.id]);
+  }, [
+    activeDate,
+    currentDate,
+    getFoodAnalysis,
+    getNutrientAnalysis,
+    getWeeklyNutrientAnalysis,
+    user.id,
+  ]);
+
+  React.useEffect(() => {
+    const fetch = async () => {
+      await getWeeklyNutrientAnalysis(user.id, currentDate);
+    };
+
+    fetch();
+  }, [currentDate, getWeeklyNutrientAnalysis, user.id]);
 
   return (
     <HStack className="items-center justify-between">

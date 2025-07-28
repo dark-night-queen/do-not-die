@@ -10,6 +10,7 @@ import { Profile } from "@/constants/user";
 import {
   createNutrientAnalysis,
   getNutrientAnalysis,
+  getWeeklyNutrientAnalysis,
   updateNutrientAnalysis,
 } from "@/src/apis/nutrient-analysis";
 import { calculateHealthScore } from "@/utils/analysis/health-score";
@@ -22,6 +23,11 @@ interface NutrientAnalysisState {
   macroTargets: typeof dMacroTargets;
   nutrientAnalysis: NutrientAnalysis;
   targetCalories: number;
+  weeklyNutrientAnalysis: {
+    [createdAt: string]: {
+      calories: number;
+    };
+  };
 }
 
 interface NutrientAnalysisActions {
@@ -30,6 +36,10 @@ interface NutrientAnalysisActions {
     userId: string,
     createdAt: Moment,
   ) => Promise<NutrientAnalysis>;
+  getWeeklyNutrientAnalysis: (
+    userId: string,
+    currentDate: Moment,
+  ) => Promise<any>;
   addFoodItem: (
     userId: string,
     analysis: FoodAnalysis,
@@ -68,6 +78,7 @@ export const useNutrientAnalysisStore = create<
   },
   nutrientAnalysis: initNutrientAnalysis,
   targetCalories: dCalorieTarget,
+  weeklyNutrientAnalysis: {},
 
   init: (profile) => {
     const macroTargets = {
@@ -130,6 +141,24 @@ export const useNutrientAnalysisStore = create<
     const { data } = await getNutrientAnalysis(userId, createdAt);
     if (data) set({ nutrientAnalysis: data });
     else set({ nutrientAnalysis: initNutrientAnalysis });
+    return data;
+  },
+  getWeeklyNutrientAnalysis: async (userId, currentDate) => {
+    const { data } = await getWeeklyNutrientAnalysis(userId, currentDate);
+    if (!data) return {};
+
+    const weeklyNutrientAnalysis = data.reduce(
+      (
+        acc: Record<string, { calories: number }>,
+        item: { calories: number; createdAt: string },
+      ) => {
+        const date = item.createdAt.split("T")[0];
+        acc[date] = { calories: item.calories };
+        return acc;
+      },
+      {},
+    );
+    set({ weeklyNutrientAnalysis });
     return data;
   },
   createNutrientAnalysis: async (analysis) => {

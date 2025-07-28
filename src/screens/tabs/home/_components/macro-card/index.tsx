@@ -17,7 +17,7 @@ export const MacroCard = () => {
   const { calories, protein, carbs, fat } = nutrientAnalysis;
 
   return (
-    <Card className="flex-row items-center gap-3 rounded-xl p-4">
+    <Card className="flex-row items-center gap-4 rounded-xl p-4">
       <MacroCircle2
         name="Calorie"
         value={calories}

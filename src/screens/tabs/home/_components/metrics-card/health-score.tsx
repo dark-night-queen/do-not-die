@@ -22,6 +22,7 @@ interface IHealthScoreProps {
   info: InfoText;
 }
 
+// component logic
 export const HealthScore = ({
   showIcon = true,
   showHealthScore = false,
@@ -31,13 +32,11 @@ export const HealthScore = ({
   const healthScoreInfo = getNutritionScoreDescription(healthScore);
 
   return (
-    <Card className="flex-1 gap-4">
+    <Card className="gap-4 flex-1">
       <VStack>
-        <HStack className="items-center gap-1">
+        <HStack className="items-center gap-2">
           {showIcon ? <Icon as={Activity} className="text-indigo-400" /> : null}
-          <Text size="sm" className="flex-1 text-gray-400">
-            Health Score
-          </Text>
+          <Text className="flex-1 text-sm text-gray-400">Health Score</Text>
           <InfoPopover size="sm" {...info} />
         </HStack>
 

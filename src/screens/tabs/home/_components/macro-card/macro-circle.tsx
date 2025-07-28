@@ -2,7 +2,7 @@
 import { AlertCircle } from "lucide-react-native";
 
 // core components
-import { CircularProgress, HStack, Text, VStack } from "@/components/ui";
+import { CircularProgress, HStack, Icon, Text, VStack } from "@/components/ui";
 
 type IMacroCircleProps = {
   name: string;
@@ -16,16 +16,16 @@ export const MacroCircle = (props: IMacroCircleProps) => {
   const { name, value = 0, target = 0, ...otherProps } = props;
 
   const fill = (value / target) * 100;
-  const valueLeft = target - value;
+  const valueLeft = Math.max(0, target - value);
 
   return (
     <VStack className="items-center justify-center gap-2">
       <CircularProgress size={60} width={8} fill={fill} {...otherProps}>
-        {() => <Text className="text-xs">{value}g</Text>}
+        {() => <Text className="text-xs">{value.toFixed(0)}g</Text>}
       </CircularProgress>
 
       <Text className="text-xs text-typography-200">{name}</Text>
-      <Text className="text-xs">{valueLeft}g left</Text>
+      <Text className="text-xs">{valueLeft.toFixed(0)}g left</Text>
     </VStack>
   );
 };
@@ -60,9 +60,13 @@ export const MacroCircle2 = (props: IMacroCircleProps) => {
         )}
       </CircularProgress>
 
-      <HStack className="justify-center">
-        {isOverLimit ? <AlertCircle className="w-3 h-3 text-red-400" /> : null}
-        <Text className="text-sm text-center">
+      <HStack className="justify-center items-center gap-[2]">
+        {isOverLimit ? (
+          <Icon size="sm" as={AlertCircle} className="text-red-400" />
+        ) : null}
+        <Text
+          className={`text-sm text-center ${isOverLimit && "text-red-400"}`}
+        >
           {isOverLimit ? "Over Daily Goal" : `${name} left`}
         </Text>
       </HStack>

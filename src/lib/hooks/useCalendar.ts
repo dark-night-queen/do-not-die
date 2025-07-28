@@ -14,8 +14,8 @@ interface CalendarAction {
   getCurrentMonthName: () => string;
 }
 
-const getStartOfWeek = (date: Moment) => date.clone().startOf("isoWeek");
-const getEndOfWeek = (date: Moment) => date.clone().endOf("isoWeek");
+export const getStartOfWeek = (date: Moment) => date.clone().startOf("isoWeek");
+export const getEndOfWeek = (date: Moment) => date.clone().endOf("isoWeek");
 
 function generateWeek(newDate: Moment) {
   return Array.from({ length: 7 }, (_, i) =>

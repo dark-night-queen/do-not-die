@@ -1,6 +1,7 @@
 import { Moment } from "moment";
 import { NutrientAnalysis } from "@/constants/analysis";
 import { supabase } from "@/utils/supabase";
+import { getEndOfWeek, getStartOfWeek } from "@/hooks/useCalendar";
 
 /* 
   Nutrient Analysis Per Day APIs 
@@ -33,6 +34,8 @@ const createNutrientAnalysis = async (analysis: NutrientAnalysis) => {
 };
 
 const updateNutrientAnalysis = async (analysis: Partial<NutrientAnalysis>) => {
+  console.log("updateNutrientAnalysis", analysis.createdAt);
+
   const { data, error } = await supabase
     .from("NutrientAnalysisPerDay")
     .update(analysis)
@@ -45,4 +48,28 @@ const updateNutrientAnalysis = async (analysis: Partial<NutrientAnalysis>) => {
   return { data, error };
 };
 
-export { getNutrientAnalysis, createNutrientAnalysis, updateNutrientAnalysis };
+const getWeeklyNutrientAnalysis = async (
+  userId: string,
+  currentDate: Moment,
+) => {
+  /* !* Haven't use single(), b/c in case of no data, it will throw an error */
+  const startOfWeek = getStartOfWeek(currentDate).toISOString();
+  const endOfWeek = getEndOfWeek(currentDate).toISOString();
+
+  const { data, error } = await supabase
+    .from("NutrientAnalysisPerDay")
+    .select("calories,createdAt")
+    .eq("userId", userId)
+    .gte("createdAt", startOfWeek)
+    .lte("createdAt", endOfWeek);
+
+  if (error) console.error("Error in fetching nutrient analysis:", error);
+  return { data, error };
+};
+
+export {
+  getNutrientAnalysis,
+  createNutrientAnalysis,
+  updateNutrientAnalysis,
+  getWeeklyNutrientAnalysis,
+};

@@ -5,18 +5,22 @@ import React from "react";
 // core components
 import { Card, HStack, Icon, Text, VStack } from "@/components/ui";
 
+// constants
+import { dMacroTargets } from "@/constants/analysis";
+
 // handler functions
-import { useNutrientAnalysisStore } from "@/store/useNutrientAnalysisStore";
 import { useProfileStore } from "@/store/useOnboardingStore";
+import { useNutrientAnalysisStore } from "@/store/useNutrientAnalysisStore";
 
 // component logic
 export const MacroDistribution = () => {
   const { profile } = useProfileStore();
   const { nutrientAnalysis } = useNutrientAnalysisStore();
 
-  const proteinTarget = profile.targetMacroNutrient?.protein || 0;
-  const carbsTarget = profile.targetMacroNutrient?.carbs || 0;
-  const fatTarget = profile.targetMacroNutrient?.fat || 0;
+  const proteinTarget =
+    profile.targetMacroNutrient?.protein || dMacroTargets.protein;
+  const carbsTarget = profile.targetMacroNutrient?.carbs || dMacroTargets.carbs;
+  const fatTarget = profile.targetMacroNutrient?.fat || dMacroTargets.fat;
 
   const proteinConsumed = nutrientAnalysis.protein;
   const carbsConsumed = nutrientAnalysis.carbs;
