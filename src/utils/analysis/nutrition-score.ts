@@ -19,7 +19,7 @@ export function getNutritionScoreDescription(score: number): {
   } else if (score >= 5.5) {
     return {
       label: "Good",
-      color: "text-lime-400",
+      color: "text-green-400",
       description: "Nutritious food with balanced nutrients",
     };
   } else if (score >= 4) {

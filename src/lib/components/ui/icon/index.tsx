@@ -45,7 +45,7 @@ cssInterop(UIIcon, {
   },
 });
 
-type IIConProps = IPrimitiveIcon &
+export type IIConProps = IPrimitiveIcon &
   VariantProps<typeof iconStyle> &
   React.ComponentPropsWithoutRef<typeof UIIcon>;
 

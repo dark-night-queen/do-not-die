@@ -1,6 +1,7 @@
 // core dependencies
 import React from "react";
 import { MotiView } from "moti";
+import { Pressable } from "react-native";
 import { PenLine, RefreshCcw } from "lucide-react-native";
 
 // core components
@@ -9,6 +10,10 @@ import { Button, ButtonIcon, HStack, Text, VStack } from "@/components/ui";
 // custom components
 import { NoItemAvailable } from "./item-not-available";
 import { LoggedItem } from "./logged-item";
+import { FoodDetail } from "./food-detail";
+
+// constants
+import { FoodAnalysis } from "@/constants/analysis";
 
 // handler functions
 import { useFoodAnalysisStore } from "@/store/useFoodAnalysisStore";
@@ -26,6 +31,17 @@ export const RecentlyLoggedItem = ({
 }: IRecentlyLoggedItemProps) => {
   const { foodAnalysis } = useFoodAnalysisStore();
   const [isAnimating, setIsAnimating] = React.useState(false);
+
+  const [showDrawer, setShowDrawer] = React.useState(false);
+  const [selectedItem, setSelectedItem] = React.useState<FoodAnalysis | null>(
+    null,
+  );
+
+  const openDrawer = (selectedItem: FoodAnalysis) => () => {
+    setShowDrawer(true);
+    setSelectedItem(selectedItem);
+  };
+  const closeDrawer = () => setShowDrawer(false);
 
   return (
     <VStack className="gap-4">
@@ -66,18 +82,25 @@ export const RecentlyLoggedItem = ({
         <NoItemAvailable />
       ) : (
         foodAnalysis.map((item, index) => (
-          <LoggedItem
-            key={index}
-            name={item.name}
-            calories={item.calories}
-            score={item.nutritionScore}
-            protein={item.protein}
-            carbs={item.carbs}
-            fat={item.fat}
-            timestamp={item.createdAt?.split("T")[0] ?? ""}
-          />
+          <Pressable key={index} onPress={openDrawer(item)}>
+            <LoggedItem
+              name={item.name}
+              calories={item.calories}
+              score={item.nutritionScore}
+              protein={item.protein}
+              carbs={item.carbs}
+              fat={item.fat}
+              timestamp={item.createdAt?.split("T")[0] ?? ""}
+            />
+          </Pressable>
         ))
       )}
+
+      <FoodDetail
+        showDrawer={showDrawer}
+        closeDrawer={closeDrawer}
+        itemInfo={selectedItem}
+      />
     </VStack>
   );
 };
