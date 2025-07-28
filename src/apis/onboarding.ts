@@ -51,11 +51,10 @@ const getProfile = async (userId: string) => {
   const { data, error } = await supabase
     .from("Profile")
     .select()
-    .eq("userId", userId)
-    .single();
+    .eq("userId", userId);
 
   if (error) console.error("Error fetching profile:", error);
-  return { data, error };
+  return { data: data?.[0] || null, error };
 };
 
 const createProfile = async (profile: Profile) => {

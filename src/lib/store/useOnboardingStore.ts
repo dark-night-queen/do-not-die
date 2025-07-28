@@ -101,6 +101,7 @@ export const useProfileStore = create<ProfileState & ProfileActions>(
 
       const { data: newProfile } = await getProfile(userId);
       if (newProfile) setProfile(newProfile);
+      else setProfile(initProfileState);
       return newProfile;
     },
     setProfile: (profile) => {
