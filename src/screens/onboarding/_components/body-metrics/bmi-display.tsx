@@ -1,5 +1,6 @@
 // core components
 import React from "react";
+import { Pressable } from "react-native";
 import { Info } from "lucide-react-native";
 import { MotiView } from "moti";
 
@@ -11,8 +12,7 @@ import {
   ProgressGradientTrack,
   Text,
   VStack,
-  Button,
-  ButtonIcon,
+  Icon,
 } from "@/components/ui";
 
 type BMIDisplayProps = {
@@ -62,9 +62,9 @@ export const BMIDisplay = ({ bmi }: BMIDisplayProps) => {
     <Card size="lg" className="gap-6">
       <HStack className="justify-between items-center">
         <Text className="text-lg font-semibold">Body Mass Index (BMI)</Text>
-        <Button variant="link" onPress={toggleInfo}>
-          <ButtonIcon as={Info} />
-        </Button>
+        <Pressable onPress={toggleInfo}>
+          <Icon as={Info} />
+        </Pressable>
       </HStack>
 
       <MotiView
