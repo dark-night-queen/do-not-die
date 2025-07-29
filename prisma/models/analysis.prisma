@@ -19,6 +19,8 @@ model NutrientAnalysisPerDay {
     // metadata
     healthScore    Float
     nutritionScore Float
-    createdAt      DateTime @unique @default(now())
+    createdAt      DateTime @default(now())
     updatedAt      DateTime @default(now()) @updatedAt
+
+    @@unique([userId, createdAt])
 }
