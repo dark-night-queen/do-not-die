@@ -1,16 +1,21 @@
+// core dependencies
 import React from "react";
 import colors from "tailwindcss/colors";
+
+// core components
 import { FormElement, InputElement } from "@/components/custom";
 import { Button, ButtonText, Spinner, Text } from "@/components/ui";
-import { useAuthStore } from "@/store/useAuthStore";
+
+// handler functions
 import { validatePassword as validatePasswordUtil } from "@/utils/validate-auth";
 
 type IResetPasswordProps = {
   handleSubmit: (email: string) => void;
 };
 
+// component logic
 export const ResetPassword = ({ handleSubmit }: IResetPasswordProps) => {
-  const { showLoader } = useAuthStore();
+  const [isLoading, setIsLoading] = React.useState(false);
   const [password, setPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
   const [error, setError] = React.useState({
@@ -43,9 +48,11 @@ export const ResetPassword = ({ handleSubmit }: IResetPasswordProps) => {
     return !error_message;
   };
 
-  const onResetPassword = () => {
+  const onResetPassword = async () => {
     if (validatePassword()) {
-      handleSubmit(password);
+      setIsLoading(true);
+      await handleSubmit(password);
+      setIsLoading(false);
     }
   };
 
@@ -77,9 +84,7 @@ export const ResetPassword = ({ handleSubmit }: IResetPasswordProps) => {
 
       <Button onPress={onResetPassword}>
         <ButtonText>Confirm Password</ButtonText>
-        {showLoader["forget-password"] ? (
-          <Spinner size="small" color={colors.white} />
-        ) : null}
+        {isLoading ? <Spinner size="small" color={colors.white} /> : null}
       </Button>
     </>
   );

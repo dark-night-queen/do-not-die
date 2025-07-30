@@ -1,34 +1,38 @@
+// core dependencies
 import React from "react";
 import { useRouter } from "expo-router";
-import {
-  Profile,
-  useProfileStore,
-  useBodyMetricsStore,
-} from "@/store/useOnboardingStore";
-import {
-  Gender,
-  UnitSystem,
-  UnitSystemOptions,
-  DietaryPreference,
-} from "@/constants/user.bodyMetric.type";
-import { useUserStore } from "@/store/useUserStore";
-import { BodyMetrics } from "./_components/body-metrics";
-import Layout from "./_layout";
 
-// TODO: Call API only if update has been made
-export default () => {
+// custom components
+import Layout from "./_layout";
+import { BodyMetrics } from "./_components/body-metrics";
+
+// handler functions
+import type { Profile } from "@/constants/user";
+import { UNIT_SYSTEM } from "@/constants/user";
+import { useProfileStore, useUserStore } from "@/store/useOnboardingStore";
+import {
+  feetToCm,
+  getDisplayHeight,
+  getDisplayWeight,
+  lbsToKg,
+} from "@/utils/units";
+
+// component logic
+const OnboardingScreen = () => {
   const router = useRouter();
-  const { getDisplayHeight, getDisplayWeight } = useBodyMetricsStore();
   const { user } = useUserStore();
   const { profile, createProfile, updateProfile } = useProfileStore();
 
+  const [isUpdated, setIsUpdated] = React.useState(false);
   const [formData, setFormData] = React.useState({
-    age: profile?.age?.toString() || "",
-    gender: profile?.gender || ("" as Gender),
-    unitSystem: profile?.unitSystem || UnitSystemOptions.Metric,
-    height: profile?.height?.toString() || "",
-    weight: profile?.weight?.toString() || "",
-    dietaryPreference: profile?.dietaryPreference || ("" as DietaryPreference),
+    age: profile.age?.toString() || "",
+    gender: profile.gender || null,
+    unitSystem: profile.unitSystem || UNIT_SYSTEM.Metric,
+    height: profile.displayHeight?.toString() || "",
+    weight: profile.displayWeight?.toString() || "",
+    heightCm: profile.heightCm,
+    weightKg: profile.weightKg,
+    dietaryPreference: profile.dietaryPreference || null,
   });
 
   const [errors, setErrors] = React.useState({
@@ -40,6 +44,7 @@ export default () => {
   });
 
   const handleChange = (name: string) => (value: string) => {
+    setIsUpdated(true);
     setFormData((prev) => ({ ...prev, [name]: value }));
     setErrors((prev) => ({ ...prev, [name]: "" }));
 
@@ -47,9 +52,27 @@ export default () => {
       // Reset height and weight when unit system changes
       setFormData((prev) => ({
         ...prev,
-        height: getDisplayHeight(formData.height, formData.unitSystem),
-        weight: getDisplayWeight(formData.weight, formData.unitSystem),
+        height: getDisplayHeight(parseFloat(formData.height), value).toString(),
+        weight: getDisplayWeight(parseFloat(formData.weight), value).toString(),
       }));
+    } else if (name === "height") {
+      // Convert height to cm if unit system is imperial
+      const height = parseFloat(value);
+
+      if (formData.unitSystem === UNIT_SYSTEM.Imperial) {
+        setFormData((prev) => ({ ...prev, heightCm: feetToCm(height) }));
+      } else {
+        setFormData((prev) => ({ ...prev, heightCm: height }));
+      }
+    } else if (name === "weight") {
+      const weight = parseFloat(value);
+
+      // Convert weight to kg if unit system is imperial
+      if (formData.unitSystem === UNIT_SYSTEM.Imperial) {
+        setFormData((prev) => ({ ...prev, weightKg: lbsToKg(weight) }));
+      } else {
+        setFormData((prev) => ({ ...prev, weightKg: weight }));
+      }
     }
   };
 
@@ -66,42 +89,37 @@ export default () => {
     return Object.values(newErrors).every((err) => !err);
   };
 
-  const handleCreateProfile = async (newProfile: Profile) => {
-    const { error } = await createProfile(newProfile);
-    if (error) return console.error("Error creating user's profile:", error);
-  };
-
-  const handleUpdateProfile = async (updatedProfile: Profile) => {
-    const { error } = await updateProfile(updatedProfile);
-    if (error) return console.error("Error updating profile:", error);
-  };
-
   const handleSubmit = async () => {
+    // Validate form before submission
     if (!validateForm()) return;
 
-    if (!user) {
+    if (!user || !user.id) {
       console.error("User is not logged in");
+      router.push("/auth");
       return;
     }
 
-    const updatedProfile: Profile = {
-      userId: user.id,
-      age: parseInt(formData.age),
-      gender: formData.gender as Gender,
-      unitSystem: formData.unitSystem as UnitSystem,
-      height: parseFloat(formData.height),
-      weight: parseFloat(formData.weight),
-      dietaryPreference: formData.dietaryPreference as DietaryPreference,
-    };
+    if (isUpdated) {
+      const updatedProfile: Profile = {
+        userId: user.id,
+        age: parseInt(formData.age),
+        gender: formData.gender,
+        unitSystem: formData.unitSystem,
+        heightCm: formData.heightCm,
+        displayHeight: parseFloat(formData.height),
+        weightKg: formData.weightKg,
+        displayWeight: parseFloat(formData.weight),
+        dietaryPreference: formData.dietaryPreference,
+      };
 
-    if (!profile) {
-      await handleCreateProfile(updatedProfile);
-    } else {
-      updatedProfile.id = profile.id;
-      await handleUpdateProfile(updatedProfile);
+      if (!profile.id) {
+        await createProfile(updatedProfile);
+      } else {
+        await updateProfile({ ...profile, ...updatedProfile });
+      }
     }
 
-    router.push("/auth/onboarding/goal");
+    router.push("/onboarding/goal");
   };
 
   return (
@@ -114,3 +132,5 @@ export default () => {
     </Layout>
   );
 };
+
+export default OnboardingScreen;

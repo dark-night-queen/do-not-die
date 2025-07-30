@@ -1,0 +1,73 @@
+// core dependencies
+import React, { useState } from "react";
+import colors from "tailwindcss/colors";
+
+// core components
+import { Button, ButtonText, Spinner, Text } from "@/components/ui";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogFooter,
+  AlertDialogBody,
+  AlertDialogBackdrop,
+} from "@/components/ui/alert-dialog";
+import { Heading } from "@/components/ui/heading";
+
+interface IResetOnboardingAlert {
+  showAlert: boolean;
+  onClose: () => void;
+  onSubmit: () => Promise<void>;
+}
+
+// component logic
+export const ResetOnboardingAlert = ({
+  showAlert,
+  onClose,
+  onSubmit,
+}: IResetOnboardingAlert) => {
+  const [showLoader, setShowLoader] = useState(false);
+
+  const onResetOnboarding = async () => {
+    setShowLoader(true);
+    await onSubmit();
+    setShowLoader(false);
+    onClose();
+  };
+
+  return (
+    <AlertDialog isOpen={showAlert} onClose={onClose} size="md">
+      <AlertDialogBackdrop />
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <Heading className="text-typography-950 font-semibold" size="md">
+            Are you sure you want to reset the onboarding?
+          </Heading>
+        </AlertDialogHeader>
+
+        <AlertDialogBody className="mt-3 mb-4">
+          <Text size="sm">
+            Resetting the onboarding will affect your existing progress
+            permanently and cannot be undone. Please confirm if you want to
+            proceed.
+          </Text>
+        </AlertDialogBody>
+
+        <AlertDialogFooter>
+          <Button
+            variant="outline"
+            action="secondary"
+            onPress={onClose}
+            size="sm"
+          >
+            <ButtonText>Cancel</ButtonText>
+          </Button>
+          <Button size="sm" onPress={onResetOnboarding}>
+            <ButtonText>Confirm</ButtonText>
+            {showLoader ? <Spinner size="small" color={colors.white} /> : null}
+          </Button>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
+};

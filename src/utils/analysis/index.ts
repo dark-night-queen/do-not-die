@@ -1,42 +1,19 @@
+import {
+  Ingredient,
+  Micronutrient,
+  FoodAnalysis as BaseFoodAnalysis,
+  dMicroTargets,
+} from "@/constants/analysis";
 import { prompt } from "./prompt";
 
-interface Micronutrients {
-  fiber: number;
-  vitaminC: number;
-  calcium: number;
-  iron: number;
-  potassium: number;
-}
-
-interface Ingredient {
-  name: string;
-  amount: string;
-  calories: number;
-  protein: number;
-  carbs: number;
-  fat: number;
-  micronutrients: Micronutrients;
-}
-
-interface NutrientContent {
-  calories: number;
-  protein: number;
-  carbs: number;
-  fat: number;
-  micronutrients: Micronutrients;
-}
-
-interface FoodAnalysis extends NutrientContent {
-  name: string;
-  ingredients: Ingredient[];
-  healthScore: number;
-  nutritionScore: number;
-}
+type FoodAnalysis = BaseFoodAnalysis & {
+  micronutrients: Micronutrient;
+};
 
 const getPrompt = (foodName: string, servingSize: string) =>
   prompt(foodName, servingSize);
 
-function calculateFoodItemHealthScore(foodItem: NutrientContent): number {
+function calculateFoodItemHealthScore(foodItem: FoodAnalysis): number {
   // Calculate macro balance (40% of score)
   const totalMacros = foodItem.protein + foodItem.carbs + foodItem.fat;
   const proteinRatio = totalMacros > 0 ? foodItem.protein / totalMacros : 0;
@@ -57,19 +34,15 @@ function calculateFoodItemHealthScore(foodItem: NutrientContent): number {
     4; // Max 4 points
 
   // Calculate micronutrient score (40% of score)
-  const microTargets = {
-    fiber: 30, // g
-    vitaminC: 90, // mg
-    calcium: 1000, // mg
-    iron: 18, // mg
-    potassium: 3500, // mg
-  };
-
-  const microScores = Object.entries(microTargets).map(([nutrient, target]) => {
-    const value =
-      foodItem.micronutrients[nutrient as keyof typeof foodItem.micronutrients];
-    return Math.min(1, value / target);
-  });
+  const microScores = Object.entries(dMicroTargets).map(
+    ([nutrient, target]) => {
+      const value =
+        foodItem.micronutrients[
+          nutrient as keyof typeof foodItem.micronutrients
+        ];
+      return Math.min(1, value / target);
+    },
+  );
 
   const microScore =
     (microScores.reduce((sum, score) => sum + score, 0) / 5) * 4; // Max 4 points
@@ -90,20 +63,12 @@ function calculateFoodItemHealthScore(foodItem: NutrientContent): number {
   return Math.min(10, Math.max(0, Math.round(finalScore * 10) / 10));
 }
 
-function calculateMicronutrientScore(micronutrients: Micronutrients): number {
-  const dailyValues = {
-    fiber: 30, // g
-    vitaminC: 90, // mg
-    calcium: 1000, // mg
-    iron: 18, // mg
-    potassium: 3500, // mg
-  };
-
+function calculateMicronutrientScore(micronutrients: Micronutrient): number {
   // Calculate percentage of daily value for each micronutrient
   const percentages = Object.entries(micronutrients).map(
-    ([nutrient, amount]) => {
-      const dv = dailyValues[nutrient as keyof typeof dailyValues];
-      return Math.min(100, (amount / dv) * 100);
+    ([nutrient, quantity]) => {
+      const dv = dMicroTargets[nutrient as keyof typeof dMicroTargets];
+      return Math.min(100, (quantity / dv) * 100);
     },
   );
 
@@ -113,8 +78,18 @@ function calculateMicronutrientScore(micronutrients: Micronutrients): number {
   return Math.min(3, avgPercentage / 33.33); // 33.33% DV = 1 point
 }
 
-function calculateNutritionScore(nutrients: NutrientContent): number {
+function calculateNutritionScore(nutrients: FoodAnalysis): number {
   // console.log("Starting nutrition score calculation with:", nutrients);
+
+  const isZeroNutrition =
+    nutrients.calories === 0 &&
+    nutrients.protein === 0 &&
+    nutrients.carbs === 0 &&
+    nutrients.fat === 0 &&
+    Object.values(nutrients.micronutrients).every((v) => v === 0);
+
+  if (isZeroNutrition) return 0;
+
   // Base score starts at 5 (neutral)
   let score = 5;
   // console.log("Initial score:", score);
@@ -124,10 +99,14 @@ function calculateNutritionScore(nutrients: NutrientContent): number {
 
   // 1. Protein Quality Score (0-2 points)
   // Good protein content relative to calories
-  const proteinScore = Math.min(
-    2,
-    ((nutrients.protein * 4) / caloriesPerHundred) * 5,
-  );
+  let proteinScore = 0;
+
+  if (caloriesPerHundred > 0) {
+    proteinScore = Math.min(
+      2,
+      ((nutrients.protein * 4) / caloriesPerHundred) * 5,
+    );
+  }
   score += proteinScore;
   // console.log("After protein score:", score, "(added", proteinScore, ")");
 
@@ -168,7 +147,7 @@ function calculateNutritionScore(nutrients: NutrientContent): number {
   // Ensure score is between 0 and 10 and has one decimal place
   const finalScore = Math.max(0, Math.min(10, score));
   // console.log("Final nutrition score:", finalScore);
-  return Number(finalScore.toFixed(1));
+  return parseFloat(finalScore.toFixed(1));
 }
 
 function validateNumber(n: unknown): number {
@@ -176,8 +155,8 @@ function validateNumber(n: unknown): number {
 }
 
 function cleanMicronutrients(
-  micro: Partial<Micronutrients> = {},
-): Micronutrients {
+  micro: Partial<Micronutrient> = {},
+): Micronutrient {
   return {
     fiber: validateNumber(micro.fiber),
     vitaminC: validateNumber(micro.vitaminC),
@@ -187,10 +166,10 @@ function cleanMicronutrients(
   };
 }
 
-function cleanIngredient(ingredient: any): Ingredient {
+function cleanIngredient(ingredient: Partial<Ingredient>): Ingredient {
   return {
     name: ingredient?.name || "Unknown ingredient",
-    amount: ingredient?.amount || "Unknown amount",
+    quantity: ingredient?.quantity || "Unknown quantity",
     calories: validateNumber(ingredient?.calories),
     protein: validateNumber(ingredient?.protein),
     carbs: validateNumber(ingredient?.carbs),
@@ -213,7 +192,7 @@ function getCleanedText(response: any): string {
   return text.replace(/```json|```/g, "").trim();
 }
 
-function analyzeResponse(response: any): FoodAnalysis {
+function analyzeResponse(response: any): BaseFoodAnalysis {
   try {
     const cleanedText = getCleanedText(response);
     let analysis: FoodAnalysis | { error: string };
@@ -221,6 +200,7 @@ function analyzeResponse(response: any): FoodAnalysis {
     try {
       analysis = JSON.parse(cleanedText);
     } catch (parseError) {
+      console.error("Error in parsing json from genai:", parseError);
       throw new Error("Unable to process analysis results: Invalid JSON");
     }
 
@@ -256,17 +236,9 @@ function analyzeResponse(response: any): FoodAnalysis {
     analysis.healthScore = calculateFoodItemHealthScore({ ...analysis });
     analysis.nutritionScore = calculateNutritionScore({ ...analysis });
 
-    // console.log("Final analysis:", {
-    //   name: analysis.name,
-    //   calories: analysis.calories,
-    //   protein: analysis.protein,
-    //   carbs: analysis.carbs,
-    //   fat: analysis.fat,
-    //   healthScore: analysis.healthScore,
-    //   nutritionScore: analysis.nutritionScore,
-    // });
+    const { micronutrients, ...food } = analysis;
 
-    return analysis;
+    return { ...food, ...micronutrients };
   } catch (error) {
     console.error("Error in analyzeResponse:", error);
     if (error instanceof Error) {
@@ -276,4 +248,4 @@ function analyzeResponse(response: any): FoodAnalysis {
   }
 }
 
-export { getPrompt, analyzeResponse };
+export { analyzeResponse, getPrompt };

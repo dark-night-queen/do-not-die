@@ -1,11 +1,18 @@
+// core dependencies
 import React from "react";
-import { SafeAreaView, ScrollView } from "react-native";
+import { Href } from "expo-router";
 import colors from "tailwindcss/colors";
-import { Box, VStack, Button, ButtonText, Spinner } from "@/components/ui";
-import { GoBack } from "./_components/go-back";
+
+// core components
+import { Button, ButtonText, Spinner, VStack } from "@/components/ui";
+
+// custom components
+import DefaultLayout from "@/screens/_layout";
+import { GoBack } from "@/screens/_components";
+import { ScrollView } from "react-native";
 
 type ILayoutProps = {
-  goBack?: () => void;
+  goBackRoute?: Href;
   onSubmit?: () => void;
   button: {
     text: string;
@@ -13,7 +20,7 @@ type ILayoutProps = {
   };
 } & React.PropsWithChildren;
 
-const Layout = ({ children, goBack, onSubmit, button }: ILayoutProps) => {
+const Layout = ({ children, goBackRoute, onSubmit, button }: ILayoutProps) => {
   const [showLoader, setShowLoader] = React.useState(false);
 
   const handleSubmit = async () => {
@@ -23,33 +30,28 @@ const Layout = ({ children, goBack, onSubmit, button }: ILayoutProps) => {
   };
 
   return (
-    <SafeAreaView className="flex-1">
-      <Box variant="scroll" className="flex-1">
-        <ScrollView
-          contentContainerStyle={{
-            flexGrow: 1,
-            justifyContent: "center",
-            alignItems: "center",
-            paddingVertical: 32,
-          }}
-        >
-          {goBack ? <GoBack goBack={goBack} /> : null}
-          <VStack className="w-full max-w-sm p-2 gap-6">
-            {children}
-            <Button
-              className="w-full rounded-lg"
-              onPress={handleSubmit}
-              {...button}
-            >
-              <ButtonText>{button.text}</ButtonText>
-              {showLoader ? (
-                <Spinner size="small" color={colors.white} />
-              ) : null}
-            </Button>
-          </VStack>
-        </ScrollView>
-      </Box>
-    </SafeAreaView>
+    <DefaultLayout className="p-0">
+      {goBackRoute ? (
+        <VStack className="p-6">
+          <GoBack goBackRoute={goBackRoute} />
+        </VStack>
+      ) : null}
+
+      <ScrollView>
+        <VStack className={`gap-4 p-6`}>
+          {children}
+
+          <Button
+            className="w-full rounded-lg"
+            onPress={handleSubmit}
+            {...button}
+          >
+            <ButtonText>{button.text}</ButtonText>
+            {showLoader ? <Spinner size="small" color={colors.white} /> : null}
+          </Button>
+        </VStack>
+      </ScrollView>
+    </DefaultLayout>
   );
 };
 

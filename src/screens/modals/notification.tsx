@@ -1,13 +1,17 @@
+// core dependencies
 import React from "react";
-import Layout from "./_layout";
-import { Text } from "@/components/ui";
-import { ComingSoon } from "./_components/coming-soon";
 
-export default () => {
+// custom components
+import DefaultLayout from "@/screens/_layout";
+import { ComingSoon, GoBack } from "@/screens/_components";
+
+const NotificationScreen = () => {
   return (
-    <Layout>
-      <Text className="text-2xl font-medium">Notification Coming Soon</Text>
-      <ComingSoon />
-    </Layout>
+    <DefaultLayout className="justify-center items-center">
+      <GoBack goBackRoute="/profile" />
+      <ComingSoon heading="Notification" />
+    </DefaultLayout>
   );
 };
+
+export default NotificationScreen;

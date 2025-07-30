@@ -1,34 +1,45 @@
 model User {
-  id        String   @id
-  email     String   @unique
-  firstName String?
-  lastName  String?
-  avatar    String?
-  isActive  Boolean  @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
-  profile   Profile?
+  id              String   @id
+  email           String   @unique
+  firstName       String?
+  lastName        String?
+  avatar          String?
+  isActive        Boolean  @default(true)
+  isEmailVerified Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @default(now()) @updatedAt
+
+  profile                Profile?
+  foodItem               FoodItem[]
+  nutrientAnalysisPerDay NutrientAnalysisPerDay[]
 }
 
 model Profile {
-  id                   Int                @id @default(autoincrement())
-  userId               String             @unique
-  age                  Int?
-  height               Float?
-  weight               Float?
-  gender               Gender?
-  unitSystem           UnitSystem         @default(IMPERIAL)
-  dietaryPreference    DietaryPreference?
-  isOnboardingComplete Boolean            @default(false)
-  createdAt            DateTime           @default(now())
-  updatedAt            DateTime           @default(now()) @updatedAt
-  bmr                  Float?
-  tdee                 Float?
-  dailyCalorieTarget   Float?
-  weeklyWeightChange   Float?
-  activity             Activity?
-  goal                 Goal?
-  user                 User               @relation(fields: [userId], references: [id])
+  id     Int    @id @default(autoincrement())
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @unique
+
+  age                   Int?
+  heightCm              Float?
+  displayHeight         Float?
+  weightKg              Float?
+  displayWeight         Float?
+  targetWeightKg        Float?
+  displayTargetWeight   Float?
+  bmr                   Float?
+  tdee                  Float?
+  dailyCalorieTarget    Float?
+  weeklyWeightChange    Float?
+  gender                Gender?
+  unitSystem            UnitSystem         @default(IMPERIAL)
+  dietaryPreference     DietaryPreference?
+  activityLevel         ActivityLevel?
+  goalType              GoalType?
+  goalDuration          GoalDuration?
+  targetMacroNutrient   Json?
+  isOnboardingCompleted Boolean            @default(false)
+  createdAt             DateTime           @default(now())
+  updatedAt             DateTime           @default(now()) @updatedAt
 }
 
 enum Gender {
@@ -46,4 +57,22 @@ enum DietaryPreference {
   VEGAN
   VEGETARIAN
   NON_VEGETARIAN
+}
+
+enum ActivityLevel {
+  SEDENTARY
+  LIGHTLY_ACTIVE
+  MODERATELY_ACTIVE
+  VERY_ACTIVE
+}
+
+enum GoalType {
+  WEIGHT_LOSS
+  WEIGHT_GAIN
+}
+
+enum GoalDuration {
+  SHORT_TERM
+  MEDIUM_TERM
+  LONG_TERM
 }

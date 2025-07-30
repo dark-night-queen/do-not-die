@@ -1,38 +1,27 @@
-import React, {useEffect, useState} from "react";
-import { useAuthStore } from "@/store/useAuthStore";
-import { ResetPassword } from "./_components/reset-password";
+// core dependencies
+import React from "react";
+import { useRouter } from "expo-router";
+import { toast } from "sonner-native";
+
+// custom components
 import Layout from "./_layout";
+import { ResetPassword } from "./_components/reset-password";
 
-export default () => {
-  //   const router = useRouter();
-  const { setShowLoader } = useAuthStore();
-  const [authParams, setAuthParams] = useState<{ [key: string]: string }>({});
+// handler functions
+import { useAuth } from "@/providers/auth-provider";
 
-  useEffect(() => {
-    // Get the hash fragment from the URL
-    const hash = window.location.hash.startsWith("#")
-      ? window.location.hash.substring(1)
-      : window.location.hash;
-    const params = new URLSearchParams(hash);
-    const parsed: { [key: string]: string } = {};
-    params.forEach((value, key) => {
-      parsed[key] = value;
-    });
-    setAuthParams(parsed);
-    // Optionally, you can log or use these params
-    console.log("Auth Params:", parsed);
-  }, []);
-
-  // Now you can access tokens like:
-  // authParams.access_token, authParams.refresh_token, etc.
+// component logic
+const ResetPasswordScreen = () => {
+  const router = useRouter();
+  const { resetPassword } = useAuth();
 
   const handleSubmit = async (password: string) => {
-    setShowLoader("forget-password", true);
-
-    // const session = await getSession();
-    // console.log("first", session);
-    // await supabase.auth.updateUser({ password });
-    setShowLoader("forget-password", false);
+    try {
+      await resetPassword(password);
+      router.push("/auth");
+    } catch (error: any) {
+      toast.warning(error);
+    }
   };
 
   return (
@@ -41,3 +30,5 @@ export default () => {
     </Layout>
   );
 };
+
+export default ResetPasswordScreen;

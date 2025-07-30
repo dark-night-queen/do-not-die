@@ -1,29 +1,37 @@
+// core dependencies
 import React from "react";
-import { useNavigation, useRouter } from "expo-router";
-import {
-  Goal,
-  useGoalStore,
-  useProfileStore,
-} from "@/store/useOnboardingStore";
-import { UnitSystemOptions } from "@/constants/user.bodyMetric.type";
-import { GoalType, GoalDuration } from "@/constants/user.goal.type";
-import { UserGoals } from "./_components/user-goals";
-import Layout from "./_layout";
+import { useRouter } from "expo-router";
 
-// TODO: Call API only if update has been made
-export default () => {
+// custom components
+import Layout from "./_layout";
+import { UserGoals } from "./_components/user-goals";
+
+// handler functions
+import { Profile, UNIT_SYSTEM } from "@/constants/user";
+import { useProfileStore } from "@/store/useOnboardingStore";
+import { lbsToKg } from "@/utils/units";
+
+// component logic
+const GoalScreen = () => {
   const router = useRouter();
-  const navigate = useNavigation();
-  const { profile } = useProfileStore();
-  const { goal, createGoal, updateGoal } = useGoalStore();
+  const { profile, updateProfile } = useProfileStore();
 
   const [isDisabled, setIsDisabled] = React.useState(true);
+  const [isUpdated, setIsUpdated] = React.useState(false);
   const [formData, setFormData] = React.useState({
-    type: goal?.type || ("" as GoalType),
-    duration: goal?.duration || ("" as GoalDuration),
-    targetWeight: goal?.targetWeight?.toString() || "",
-    unitSystem: profile?.unitSystem ?? UnitSystemOptions.Metric,
+    type: profile.goalType,
+    duration: profile.goalDuration,
+    targetWeight: profile.displayTargetWeight?.toString() || "",
+    targetWeightKg: profile.targetWeightKg,
   });
+
+  const meta = React.useMemo(
+    () => ({
+      weight: profile.displayWeight?.toString() || "70",
+      unitSystem: profile.unitSystem ?? UNIT_SYSTEM.Metric,
+    }),
+    [profile],
+  );
 
   const [errors, setErrors] = React.useState({
     targetWeight: "",
@@ -35,8 +43,23 @@ export default () => {
   }, [formData]);
 
   const handleChange = (name: string) => (value: string) => {
+    setIsUpdated(true);
     setFormData((prev) => ({ ...prev, [name]: value }));
     setErrors((prev) => ({ ...prev, [name]: "" }));
+
+    if (name === "targetWeight") {
+      // Convert target weight to kg if unit system is imperial
+      const targetWeight = parseFloat(value);
+
+      if (meta.unitSystem === UNIT_SYSTEM.Imperial) {
+        setFormData((prev) => ({
+          ...prev,
+          targetWeightKg: lbsToKg(targetWeight),
+        }));
+      } else {
+        setFormData((prev) => ({ ...prev, targetWeightKg: targetWeight }));
+      }
+    }
   };
 
   const validateForm = () => {
@@ -47,56 +70,44 @@ export default () => {
     return Object.values(newErrors).every((error) => !error);
   };
 
-  const goBack = () => {
-    navigate.canGoBack() ? navigate.goBack() : router.push("/auth/onboarding");
-  };
-
-  const handleCreateGoal = async (newGoal: Goal) => {
-    const { error } = await createGoal(newGoal);
-    if (error) return console.error("Error creating user's goal:", error);
-  };
-
-  const handleUpdateGoal = async (updatedGoal: Goal) => {
-    const { error } = await updateGoal(updatedGoal);
-    if (error) return console.error("Error updating user's goal:", error);
-  };
-
   const handleSubmit = async () => {
     if (!validateForm()) return;
 
-    if (!profile?.id) {
+    if (!profile.id) {
       console.error("Profile does not exists!");
+      router.push("/auth");
       return;
     }
 
-    const updatedGoal: Goal = {
-      profileId: profile.id,
-      type: formData.type,
-      targetWeight: parseFloat(formData.targetWeight),
-      duration: formData.duration,
-    };
+    if (isUpdated) {
+      const updatedProfile: Profile = {
+        ...profile,
+        goalType: formData.type,
+        goalDuration: formData.duration,
+        displayTargetWeight: parseFloat(formData.targetWeight),
+        targetWeightKg: formData.targetWeightKg,
+      };
 
-    if (!goal) {
-      await handleCreateGoal(updatedGoal);
-    } else {
-      updatedGoal.id = goal.id;
-      await handleUpdateGoal(updatedGoal);
+      await updateProfile(updatedProfile);
     }
 
-    router.push("/auth/onboarding/activity");
+    router.push("/onboarding/activity");
   };
 
   return (
     <Layout
+      goBackRoute="/onboarding"
       onSubmit={handleSubmit}
-      goBack={goBack}
       button={{ text: "Continue", isDisabled }}
     >
       <UserGoals
         formData={formData}
+        meta={meta}
         errors={errors}
         handleChange={handleChange}
       />
     </Layout>
   );
 };
+
+export default GoalScreen;

@@ -1,0 +1,48 @@
+enum ACTIVITY_LEVEL {
+  SEDENTARY = "SEDENTARY",
+  LIGHTLY_ACTIVE = "LIGHTLY_ACTIVE",
+  MODERATELY_ACTIVE = "MODERATELY_ACTIVE",
+  VERY_ACTIVE = "VERY_ACTIVE",
+}
+
+enum DIETARY_PREFERENCE {
+  "Vegan" = "VEGAN",
+  "Vegetarian" = "VEGETARIAN",
+  "Non-Vegetarian" = "NON_VEGETARIAN",
+}
+
+enum GENDER {
+  Male = "MALE",
+  Female = "FEMALE",
+  Other = "OTHER",
+}
+
+enum GOAL_DURATION {
+  SHORT_TERM = "SHORT_TERM",
+  MEDIUM_TERM = "MEDIUM_TERM",
+  LONG_TERM = "LONG_TERM",
+}
+enum GOAL_DURATION_LABEL {
+  SHORT_TERM = "1 month",
+  MEDIUM_TERM = "3 months",
+  LONG_TERM = "6 months",
+}
+enum GOAL_TYPE {
+  WEIGHT_LOSS = "WEIGHT_LOSS",
+  WEIGHT_GAIN = "WEIGHT_GAIN",
+}
+
+enum UNIT_SYSTEM {
+  Imperial = "IMPERIAL",
+  Metric = "METRIC",
+}
+
+export {
+  ACTIVITY_LEVEL,
+  DIETARY_PREFERENCE,
+  GENDER,
+  GOAL_DURATION,
+  GOAL_DURATION_LABEL,
+  GOAL_TYPE,
+  UNIT_SYSTEM,
+};

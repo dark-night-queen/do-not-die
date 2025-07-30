@@ -35,6 +35,7 @@ const prompt = (
     Respond with a JSON object in this exact format:
     {
       "name": "standardized name of the food",
+      "quantity": ${servingSize},
       "calories": number (realistic per serving),
       "protein": number (in grams),
       "carbs": number (in grams),
@@ -49,7 +50,7 @@ const prompt = (
       "ingredients": [
         {
           "name": "ingredient name",
-          "amount": "typical amount",
+          "quantity": "typical quantity",
           "calories": number,
           "protein": number,
           "carbs": number,
