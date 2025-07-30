@@ -1,6 +1,5 @@
 // core dependencies
 import React from "react";
-import { Pressable } from "react-native";
 import { Info, LucideIcon } from "lucide-react-native";
 
 // core components
