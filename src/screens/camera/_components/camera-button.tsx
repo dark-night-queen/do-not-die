@@ -11,7 +11,7 @@ export const CameraButton = ({ onPress }: { onPress?: () => void }) => {
 
   const handlePress = async () => {
     setIsPressed(true);
-    await onPress?.();
+    onPress?.();
     await new Promise((resolve) => setTimeout(resolve, 60));
     setIsPressed(false);
   };

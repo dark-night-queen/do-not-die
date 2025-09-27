@@ -5,6 +5,7 @@ model FoodItem {
 
     name     String
     quantity String
+    image    String?
 
     // nutrients
     calories Float

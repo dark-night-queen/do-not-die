@@ -2,108 +2,39 @@ import "@/global.css";
 import "react-native-reanimated";
 
 // core dependencies
-import { useEffect, useState } from "react";
-import { InteractionManager } from "react-native";
-import { Stack, useRouter } from "expo-router";
+import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { Toaster } from "sonner-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 // handler functions
-import { AuthProvider } from "@/providers/auth-provider";
+import { RouterProvider } from "@/providers/router-provider";
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useAuthStore } from "@/store/useAuthStore";
-import { useProfileStore, useUserStore } from "@/store/useOnboardingStore";
-import { useNutrientAnalysisStore } from "@/store/useNutrientAnalysisStore";
 
-const queryClient = new QueryClient();
+let queryClient: QueryClient;
 
 export default function RootLayout() {
-  const router = useRouter();
-
-  const [isLoading, setIsLoading] = useState(true);
-  const [isInitLoading, setIsInitLoading] = useState(true);
-  const { session, redirected, setRedirected } = useAuthStore();
-  const { user, getUser } = useUserStore();
-  const { profile, getProfile } = useProfileStore();
-  const { init } = useNutrientAnalysisStore();
-
-  // Wait for animation and auth check
-  useEffect(() => {
-    const loadApp = async () => {
-      // simulate delay for loader animation (e.g., 1.5s)
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      // wait until react-native interactions complete (i.e., UI stable)
-      await new Promise((resolve) => {
-        InteractionManager.runAfterInteractions(() => resolve(undefined));
-      });
-
-      setIsInitLoading(false);
-    };
-
-    loadApp();
-  }, [redirected, router]);
-
-  useEffect(() => {
-    setIsLoading(true);
-    const loadUser = async () => {
-      if (session && !user?.id) await getUser(session.user.id);
-    };
-
-    loadUser();
-  }, [getUser, session, user?.id]);
-
-  useEffect(() => {
-    const loadProfile = async () => {
-      if (user?.id && !profile?.id) {
-        const _profile = await getProfile(user.id);
-        init(_profile);
-        setIsLoading(false);
-      }
-    };
-
-    loadProfile();
-  }, [getProfile, init, profile?.id, user]);
-
-  useEffect(() => {
-    if (!isLoading && !isInitLoading && !redirected) {
-      if (session) {
-        if (profile.isOnboardingCompleted) {
-          router.replace("/(tabs)");
-        } else {
-          router.replace("/onboarding");
-        }
-      } else {
-        router.replace("/auth");
-      }
-      setRedirected(true);
-    }
-  }, [
-    isLoading,
-    redirected,
-    session,
-    profile.isOnboardingCompleted,
-    setRedirected,
-    router,
-    isInitLoading,
-  ]);
+  if (!queryClient) queryClient = new QueryClient();
 
   return (
     <GluestackUIProvider mode="system">
+      <Toaster position="bottom-center" duration={3000} visibleToasts={2} />
+
       <QueryClientProvider client={queryClient}>
         <GestureHandlerRootView>
-          <AuthProvider>
-            <Stack screenOptions={{ headerShown: false }}>
+          <RouterProvider>
+            <Stack
+              initialRouteName="(loaders)"
+              screenOptions={{ headerShown: false }}
+            >
               <Stack.Screen name="modal" options={{ presentation: "modal" }} />
             </Stack>
-          </AuthProvider>
-
-          <Toaster position="bottom-center" duration={3000} visibleToasts={2} />
+          </RouterProvider>
         </GestureHandlerRootView>
       </QueryClientProvider>
 
+      {/* System status bar */}
       <StatusBar />
     </GluestackUIProvider>
   );
