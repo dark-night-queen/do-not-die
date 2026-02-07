@@ -8,6 +8,7 @@ node_modules/
 dist/
 web-build/
 expo-env.d.ts
+old-code/
 
 # Native
 .kotlin/
@@ -37,6 +38,6 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 
-app-example
-
-/src/generated/prisma
+# generated native folders
+/ios
+/android
