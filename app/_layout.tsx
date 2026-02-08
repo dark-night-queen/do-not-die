@@ -1,59 +1,76 @@
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
+import "@/global.css";
 
-import { useColorScheme } from '@/components/useColorScheme';
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { useFonts } from "expo-font";
+import { Stack } from "expo-router";
+import * as SplashScreen from "expo-splash-screen";
+import { useEffect, useState } from "react";
+import "react-native-reanimated";
 
-export {
-  // Catch any errors thrown by the Layout component.
-  ErrorBoundary,
-} from 'expo-router';
+import LoadingScreen from "./(loaders)/index"; // Ensure path is correct
+
+// handler functions
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
+
+export { ErrorBoundary } from "expo-router";
 
 export const unstable_settings = {
-  // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: '(tabs)',
+  initialRouteName: "(tabs)",
 };
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
+// Keep native splash screen visible
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const [loaded, error] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+  const [isAppReady, setIsAppReady] = useState(false);
+
+  // 1. Load Fonts
+  const [fontsLoaded, fontError] = useFonts({
+    SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
     ...FontAwesome.font,
   });
 
-  // Expo Router uses Error Boundaries to catch errors in the navigation tree.
+  // 2. Handle Font Errors
   useEffect(() => {
-    if (error) throw error;
-  }, [error]);
+    if (fontError) throw fontError;
+  }, [fontError]);
 
+  // 3. App Readiness Logic (Fonts + Data)
   useEffect(() => {
-    if (loaded) {
+    async function prepare() {
+      try {
+        // Pre-load data, check auth, or delay for Gemini keys
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+      } catch (e) {
+        console.warn(e);
+      } finally {
+        setIsAppReady(true);
+      }
+    }
+    prepare();
+  }, []);
+
+  // 4. Hide Splash Screen only when BOTH are ready
+  useEffect(() => {
+    if (fontsLoaded && isAppReady) {
       SplashScreen.hideAsync();
     }
-  }, [loaded]);
+  }, [fontsLoaded, isAppReady]);
 
-  if (!loaded) {
-    return null;
+  // While waiting, return your custom animated loader
+  if (!fontsLoaded || !isAppReady) {
+    return <LoadingScreen />;
   }
 
-  return <RootLayoutNav />;
-}
-
-function RootLayoutNav() {
-  const colorScheme = useColorScheme();
-
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
-      </Stack>
-    </ThemeProvider>
+    <GluestackUIProvider mode="dark">
+      <SafeAreaProvider>
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="modal" options={{ presentation: "modal" }} />
+        </Stack>
+      </SafeAreaProvider>
+    </GluestackUIProvider>
   );
 }
