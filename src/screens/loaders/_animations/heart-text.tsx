@@ -8,7 +8,7 @@ interface HeartTextProps {
 }
 
 const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
-export const HeartText = ({ animatedTextProps }: HeartTextProps) => {
+export default function HeartText({ animatedTextProps }: Readonly<HeartTextProps>) {
   return (
     <AnimatedTextInput
       editable={false}
@@ -19,4 +19,4 @@ export const HeartText = ({ animatedTextProps }: HeartTextProps) => {
       defaultValue="0%"
     />
   );
-};
+}

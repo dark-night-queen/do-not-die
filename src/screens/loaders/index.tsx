@@ -12,11 +12,9 @@ import {
 import { Text } from "@/components/ui/text";
 import DefaultLayout from "@/src/screens/_layout";
 import HeartSVG from "./_animations/heart-svg";
+import HeartText from "./_animations/heart-text";
 
-// constants
-import { HeartText } from "./_animations/heart-text";
-
-const LoaderScreen = () => {
+export default function LoaderScreen() {
   const progress = useSharedValue(0);
 
   useEffect(() => {
@@ -41,11 +39,11 @@ const LoaderScreen = () => {
   });
 
   return (
-    <DefaultLayout className="justify-center items-center">
+    <DefaultLayout className="items-center justify-center">
       <MotiView
         from={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        className="items-center mb-6"
+        className="mb-6 items-center"
       >
         <HeartSVG animatedProps={animatedProps} />
         <HeartText animatedTextProps={animatedTextProps} />
@@ -55,7 +53,7 @@ const LoaderScreen = () => {
         from={{ opacity: 0, translateY: 10 }}
         animate={{ opacity: 1, translateY: 0 }}
         transition={{ delay: 400 }}
-        className="text-white text-3xl font-bold"
+        className="text-3xl font-bold text-white"
       >
         Don&apos;t Die
       </MotiText>
@@ -63,6 +61,4 @@ const LoaderScreen = () => {
       <Text className="text-sm text-indigo-400">Loading your health data...</Text>
     </DefaultLayout>
   );
-};
-
-export default LoaderScreen;
+}

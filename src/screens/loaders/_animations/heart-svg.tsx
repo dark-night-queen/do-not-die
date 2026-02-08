@@ -13,7 +13,7 @@ interface HeartSVGProps {
 }
 
 const AnimatedRect = Animated.createAnimatedComponent(Rect);
-export default function HeartSVG({ animatedProps }: HeartSVGProps) {
+export default function HeartSVG({ animatedProps }: Readonly<HeartSVGProps>) {
   return (
     <Svg width={100} height={100} viewBox="0 0 24 24">
       <Defs>
