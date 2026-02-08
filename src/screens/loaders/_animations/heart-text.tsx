@@ -8,7 +8,9 @@ interface HeartTextProps {
 }
 
 const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
-export default function HeartText({ animatedTextProps }: Readonly<HeartTextProps>) {
+export default function HeartText({
+  animatedTextProps,
+}: Readonly<HeartTextProps>) {
   return (
     <AnimatedTextInput
       editable={false}

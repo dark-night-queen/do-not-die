@@ -19,7 +19,7 @@ export default function LoaderScreen() {
 
   useEffect(() => {
     progress.value = withTiming(1, { duration: 1000 });
-  }, []);
+  }, [progress]);
 
   const animatedProps = useAnimatedProps(() => {
     return {
