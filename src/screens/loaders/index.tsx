@@ -1,8 +1,7 @@
 // core dependencies
 import React, { useEffect } from "react";
-import Svg, { Defs, ClipPath, Rect, Path } from "react-native-svg";
 import { MotiView, MotiText } from "moti";
-import Animated, {
+import {
   useSharedValue,
   useAnimatedProps,
   withTiming,
@@ -12,13 +11,10 @@ import Animated, {
 // core components
 import { Text } from "@/components/ui/text";
 import DefaultLayout from "@/src/screens/_layout";
+import HeartSVG from "./_animations/heart-svg";
 
 // constants
-import { HEART_PATH } from "@/src/constants/loaders";
-import { TextInput } from "react-native";
-
-const AnimatedRect = Animated.createAnimatedComponent(Rect);
-const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
+import { HeartText } from "./_animations/heart-text";
 
 const LoaderScreen = () => {
   const progress = useSharedValue(0);
@@ -51,42 +47,8 @@ const LoaderScreen = () => {
         animate={{ scale: 1, opacity: 1 }}
         className="items-center mb-6"
       >
-        <Svg width={100} height={100} viewBox="0 0 24 24">
-          <Defs>
-            <ClipPath id="clip">
-              {/* This Rect is now animated natively */}
-              <AnimatedRect
-                x="0"
-                width="24"
-                height="24"
-                animatedProps={animatedProps}
-              />
-            </ClipPath>
-          </Defs>
-
-          {/* Heart Outline */}
-          <Path
-            d={HEART_PATH}
-            fill="none"
-            stroke="rgba(129, 140, 248, 0.3)"
-            strokeWidth={1}
-          />
-
-          {/* Filled Heart (clipped) */}
-          <Path
-            d={HEART_PATH}
-            fill="rgba(129, 140, 248, 1)"
-            clipPath="url(#clip)"
-          />
-        </Svg>
-        <AnimatedTextInput
-          editable={false}
-          underlineColorAndroid="transparent"
-          style={{ color: "#818cf8", fontSize: 16, fontWeight: "bold" }}
-          animatedProps={animatedTextProps}
-          // Set an initial value so it's not blank for the first millisecond
-          defaultValue="0%"
-        />
+        <HeartSVG animatedProps={animatedProps} />
+        <HeartText animatedTextProps={animatedTextProps} />
       </MotiView>
 
       <MotiText
@@ -97,9 +59,8 @@ const LoaderScreen = () => {
       >
         Don&apos;t Die
       </MotiText>
-      <Text className="text-sm text-indigo-400">
-        Loading your health data...
-      </Text>
+
+      <Text className="text-sm text-indigo-400">Loading your health data...</Text>
     </DefaultLayout>
   );
 };
