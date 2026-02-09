@@ -23,8 +23,8 @@ const DefaultLayout = ({ className = "", children }: IDefaultLayout) => {
         paddingBottom: insets.bottom,
         paddingLeft: insets.left,
         paddingRight: insets.right,
-        backgroundColor: isDark ? "#111827" : "#FFFFFF",
       }}
+      className={isDark ? "bg-gray-900" : "bg-white"}
     >
       <VStack className={`flex-1 gap-4 ${className}`}>{children}</VStack>
     </View>

@@ -210,9 +210,7 @@ const formControlLabelAstrickStyle = tva({
   },
 });
 
-type IFormControlLabelAstrickProps = React.ComponentPropsWithoutRef<
-  typeof Text
-> &
+type IFormControlLabelAstrickProps = React.ComponentPropsWithoutRef<typeof Text> &
   VariantProps<typeof formControlLabelAstrickStyle>;
 
 const FormControlLabelAstrick = React.forwardRef<
@@ -401,9 +399,7 @@ const FormControlLabelText = React.forwardRef<
   );
 });
 
-type IFormControlHelperProps = React.ComponentProps<
-  typeof UIFormControl.Helper
-> &
+type IFormControlHelperProps = React.ComponentProps<typeof UIFormControl.Helper> &
   VariantProps<typeof formControlHelperStyle>;
 
 const FormControlHelper = React.forwardRef<
@@ -465,4 +461,5 @@ export {
   FormControlLabelAstrick,
   FormControlHelper,
   FormControlHelperText,
+  IFormControlProps,
 };
