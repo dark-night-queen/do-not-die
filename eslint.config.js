@@ -1,7 +1,7 @@
 // https://docs.expo.dev/guides/using-eslint/
 const { defineConfig } = require("eslint/config");
 const expo = require("eslint-config-expo/flat");
-const prettier = require("eslint-plugin-prettier/recommended");
+const prettier = require("eslint-config-prettier");
 
 module.exports = defineConfig([
   ...expo,
@@ -12,6 +12,7 @@ module.exports = defineConfig([
   {
     rules: {
       "react/display-name": "off",
+      "import/no-unresolved": "off",
     },
   },
 ]);
